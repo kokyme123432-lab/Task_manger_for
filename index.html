@@ -3,14 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mission Master - السحابة</title>
+    <title>Mission Master - نظام التنبيهات المتكامل</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
         * {
@@ -97,8 +92,68 @@
             color: #fff;
         }
 
+        /* النقاط الفرعية - لون الخلفية حسب المود */
+        .subtask-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            border-radius: 8px;
+            margin: 5px 0;
+            transition: all 0.3s;
+        }
+
+        body:not(.dark-mode) .subtask-item {
+            background: #fff;
+            color: #1e1e2f;
+            border: 1px solid #e0e0e0;
+        }
+
         body.dark-mode .subtask-item {
-            background: #2a2a3a;
+            background: #2a2a3a !important;
+            color: #fff !important;
+            border: 1px solid #3a3a4a !important;
+        }
+
+        body.dark-mode .subtask-item input[type="text"] {
+            background: #1a1a24;
+            color: #fff;
+            border-color: #3a3a4a;
+        }
+
+        /* إحصائيات التنبيهات - تعديل الألوان */
+        body.dark-mode .stat-card {
+            background: #1a1a24 !important;
+            color: #fff !important;
+        }
+
+        body.dark-mode .stat-card .stat-label {
+            color: #aaa !important;
+        }
+
+        body.dark-mode .progress-bar {
+            background: #2a2a3a !important;
+        }
+
+        body.dark-mode .weekly-report-item {
+            background: #2a2a3a !important;
+            color: #fff !important;
+        }
+
+        body.dark-mode .weekly-report-item span {
+            color: #fff !important;
+        }
+
+        .subtask-alarm-icon {
+            cursor: pointer;
+            color: #667eea;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .subtask-alarm-icon:hover {
+            transform: scale(1.2);
+            color: #ff6b6b;
         }
 
         body.dark-mode .action-btn {
@@ -142,21 +197,38 @@
             color: #fff;
         }
 
-        /* ========== النقاط الفرعية في الوضع الليلي ========== */
-        body.dark-mode .subtask-item {
-            background: #2a2a3a;
-            color: #fff;
+        /* الآية الكريمة - دائرية الجوانب وخط مميز */
+        .welcome-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 50;
+            pointer-events: none;
+            width: 100%;
         }
 
-        body.dark-mode .subtask-item input[type="text"] {
-            background: #1a1a24;
-            color: #fff;
-            border-color: #3a3a4a;
+        .welcome-title {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: 'Amiri', serif;
+            padding: 20px 40px;
+            border-radius: 20%;
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
-        body:not(.dark-mode) .subtask-item {
-            background: #fff;
-            color: #1e1e2f;
+        body.dark-mode .welcome-title {
+            background: linear-gradient(145deg, #9b87f5, #a57eea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-color: rgba(0, 0, 0, 0.3);
         }
 
         .app-container {
@@ -212,7 +284,6 @@
             transform: scale(1.1);
         }
 
-        /* ========== عداد الإشعارات ========== */
         .notification-badge {
             position: absolute;
             top: -5px;
@@ -358,12 +429,35 @@
             background: rgba(102, 126, 234, 0.03);
             border-radius: 8px;
             margin: 5px 0;
+            transition: all 0.3s;
+        }
+
+        .main-mission-item.urgent {
+            background: rgba(255, 107, 107, 0.2);
+            border-right: 3px solid #ff6b6b;
+        }
+
+        .main-mission-item.important {
+            background: rgba(255, 217, 62, 0.2);
+            border-right: 3px solid #ffd93e;
         }
 
         .main-mission-title {
             flex: 1;
             cursor: pointer;
             font-size: 0.9rem;
+        }
+
+        .mission-alarm-icon {
+            cursor: pointer;
+            color: #667eea;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .mission-alarm-icon:hover {
+            transform: scale(1.2);
+            color: #ff6b6b;
         }
 
         .main-mission-count {
@@ -655,6 +749,21 @@
             font-size: 1.2rem;
             font-weight: 700;
             margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-alarm-icon {
+            cursor: pointer;
+            color: #667eea;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .card-alarm-icon:hover {
+            transform: scale(1.2);
+            color: #ff6b6b;
         }
 
         .deadline-badge {
@@ -669,11 +778,25 @@
             margin-bottom: 10px;
         }
 
+        .deadline-badge.urgent {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .deadline-badge.important {
+            background: #ffd93e;
+            color: #1e1e2f;
+        }
+
         .subtasks-section {
             background: #f8f9fa;
             border-radius: 12px;
             padding: 15px;
             margin: 15px 0;
+        }
+
+        body.dark-mode .subtasks-section {
+            background: #1a1a24;
         }
 
         .subtasks-title {
@@ -682,17 +805,6 @@
             color: #667eea;
             font-weight: 600;
             margin-bottom: 10px;
-        }
-
-        .subtask-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px;
-            background: #fff;
-            border-radius: 8px;
-            margin: 5px 0;
-            transition: all 0.3s;
         }
 
         .subtask-checkbox {
@@ -766,6 +878,10 @@
             align-items: center;
             padding-top: 15px;
             border-top: 1px solid #f0f0f0;
+        }
+
+        body.dark-mode .card-footer {
+            border-top-color: #3a3a4a;
         }
 
         .card-actions {
@@ -953,6 +1069,80 @@
             border-radius: 10px;
         }
 
+        /* ========== نافذة ضبط المنبه ========== */
+        .alarm-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            z-index: 3000;
+            display: none;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-mode .alarm-modal {
+            background: #1a1a24;
+            color: #fff;
+        }
+
+        .alarm-modal.show {
+            display: block;
+        }
+
+        .alarm-modal h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .alarm-modal input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #f0f0f0;
+            border-radius: 10px;
+        }
+
+        body.dark-mode .alarm-modal input {
+            background: #2a2a3a;
+            color: #fff;
+            border-color: #3a3a4a;
+        }
+
+        .alarm-modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .alarm-modal-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .alarm-modal-btn.primary {
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            color: #fff;
+        }
+
+        .alarm-modal-btn.secondary {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        .alarm-modal-btn:hover {
+            transform: scale(1.02);
+        }
+
         /* ========== النوافذ المنبثقة ========== */
         .modal {
             position: fixed;
@@ -1118,13 +1308,12 @@
             transition: all 0.3s;
         }
 
-        /* ========== ألوان الإشعارات حسب المود ========== */
         body:not(.dark-mode) .notification-item {
-            background: #fff9e6; /* أبيض مصفر للايت مود */
+            background: #fff9e6;
         }
 
         body.dark-mode .notification-item {
-            background: #2a2a3a; /* رمادي غامق للدارك مود */
+            background: #2a2a3a;
             color: #fff;
             border-bottom-color: #3a3a4a;
         }
@@ -1134,13 +1323,25 @@
             color: #fff !important;
         }
 
-        .notification-item:hover .notification-text i,
-        .notification-item:hover .notification-time {
-            color: #fff !important;
+        .notification-item.snooze-item {
+            border-right: 3px solid #ffd93e;
         }
 
-        .notification-item.read {
-            opacity: 0.7;
+        .notification-item .snooze-btn {
+            background: #ffd93e;
+            color: #1e1e2f;
+            border: none;
+            border-radius: 15px;
+            padding: 3px 10px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-top: 5px;
+            transition: all 0.3s;
+        }
+
+        .notification-item .snooze-btn:hover {
+            background: #ffc107;
+            transform: scale(1.05);
         }
 
         .notification-text {
@@ -1157,6 +1358,10 @@
             font-size: 0.8rem;
             color: #888;
             margin-top: 5px;
+        }
+
+        .notification-item:hover .notification-time {
+            color: #fff;
         }
 
         /* ========== صفحة الحساب ========== */
@@ -1196,6 +1401,10 @@
             color: #333;
         }
 
+        body.dark-mode .profile-name {
+            color: #fff;
+        }
+
         .profile-bio {
             color: #666;
             margin-bottom: 30px;
@@ -1209,6 +1418,10 @@
             padding: 20px 0;
             border-top: 2px solid #f0f0f0;
             border-bottom: 2px solid #f0f0f0;
+        }
+
+        body.dark-mode .profile-stats {
+            border-color: #3a3a4a;
         }
 
         .stat-value {
@@ -1288,12 +1501,80 @@
             margin-bottom: 20px;
         }
 
+        body.dark-mode .settings-group {
+            background: #1a1a24;
+        }
+
         .settings-group h2 {
             color: #667eea;
             margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 10px;
+        }
+
+        .setting-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin: 10px 0;
+        }
+
+        body.dark-mode .setting-item {
+            background: #2a2a3a;
+        }
+
+        .setting-item label {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .setting-item input[type="time"],
+        .setting-item select {
+            padding: 8px 15px;
+            border: 2px solid #667eea30;
+            border-radius: 10px;
+            background: #fff;
+        }
+
+        body.dark-mode .setting-item input[type="time"],
+        body.dark-mode .setting-item select {
+            background: #1a1a24;
+            color: #fff;
+            border-color: #3a3a4a;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 24px;
+            background: #ccc;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: #667eea;
+        }
+
+        .toggle-switch:after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border-radius: 50%;
+            top: 2px;
+            right: 2px;
+            transition: all 0.3s;
+        }
+
+        .toggle-switch.active:after {
+            right: 28px;
         }
 
         .code-section {
@@ -1343,6 +1624,92 @@
             border-color: #764ba2;
         }
 
+        /* ========== صفحة إحصائيات التنبيهات ========== */
+        .stats-page {
+            padding: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        body.dark-mode .stat-card {
+            background: #1a1a24 !important;
+            color: #fff !important;
+        }
+
+        body.dark-mode .stat-card .stat-label {
+            color: #aaa !important;
+        }
+
+        .stat-card i {
+            font-size: 2.5rem;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .stat-card .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .stat-card .stat-label {
+            font-size: 1rem;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        body.dark-mode .progress-bar {
+            background: #2a2a3a !important;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            border-radius: 5px;
+            transition: width 0.3s;
+        }
+
+        /* التقرير الأسبوعي */
+        .weekly-report-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin: 5px 0;
+        }
+
+        body.dark-mode .weekly-report-item {
+            background: #2a2a3a !important;
+            color: #fff !important;
+        }
+
+        body.dark-mode .weekly-report-item span {
+            color: #fff !important;
+        }
+
         /* ========== صفحة المهام المكتملة ========== */
         .completed-missions-page {
             padding: 20px;
@@ -1366,6 +1733,11 @@
         .completed-card .task-title {
             flex: 1;
             text-decoration: line-through;
+        }
+
+        body.dark-mode .completed-card {
+            background: #1a1a24;
+            color: #fff;
         }
 
         /* ========== مؤشر التقدم ========== */
@@ -1417,243 +1789,6 @@
                 top: 20px;
             }
         }
-
-        /* ========== الرسالة التحفيزية ========== */
-        .welcome-message {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            z-index: 50;
-            pointer-events: none;
-            width: 100%;
-        }
-
-        .welcome-title {
-            font-size: 3rem;
-            font-weight: 800;
-            background: linear-gradient(145deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* ========== نافذة تسجيل الدخول الجديدة ========== */
-        .auth-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-        }
-
-        .auth-card {
-            background: #fff;
-            border-radius: 30px;
-            padding: 40px;
-            width: 90%;
-            max-width: 450px;
-            animation: modalPop 0.3s;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-
-        body.dark-mode .auth-card {
-            background: #1a1a24;
-            color: #fff;
-        }
-
-        .auth-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .auth-header i {
-            font-size: 4rem;
-            color: #667eea;
-            margin-bottom: 15px;
-        }
-
-        .auth-header h2 {
-            color: #667eea;
-            margin-bottom: 5px;
-        }
-
-        .auth-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-            border-bottom: 2px solid #f0f0f0;
-            padding-bottom: 10px;
-        }
-
-        .auth-tab {
-            flex: 1;
-            text-align: center;
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 10px;
-            transition: all 0.3s;
-            color: #888;
-        }
-
-        .auth-tab.active {
-            background: linear-gradient(145deg, #667eea, #764ba2);
-            color: #fff;
-        }
-
-        .auth-form {
-            display: none;
-        }
-
-        .auth-form.active {
-            display: block;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #667eea;
-        }
-
-        .auth-input, .auth-select {
-            width: 100%;
-            padding: 15px 20px;
-            border: 2px solid #f0f0f0;
-            border-radius: 15px;
-            font-size: 1rem;
-            background: #f8f9fa;
-            transition: all 0.3s;
-        }
-
-        .auth-input:focus, .auth-select:focus {
-            outline: 0;
-            border-color: #667eea;
-        }
-
-        body.dark-mode .auth-input, body.dark-mode .auth-select {
-            background: #2a2a3a;
-            color: #fff;
-            border-color: #3a3a4a;
-        }
-
-        .auth-btn {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 15px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            background: linear-gradient(145deg, #667eea, #764ba2);
-            color: #fff;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-bottom: 15px;
-        }
-
-        .auth-btn:hover {
-            transform: scale(1.02);
-        }
-
-        .social-auth {
-            display: flex;
-            gap: 10px;
-            margin: 20px 0;
-        }
-
-        .social-btn {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 15px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .social-btn.google {
-            background: #DB4437;
-            color: #fff;
-        }
-
-        .social-btn.facebook {
-            background: #4267B2;
-            color: #fff;
-        }
-
-        .social-btn:hover {
-            transform: scale(1.02);
-        }
-
-        .auth-link {
-            text-align: center;
-            color: #667eea;
-            cursor: pointer;
-            font-size: 0.9rem;
-            margin: 10px 0;
-        }
-
-        .auth-link:hover {
-            text-decoration: underline;
-        }
-
-        .error-message {
-            color: #ff6b6b;
-            font-size: 0.9rem;
-            margin-top: 5px;
-            text-align: center;
-        }
-
-        .loading-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .password-strength {
-            height: 5px;
-            border-radius: 5px;
-            margin-top: 5px;
-            transition: all 0.3s;
-        }
-
-        .strength-weak {
-            background: #ff6b6b;
-            width: 33%;
-        }
-
-        .strength-medium {
-            background: #ffd93e;
-            width: 66%;
-        }
-
-        .strength-strong {
-            background: #6bcf7f;
-            width: 100%;
-        }
     </style>
 </head>
 <body>
@@ -1682,120 +1817,14 @@
         </div>
     </div>
 
-    <!-- نافذة تسجيل الدخول -->
-    <div id="authModal" class="auth-modal" style="display: none;">
-        <div class="auth-card">
-            <div class="auth-header">
-                <i class="fas fa-cloud-upload-alt"></i>
-                <h2>Mission Master Cloud</h2>
-                <p style="color: #888;">سجل دخولك لحفظ بياناتك في السحابة</p>
-            </div>
-
-            <div class="auth-tabs">
-                <div class="auth-tab active" onclick="switchAuthTab('login')">تسجيل الدخول</div>
-                <div class="auth-tab" onclick="switchAuthTab('register')">إنشاء حساب</div>
-            </div>
-
-            <!-- نموذج تسجيل الدخول -->
-            <div id="loginForm" class="auth-form active">
-                <div class="form-group">
-                    <label><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
-                    <input type="email" id="loginEmail" class="auth-input" placeholder="أدخل بريدك الإلكتروني">
-                </div>
-                <div class="form-group">
-                    <label><i class="fas fa-lock"></i> كلمة المرور</label>
-                    <input type="password" id="loginPassword" class="auth-input" placeholder="أدخل كلمة المرور">
-                </div>
-                
-                <!-- أزرار تسجيل الدخول الاجتماعي -->
-                <div class="social-auth">
-                    <button class="social-btn google" onclick="loginWithGoogle()">
-                        <i class="fab fa-google"></i> Google
-                    </button>
-                    <button class="social-btn facebook" onclick="loginWithFacebook()">
-                        <i class="fab fa-facebook-f"></i> Facebook
-                    </button>
-                </div>
-
-                <button class="auth-btn" onclick="loginUser()">
-                    <span id="loginText">تسجيل الدخول</span>
-                    <span id="loginSpinner" class="loading-spinner" style="display: none;"></span>
-                </button>
-                <div class="auth-link" onclick="forgotPassword()">نسيت كلمة المرور؟</div>
-                <div id="loginError" class="error-message"></div>
-            </div>
-
-            <!-- نموذج إنشاء حساب -->
-            <div id="registerForm" class="auth-form">
-                <div class="form-group">
-                    <label><i class="fas fa-user"></i> الاسم الكامل</label>
-                    <input type="text" id="regName" class="auth-input" placeholder="أدخل اسمك">
-                </div>
-                <div class="form-group">
-                    <label><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
-                    <input type="email" id="regEmail" class="auth-input" placeholder="أدخل بريدك الإلكتروني">
-                </div>
-                <div class="form-group">
-                    <label><i class="fas fa-graduation-cap"></i> السنة الدراسية</label>
-                    <select id="regGrade" class="auth-select">
-                        <option value="">اختر السنة الدراسية</option>
-                        <option value="1 اعدادي">1 إعدادي</option>
-                        <option value="2 اعدادي">2 إعدادي</option>
-                        <option value="3 اعدادي">3 إعدادي</option>
-                        <option value="1 ثانوي">1 ثانوي</option>
-                        <option value="2 ثانوي">2 ثانوي</option>
-                        <option value="3 ثانوي">3 ثانوي</option>
-                        <option value="جامعة">جامعة</option>
-                        <option value="خريج">خريج</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label><i class="fas fa-calendar"></i> العمر</label>
-                    <input type="number" id="regAge" class="auth-input" placeholder="العمر" min="10" max="100">
-                </div>
-                <div class="form-group">
-                    <label><i class="fas fa-lock"></i> كلمة المرور</label>
-                    <input type="password" id="regPassword" class="auth-input" placeholder="أدخل كلمة المرور" onkeyup="checkPasswordStrength()">
-                    <div id="passwordStrength" class="password-strength"></div>
-                </div>
-                <div class="form-group">
-                    <label><i class="fas fa-lock"></i> تأكيد كلمة المرور</label>
-                    <input type="password" id="regConfirmPassword" class="auth-input" placeholder="أعد إدخال كلمة المرور">
-                </div>
-                <div>
-                    <label style="color: #667eea; font-weight: 600; margin-bottom: 10px; display: block;">
-                        <i class="fas fa-smile"></i> اختر صورتك الرمزية:
-                    </label>
-                    <div class="avatar-selector" id="regAvatarSelector">
-                        <div class="avatar-option selected" data-avatar="🧑">🧑</div>
-                        <div class="avatar-option" data-avatar="👨‍🎓">👨‍🎓</div>
-                        <div class="avatar-option" data-avatar="👩‍🔬">👩‍🔬</div>
-                        <div class="avatar-option" data-avatar="👨‍💻">👨‍💻</div>
-                        <div class="avatar-option" data-avatar="👩‍🏫">👩‍🏫</div>
-                        <div class="avatar-option" data-avatar="👨‍🔧">👨‍🔧</div>
-                        <div class="avatar-option" data-avatar="👩‍🎨">👩‍🎨</div>
-                        <div class="avatar-option" data-avatar="👨‍🚒">👨‍🚒</div>
-                    </div>
-                </div>
-                
-                <!-- أزرار التسجيل الاجتماعي -->
-                <div class="social-auth">
-                    <button class="social-btn google" onclick="registerWithGoogle()">
-                        <i class="fab fa-google"></i> Google
-                    </button>
-                    <button class="social-btn facebook" onclick="registerWithFacebook()">
-                        <i class="fab fa-facebook-f"></i> Facebook
-                    </button>
-                </div>
-
-                <button class="auth-btn" onclick="registerUser()">
-                    <span id="registerText">إنشاء حساب</span>
-                    <span id="registerSpinner" class="loading-spinner" style="display: none;"></span>
-                </button>
-                <div id="registerError" class="error-message"></div>
-            </div>
-
-            <div class="auth-link" onclick="continueAsGuest()">دخول كزائر (بدون حفظ)</div>
+    <!-- نافذة ضبط المنبه -->
+    <div class="alarm-modal" id="alarmModal">
+        <h3>⏰ ضبط المنبه</h3>
+        <input type="datetime-local" id="alarmDateTime">
+        <input type="text" id="alarmMessage" placeholder="رسالة التذكير" value="حان وقت المهمة!">
+        <div class="alarm-modal-buttons">
+            <button class="alarm-modal-btn primary" onclick="saveAlarm()">حفظ</button>
+            <button class="alarm-modal-btn secondary" onclick="closeAlarmModal()">إلغاء</button>
         </div>
     </div>
 
@@ -1932,6 +1961,11 @@
                 <i class="fas fa-check-circle"></i> المهام المكتملة
             </div>
 
+            <!-- زر إحصائيات التنبيهات -->
+            <div class="show-completed-btn" onclick="showNotificationStats()">
+                <i class="fas fa-chart-bar"></i> إحصائيات التنبيهات
+            </div>
+
             <!-- الإعدادات -->
             <div class="settings-section">
                 <div class="settings-item" onclick="showSettingsPage()">
@@ -1942,15 +1976,15 @@
 
         <!-- المحتوى الرئيسي -->
         <div class="main-content" id="mainContent">
-            <!-- الرسالة التحفيزية -->
+            <!-- الآية الكريمة - دائرية الجوانب وخط مميز -->
             <div class="welcome-message" id="welcomeMessage">
-                <div class="welcome-title">✨ أنت قادر على النجاح ✨</div>
+                <div class="welcome-title">وَقُل رَّبِّ زِدْنِي عِلْمًا</div>
             </div>
 
             <!-- الصفحة الرئيسية -->
             <div id="homePage" class="page active">
                 <div class="page-header">
-                    <h1 id="currentMainTitle">وَقُل رَّبِّ زِدْنِي عِلْمًا</h1>
+                    <h1 id="currentMainTitle">المهام</h1>
                 </div>
 
                 <!-- لوحة إضافة مهمة رئيسية -->
@@ -2067,7 +2101,7 @@
                 </div>
             </div>
 
-            <!-- صفحة الإعدادات -->
+            <!-- صفحة الإعدادات مع تخصيص التنبيهات -->
             <div id="settingsPage" class="page">
                 <div class="page-header">
                     <h1><i class="fas fa-cog"></i> الإعدادات</h1>
@@ -2075,11 +2109,54 @@
                 </div>
                 <div class="settings-page">
                     <div class="settings-group">
+                        <h2><i class="fas fa-bell"></i> إعدادات التنبيهات</h2>
+                        
+                        <div class="setting-item">
+                            <label><i class="fas fa-volume-up"></i> تشغيل الصوت</label>
+                            <div class="toggle-switch" id="soundToggle" onclick="toggleSound()"></div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label><i class="fas fa-clock"></i> وقت التنبيه المفضل</label>
+                            <input type="time" id="preferredTime" value="09:00" onchange="saveSettings()">
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label><i class="fas fa-moon"></i> وضع عدم الإزعاج</label>
+                            <div class="toggle-switch" id="dndToggle" onclick="toggleDND()"></div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label><i class="fas fa-music"></i> نغمة التنبيه</label>
+                            <select id="notificationSound" onchange="saveSettings()">
+                                <option value="default">افتراضي</option>
+                                <option value="gentle">ناعم</option>
+                                <option value="urgent">عاجل</option>
+                            </select>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label><i class="fas fa-repeat"></i> تكرار التنبيه</label>
+                            <select id="repeatInterval" onchange="saveSettings()">
+                                <option value="0">مرة واحدة</option>
+                                <option value="1">كل ساعة</option>
+                                <option value="3">كل 3 ساعات</option>
+                                <option value="6">كل 6 ساعات</option>
+                            </select>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label><i class="fas fa-pray"></i> تذكير الصلاة على النبي</label>
+                            <div class="toggle-switch" id="prayerToggle" onclick="togglePrayerReminder()"></div>
+                        </div>
+                    </div>
+
+                    <div class="settings-group">
                         <h2><i class="fas fa-key"></i> الأكواد السرية</h2>
                         <div class="code-section">
                             <button class="code-button" onclick="toggleCodeInput()"><i class="fas fa-key"></i> فك الرمز</button>
                             <div id="codeInputContainer" style="display: none;" class="code-input-container">
-                                <div style="margin-bottom: 10px; color: #667eea;">أدخل الرمز المكون من 6 أحرف</div>
+                                <div style="margin-bottom: 10px; color: #667eea;">أدخل الرمز المكون من 6 أرقام</div>
                                 <input type="text" id="codeInput" class="code-input" maxlength="6" placeholder="******">
                                 <div style="display: flex; gap: 10px; justify-content: center;">
                                     <button onclick="decodeCode()" class="modal-btn primary">تأكيد</button>
@@ -2087,6 +2164,76 @@
                                 </div>
                                 <div id="codeResult" style="margin-top: 20px; width: 100%;"></div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- صفحة إحصائيات التنبيهات -->
+            <div id="statsPage" class="page">
+                <div class="page-header">
+                    <h1><i class="fas fa-chart-bar"></i> إحصائيات التنبيهات</h1>
+                    <button class="back-btn" onclick="backToHome()"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="stats-page">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <i class="fas fa-bell"></i>
+                            <div class="stat-number" id="totalNotifications">0</div>
+                            <div class="stat-label">إجمالي التنبيهات</div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-check-circle"></i>
+                            <div class="stat-number" id="completedAfterNotification">0</div>
+                            <div class="stat-label">مهام أنجزت بعد التنبيه</div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-clock"></i>
+                            <div class="stat-number" id="avgResponseTime">0</div>
+                            <div class="stat-label">متوسط وقت الاستجابة</div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-percent"></i>
+                            <div class="stat-number" id="successRate">0%</div>
+                            <div class="stat-label">نسبة النجاح</div>
+                        </div>
+                    </div>
+
+                    <div class="settings-group">
+                        <h2><i class="fas fa-chart-line"></i> أداء التنبيهات</h2>
+                        <div style="margin: 20px 0;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <span>التنبيهات العادية</span>
+                                <span id="normalRate">0%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="normalProgress" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                        <div style="margin: 20px 0;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <span>التنبيهات المهمة (3 أيام)</span>
+                                <span id="importantRate">0%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="importantProgress" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                        <div style="margin: 20px 0;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <span>التنبيهات العاجلة (يوم)</span>
+                                <span id="urgentRate">0%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="urgentProgress" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-group">
+                        <h2><i class="fas fa-calendar-week"></i> التقرير الأسبوعي</h2>
+                        <div id="weeklyReport">
+                            <p style="text-align: center; color: #888;">جارٍ تحميل التقرير...</p>
                         </div>
                     </div>
                 </div>
@@ -2121,42 +2268,41 @@
     </div>
 
     <script>
-        // ==================== تهيئة Firebase ====================
-        const firebaseConfig = {
-            apiKey: "AIzaSyBkXx7Y7QvZ1Q3R5T7N9L2M4N6P8Q0R2T4V6",
-            authDomain: "mission-master-12345.firebaseapp.com",
-            projectId: "mission-master-12345",
-            storageBucket: "mission-master-12345.appspot.com",
-            messagingSenderId: "123456789012",
-            appId: "1:123456789012:web:abcdef1234567890"
-        };
-
-        // تهيئة Firebase
-        let firebaseApp, auth, db;
-        
-        try {
-            firebaseApp = firebase.initializeApp(firebaseConfig);
-            auth = firebase.auth();
-            db = firebase.firestore();
-            console.log('✅ Firebase initialized successfully');
-        } catch (error) {
-            console.error('❌ Firebase initialization error:', error);
-            console.log('Using localStorage as fallback');
-        }
-
         // ==================== متغيرات عامة ====================
         let userData = {
             name: 'زائر',
             grade: '',
             age: '',
             avatar: '🧑',
-            email: '',
             joinedDate: new Date().toISOString(),
             stats: {
                 completedTasks: 0,
                 score: 0,
                 streak: 0
             }
+        };
+
+        // إعدادات التنبيهات
+        let notificationSettings = {
+            soundEnabled: true,
+            preferredTime: '09:00',
+            dndEnabled: false,
+            notificationSound: 'default',
+            repeatInterval: 0,
+            prayerReminder: true
+        };
+
+        // إحصائيات التنبيهات
+        let notificationStats = {
+            total: 0,
+            completedAfter: 0,
+            responseTimes: [],
+            byType: {
+                normal: { sent: 0, completed: 0 },
+                important: { sent: 0, completed: 0 },
+                urgent: { sent: 0, completed: 0 }
+            },
+            weekly: []
         };
 
         // المهام
@@ -2166,9 +2312,13 @@
             monthly: {}
         };
 
+        // التنبيهات المخصصة
+        let customAlarms = [];
+
         // الحالة الحالية
         let currentCategory = 'daily';
         let currentMainMission = null;
+        let currentAlarmTarget = null;
         
         // متغيرات المؤقت
         let timerSeconds = 1500;
@@ -2190,37 +2340,232 @@
         // الأكواد السرية
         let secretCodes = [];
 
-        // تحميل الأكواد السرية من localStorage
-        function loadSecretCodes() {
-            let saved = localStorage.getItem('secretCodes');
-            if (saved) {
-                secretCodes = JSON.parse(saved);
+        // مؤقتات التنبيهات
+        let reminderIntervals = [];
+        let prayerInterval = null;
+
+        // تحميل البيانات من localStorage
+        function loadData() {
+            let savedUser = localStorage.getItem('missionMasterUser');
+            if (savedUser) {
+                userData = JSON.parse(savedUser);
+            }
+            
+            let savedSettings = localStorage.getItem('notificationSettings');
+            if (savedSettings) {
+                notificationSettings = JSON.parse(savedSettings);
+                updateToggleButtons();
+            }
+            
+            let savedStats = localStorage.getItem('notificationStats');
+            if (savedStats) {
+                notificationStats = JSON.parse(savedStats);
+            }
+            
+            let savedMissions = localStorage.getItem('missionMasterMissions');
+            if (savedMissions) {
+                missions = JSON.parse(savedMissions);
+            }
+            
+            let savedAlarms = localStorage.getItem('customAlarms');
+            if (savedAlarms) {
+                customAlarms = JSON.parse(savedAlarms);
+                scheduleCustomAlarms();
+            }
+            
+            let savedCompleted = localStorage.getItem('missionMasterCompleted');
+            if (savedCompleted) {
+                completedTasks = JSON.parse(savedCompleted);
+            }
+            
+            let savedCodes = localStorage.getItem('secretCodes');
+            if (savedCodes) {
+                secretCodes = JSON.parse(savedCodes);
             } else {
-                // الأكواد الافتراضية
                 secretCodes = [
                     { code: '#0080#', message: 'عمك بكر بيمسي عليك يلا ذاكر', icon: 'fa-book' },
                     { code: '#9912#', message: 'اللهم صل وسلم على سيدنا ومولانا رسول الله', icon: 'fa-mosque' },
                     { code: '#12345#', message: 'ذاكر يا دوك عين شمس تنتظرك', icon: 'fa-graduation-cap' },
-                    { code: '*000#', message: 'ذاكري عشان العيد ميبقاش فيه كحكين 👀', icon: 'fa-star' },
-                    { code: '#1240#', message: 'admin', icon: 'fa-crown' }
+                    { code: '*000#', message: 'ذاكري عشان العيد ميبقاش فيه كحكين 👀', icon: 'fa-star' }
                 ];
                 localStorage.setItem('secretCodes', JSON.stringify(secretCodes));
             }
+            
+            updateUI();
+            renderMainMissions('daily');
+            renderMainMissions('weekly');
+            renderMainMissions('monthly');
+            updateProgress();
+            checkDeadlines();
+            startPeriodicChecks();
+            startPrayerReminder();
+        }
+
+        // حفظ البيانات في localStorage
+        function saveData() {
+            localStorage.setItem('missionMasterUser', JSON.stringify(userData));
+            localStorage.setItem('notificationSettings', JSON.stringify(notificationSettings));
+            localStorage.setItem('notificationStats', JSON.stringify(notificationStats));
+            localStorage.setItem('missionMasterMissions', JSON.stringify(missions));
+            localStorage.setItem('customAlarms', JSON.stringify(customAlarms));
+            localStorage.setItem('missionMasterCompleted', JSON.stringify(completedTasks));
+        }
+
+        // تحديث أزرار التبديل في الإعدادات
+        function updateToggleButtons() {
+            let soundToggle = document.getElementById('soundToggle');
+            let dndToggle = document.getElementById('dndToggle');
+            let prayerToggle = document.getElementById('prayerToggle');
+            
+            if (soundToggle) {
+                soundToggle.className = `toggle-switch ${notificationSettings.soundEnabled ? 'active' : ''}`;
+            }
+            
+            if (dndToggle) {
+                dndToggle.className = `toggle-switch ${notificationSettings.dndEnabled ? 'active' : ''}`;
+            }
+            
+            if (prayerToggle) {
+                prayerToggle.className = `toggle-switch ${notificationSettings.prayerReminder ? 'active' : ''}`;
+            }
+            
+            let timeInput = document.getElementById('preferredTime');
+            if (timeInput) {
+                timeInput.value = notificationSettings.preferredTime;
+            }
+            
+            let soundSelect = document.getElementById('notificationSound');
+            if (soundSelect) {
+                soundSelect.value = notificationSettings.notificationSound;
+            }
+            
+            let repeatSelect = document.getElementById('repeatInterval');
+            if (repeatSelect) {
+                repeatSelect.value = notificationSettings.repeatInterval;
+            }
+        }
+
+        // حفظ الإعدادات
+        function saveSettings() {
+            notificationSettings.preferredTime = document.getElementById('preferredTime').value;
+            notificationSettings.notificationSound = document.getElementById('notificationSound').value;
+            notificationSettings.repeatInterval = parseInt(document.getElementById('repeatInterval').value);
+            saveData();
+        }
+
+        // تشغيل/إيقاف الصوت
+        function toggleSound() {
+            notificationSettings.soundEnabled = !notificationSettings.soundEnabled;
+            updateToggleButtons();
+            saveData();
+        }
+
+        // تشغيل/إيقاف عدم الإزعاج
+        function toggleDND() {
+            notificationSettings.dndEnabled = !notificationSettings.dndEnabled;
+            updateToggleButtons();
+            saveData();
+        }
+
+        // تشغيل/إيقاف تذكير الصلاة على النبي
+        function togglePrayerReminder() {
+            notificationSettings.prayerReminder = !notificationSettings.prayerReminder;
+            updateToggleButtons();
+            saveData();
+            
+            if (notificationSettings.prayerReminder) {
+                startPrayerReminder();
+                showMessage('✅ تم تفعيل تذكير الصلاة على النبي');
+            } else {
+                if (prayerInterval) {
+                    clearInterval(prayerInterval);
+                    prayerInterval = null;
+                }
+                showMessage('⏹️ تم إيقاف تذكير الصلاة على النبي');
+            }
+        }
+
+        // بدء تذكير الصلاة على النبي كل ساعة
+        function startPrayerReminder() {
+            if (!notificationSettings.prayerReminder) return;
+            
+            if (prayerInterval) {
+                clearInterval(prayerInterval);
+            }
+            
+            let now = new Date();
+            let nextHour = new Date(now);
+            nextHour.setHours(now.getHours() + 1, 0, 0, 0);
+            let timeToNextHour = nextHour - now;
+            
+            setTimeout(() => {
+                sendPrayerReminder();
+                prayerInterval = setInterval(sendPrayerReminder, 60 * 60 * 1000);
+            }, timeToNextHour);
+        }
+
+        // إرسال تذكير الصلاة على النبي
+        function sendPrayerReminder() {
+            if (!notificationSettings.prayerReminder || notificationSettings.dndEnabled) return;
+            
+            let message = "اللهم صل وسلم على سيدنا محمد";
+            addNotification(message, 'normal', null, null, 'prayer');
+            
+            if (notificationSettings.soundEnabled) {
+                playPrayerSound();
+            }
+        }
+
+        // صوت خاص للصلاة على النبي
+        function playPrayerSound() {
+            try {
+                let a = new (window.AudioContext || window.webkitAudioContext)();
+                let o = a.createOscillator();
+                let g = a.createGain();
+                o.type = 'sine';
+                o.frequency.value = 523.25;
+                g.gain.value = 0.1;
+                o.connect(g);
+                g.connect(a.destination);
+                o.start();
+                o.stop(a.currentTime + 0.5);
+                
+                setTimeout(() => {
+                    let o2 = a.createOscillator();
+                    let g2 = a.createGain();
+                    o2.type = 'sine';
+                    o2.frequency.value = 659.25;
+                    g2.gain.value = 0.1;
+                    o2.connect(g2);
+                    g2.connect(a.destination);
+                    o2.start();
+                    o2.stop(a.currentTime + 0.5);
+                }, 300);
+            } catch (e) { }
         }
 
         // دالة الصوت مع مدة أطول (٣ ثواني)
         function playLongSound() {
+            if (!notificationSettings.soundEnabled || notificationSettings.dndEnabled) return;
+            
             try {
                 let a = new (window.AudioContext || window.webkitAudioContext)();
                 let startTime = a.currentTime;
                 
-                // تشغيل صوت لمدة 3 ثواني
                 function playBeep() {
                     if (a.currentTime - startTime < 3) {
                         let o = a.createOscillator();
                         let g = a.createGain();
+                        
+                        if (notificationSettings.notificationSound === 'gentle') {
+                            o.frequency.value = 440;
+                        } else if (notificationSettings.notificationSound === 'urgent') {
+                            o.frequency.value = 880;
+                        } else {
+                            o.frequency.value = 660;
+                        }
+                        
                         o.type = 'sine';
-                        o.frequency.value = 880;
                         g.gain.value = 0.1;
                         o.connect(g);
                         g.connect(a.destination);
@@ -2236,6 +2581,8 @@
         }
 
         function playSound() {
+            if (!notificationSettings.soundEnabled || notificationSettings.dndEnabled) return;
+            
             try {
                 let a = new (window.AudioContext || window.webkitAudioContext)();
                 let o = a.createOscillator();
@@ -2261,530 +2608,506 @@
             } catch (e) { }
         }
 
-        function playAlarm(d) {
-            let s = Date.now();
-            let i = setInterval(() => {
-                playSound();
-                if (Date.now() - s >= d) clearInterval(i);
-            }, 200);
-        }
+        // ==================== نظام التنبيهات المتكامل ====================
 
-        // ==================== دوال المصادقة ====================
-        function showAuthModal() {
-            document.getElementById('authModal').style.display = 'flex';
-        }
-
-        function switchAuthTab(tab) {
-            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+        // إضافة تنبيه
+        function addNotification(text, type = 'normal', missionId = null, taskId = null, source = 'default') {
+            let n = {
+                id: Date.now(),
+                text: text,
+                time: new Date().toLocaleTimeString('ar-EG'),
+                date: new Date().toDateString(),
+                datetime: new Date().toISOString(),
+                read: false,
+                type: type,
+                missionId: missionId,
+                taskId: taskId,
+                source: source,
+                snoozeCount: 0
+            };
             
-            if (tab === 'login') {
-                document.querySelector('.auth-tab:first-child').classList.add('active');
-                document.getElementById('loginForm').classList.add('active');
-            } else {
-                document.querySelector('.auth-tab:last-child').classList.add('active');
-                document.getElementById('registerForm').classList.add('active');
+            notifications.unshift(n);
+            unreadNotifications++;
+            
+            notificationStats.total++;
+            if (notificationStats.byType[type]) {
+                notificationStats.byType[type].sent++;
             }
+            
+            saveData();
+            
+            updateNotificationBadge();
+            
+            if (source === 'prayer') {
+                playPrayerSound();
+            } else {
+                playLongSound();
+            }
+            
+            notifications = notifications.slice(0, 50);
+            
+            renderNotifications();
+            
+            return n.id;
         }
 
-        // تسجيل الدخول بجوجل
-        async function loginWithGoogle() {
-            try {
-                const provider = new firebase.auth.GoogleAuthProvider();
-                const result = await auth.signInWithPopup(provider);
-                showMessage('✅ تم تسجيل الدخول بجوجل بنجاح');
+        // فتح نافذة ضبط المنبه
+        function openAlarmModal(targetType, targetId, targetName) {
+            currentAlarmTarget = {
+                type: targetType,
+                id: targetId,
+                name: targetName
+            };
+            
+            let modal = document.getElementById('alarmModal');
+            let now = new Date();
+            now.setMinutes(now.getMinutes() + 10);
+            let defaultTime = now.toISOString().slice(0, 16);
+            document.getElementById('alarmDateTime').value = defaultTime;
+            document.getElementById('alarmMessage').value = `تذكير: ${targetName}`;
+            
+            modal.classList.add('show');
+        }
+
+        // إغلاق نافذة ضبط المنبه
+        function closeAlarmModal() {
+            document.getElementById('alarmModal').classList.remove('show');
+            currentAlarmTarget = null;
+        }
+
+        // حفظ المنبه
+        function saveAlarm() {
+            if (!currentAlarmTarget) return;
+            
+            let dateTime = document.getElementById('alarmDateTime').value;
+            let message = document.getElementById('alarmMessage').value;
+            
+            if (!dateTime) {
+                showMessage('❌ الرجاء تحديد الوقت');
+                return;
+            }
+            
+            let alarmTime = new Date(dateTime).getTime();
+            let now = new Date().getTime();
+            
+            if (alarmTime <= now) {
+                showMessage('❌ الرجاء تحديد وقت في المستقبل');
+                return;
+            }
+            
+            let alarm = {
+                id: Date.now(),
+                targetType: currentAlarmTarget.type,
+                targetId: currentAlarmTarget.id,
+                targetName: currentAlarmTarget.name,
+                time: alarmTime,
+                message: message,
+                active: true
+            };
+            
+            customAlarms.push(alarm);
+            saveData();
+            scheduleCustomAlarm(alarm);
+            
+            showMessage('✅ تم ضبط المنبه بنجاح');
+            closeAlarmModal();
+        }
+
+        // جدولة منبه مخصص
+        function scheduleCustomAlarm(alarm) {
+            let now = new Date().getTime();
+            let delay = alarm.time - now;
+            
+            if (delay <= 0) return;
+            
+            setTimeout(() => {
+                if (!alarm.active) return;
+                
+                addNotification(`⏰ ${alarm.message}`, 'urgent', 
+                    alarm.targetType.includes('mission') ? alarm.targetId : null,
+                    alarm.targetType.includes('task') ? alarm.targetId : null);
+                
+                customAlarms = customAlarms.filter(a => a.id !== alarm.id);
+                saveData();
+            }, delay);
+        }
+
+        // جدولة جميع المنبهات المخصصة
+        function scheduleCustomAlarms() {
+            customAlarms.forEach(alarm => scheduleCustomAlarm(alarm));
+        }
+
+        // خاصية الغفوة (Snooze)
+        function snoozeNotification(notificationId, minutes = 10) {
+            let notification = notifications.find(n => n.id === notificationId);
+            if (notification) {
+                notification.snoozeCount = (notification.snoozeCount || 0) + 1;
+                
+                if (notification.snoozeCount >= 3) {
+                    showMessage('⚠️ تم الوصول للحد الأقصى للغفوة');
+                    return;
+                }
+                
+                showMessage(`⏰ تم تأجيل التنبيه ${minutes} دقائق`);
+                
                 setTimeout(() => {
-                    document.getElementById('authModal').style.display = 'none';
-                }, 1500);
-            } catch (error) {
-                console.error('Google login error:', error);
-                showError('loginError', 'فشل تسجيل الدخول بجوجل');
+                    addNotification(`[تذكير] ${notification.text}`, notification.type, 
+                        notification.missionId, notification.taskId, notification.source);
+                }, minutes * 60 * 1000);
             }
         }
 
-        // تسجيل الدخول بفيسبوك
-        async function loginWithFacebook() {
-            try {
-                const provider = new firebase.auth.FacebookAuthProvider();
-                const result = await auth.signInWithPopup(provider);
-                showMessage('✅ تم تسجيل الدخول بفيسبوك بنجاح');
-                setTimeout(() => {
-                    document.getElementById('authModal').style.display = 'none';
-                }, 1500);
-            } catch (error) {
-                console.error('Facebook login error:', error);
-                showError('loginError', 'فشل تسجيل الدخول بفيسبوك');
-            }
-        }
-
-        // التسجيل بجوجل
-        async function registerWithGoogle() {
-            await loginWithGoogle();
-        }
-
-        // التسجيل بفيسبوك
-        async function registerWithFacebook() {
-            await loginWithFacebook();
-        }
-
-        // اختيار الصورة الرمزية للتسجيل
-        document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(function() {
-                document.querySelectorAll('#regAvatarSelector .avatar-option').forEach(opt => {
-                    opt.addEventListener('click', function() {
-                        document.querySelectorAll('#regAvatarSelector .avatar-option').forEach(x => x.classList.remove('selected'));
-                        this.classList.add('selected');
-                    });
-                });
-
-                document.querySelectorAll('#editAvatarSelector .avatar-option').forEach(opt => {
-                    opt.addEventListener('click', function() {
-                        document.querySelectorAll('#editAvatarSelector .avatar-option').forEach(x => x.classList.remove('selected'));
-                        this.classList.add('selected');
-                    });
-                });
-            }, 500);
-        });
-
-        // التحقق من قوة كلمة المرور
-        function checkPasswordStrength() {
-            const password = document.getElementById('regPassword').value;
-            const strengthDiv = document.getElementById('passwordStrength');
-            
-            if (password.length === 0) {
-                strengthDiv.className = 'password-strength';
-                return;
-            }
-            
-            let strength = 0;
-            if (password.match(/[a-z]+/)) strength++;
-            if (password.match(/[A-Z]+/)) strength++;
-            if (password.match(/[0-9]+/)) strength++;
-            if (password.match(/[$@#&!]+/)) strength++;
-            if (password.length > 7) strength++;
-            
-            if (strength < 2) {
-                strengthDiv.className = 'password-strength strength-weak';
-            } else if (strength < 4) {
-                strengthDiv.className = 'password-strength strength-medium';
+        // تحديث عداد الإشعارات
+        function updateNotificationBadge() {
+            let badge = document.getElementById('notificationBadge');
+            if (unreadNotifications > 0) {
+                badge.textContent = unreadNotifications > 9 ? '9+' : unreadNotifications;
+                badge.style.display = 'flex';
             } else {
-                strengthDiv.className = 'password-strength strength-strong';
+                badge.style.display = 'none';
             }
         }
 
-        // إنشاء حساب جديد
-        async function registerUser() {
-            console.log('registerUser function called');
-            
-            const name = document.getElementById('regName').value.trim();
-            const email = document.getElementById('regEmail').value.trim();
-            const grade = document.getElementById('regGrade').value;
-            const age = document.getElementById('regAge').value;
-            const password = document.getElementById('regPassword').value;
-            const confirmPassword = document.getElementById('regConfirmPassword').value;
-            
-            // الحصول على الصورة الرمزية المحددة
-            let avatar = '🧑';
-            const selectedAvatar = document.querySelector('#regAvatarSelector .avatar-option.selected');
-            if (selectedAvatar) {
-                avatar = selectedAvatar.dataset.avatar;
-            }
-
-            // التحقق من المدخلات
-            if (!name || !email || !password) {
-                showError('registerError', 'الرجاء ملء جميع الحقول المطلوبة');
-                return;
-            }
-
-            if (password.length < 6) {
-                showError('registerError', 'كلمة المرور يجب أن تكون 6 أحرف على الأقل');
-                return;
-            }
-
-            if (password !== confirmPassword) {
-                showError('registerError', 'كلمة المرور غير متطابقة');
-                return;
-            }
-
-            // إظهار مؤشر التحميل
-            document.getElementById('registerText').style.display = 'none';
-            document.getElementById('registerSpinner').style.display = 'inline-block';
-
-            try {
-                if (auth && db) {
-                    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                    const user = userCredential.user;
-
-                    await user.updateProfile({
-                        displayName: name
-                    });
-
-                    const userDataToSave = {
-                        uid: user.uid,
-                        name: name,
-                        email: email,
-                        grade: grade || 'لم يحدد',
-                        age: age || '',
-                        avatar: avatar,
-                        joinedDate: new Date().toISOString(),
-                        stats: {
-                            completedTasks: 0,
-                            score: 0,
-                            streak: 0
-                        },
-                        missions: {
-                            daily: {},
-                            weekly: {},
-                            monthly: {}
-                        }
-                    };
-
-                    await db.collection('users').doc(user.uid).set(userDataToSave);
-                    
-                    showMessage('✅ تم إنشاء الحساب بنجاح');
-                    
-                    setTimeout(() => {
-                        document.getElementById('authModal').style.display = 'none';
-                    }, 1500);
-                } else {
-                    const localUsers = JSON.parse(localStorage.getItem('localUsers') || '[]');
-                    const existingUser = localUsers.find(u => u.email === email);
-                    
-                    if (existingUser) {
-                        throw { code: 'auth/email-already-in-use' };
-                    }
-                    
-                    const newUser = {
-                        id: 'local_' + Date.now(),
-                        name: name,
-                        email: email,
-                        password: btoa(password),
-                        grade: grade || 'لم يحدد',
-                        age: age || '',
-                        avatar: avatar,
-                        joinedDate: new Date().toISOString(),
-                        stats: {
-                            completedTasks: 0,
-                            score: 0,
-                            streak: 0
-                        },
-                        missions: {
-                            daily: {},
-                            weekly: {},
-                            monthly: {}
-                        }
-                    };
-                    
-                    localUsers.push(newUser);
-                    localStorage.setItem('localUsers', JSON.stringify(localUsers));
-                    
-                    localStorage.setItem('currentUser', JSON.stringify(newUser));
-                    
-                    userData = {
-                        name: newUser.name,
-                        grade: newUser.grade,
-                        age: newUser.age,
-                        avatar: newUser.avatar,
-                        email: newUser.email,
-                        joinedDate: newUser.joinedDate,
-                        stats: newUser.stats
-                    };
-                    
-                    missions = newUser.missions;
-                    
-                    updateUI();
-                    renderMainMissions('daily');
-                    renderMainMissions('weekly');
-                    renderMainMissions('monthly');
-                    
-                    showMessage('✅ تم إنشاء الحساب بنجاح (محلياً)');
-                    
-                    setTimeout(() => {
-                        document.getElementById('authModal').style.display = 'none';
-                    }, 1500);
-                }
-            } catch (error) {
-                console.error('Registration error:', error);
-                let errorMessage = 'حدث خطأ أثناء إنشاء الحساب';
-                if (error.code === 'auth/email-already-in-use') {
-                    errorMessage = 'البريد الإلكتروني مستخدم بالفعل';
-                } else if (error.code === 'auth/invalid-email') {
-                    errorMessage = 'البريد الإلكتروني غير صالح';
-                } else if (error.code === 'auth/weak-password') {
-                    errorMessage = 'كلمة المرور ضعيفة جداً';
-                }
-                showError('registerError', errorMessage);
-            } finally {
-                document.getElementById('registerText').style.display = 'inline';
-                document.getElementById('registerSpinner').style.display = 'none';
-            }
-        }
-
-        // تسجيل الدخول
-        async function loginUser() {
-            console.log('loginUser function called');
-            
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value;
-
-            if (!email || !password) {
-                showError('loginError', 'الرجاء إدخال البريد الإلكتروني وكلمة المرور');
-                return;
-            }
-
-            document.getElementById('loginText').style.display = 'none';
-            document.getElementById('loginSpinner').style.display = 'inline-block';
-
-            try {
-                if (auth && db) {
-                    const userCredential = await auth.signInWithEmailAndPassword(email, password);
-                    
-                    showMessage('✅ تم تسجيل الدخول بنجاح');
-                    setTimeout(() => {
-                        document.getElementById('authModal').style.display = 'none';
-                    }, 1500);
-                } else {
-                    const localUsers = JSON.parse(localStorage.getItem('localUsers') || '[]');
-                    const user = localUsers.find(u => u.email === email && atob(u.password) === password);
-                    
-                    if (user) {
-                        localStorage.setItem('currentUser', JSON.stringify(user));
-                        
-                        userData = {
-                            name: user.name,
-                            grade: user.grade,
-                            age: user.age,
-                            avatar: user.avatar,
-                            email: user.email,
-                            joinedDate: user.joinedDate,
-                            stats: user.stats
-                        };
-                        
-                        missions = user.missions || {
-                            daily: {},
-                            weekly: {},
-                            monthly: {}
-                        };
-                        
-                        updateUI();
-                        renderMainMissions('daily');
-                        renderMainMissions('weekly');
-                        renderMainMissions('monthly');
-                        
-                        showMessage('✅ تم تسجيل الدخول بنجاح (محلياً)');
-                        
-                        setTimeout(() => {
-                            document.getElementById('authModal').style.display = 'none';
-                        }, 1500);
-                    } else {
-                        throw { code: 'auth/user-not-found' };
-                    }
-                }
-            } catch (error) {
-                console.error('Login error:', error);
-                let errorMessage = 'خطأ في تسجيل الدخول';
-                if (error.code === 'auth/user-not-found') {
-                    errorMessage = 'لا يوجد حساب بهذا البريد';
-                } else if (error.code === 'auth/wrong-password') {
-                    errorMessage = 'كلمة المرور غير صحيحة';
-                } else if (error.code === 'auth/invalid-email') {
-                    errorMessage = 'البريد الإلكتروني غير صالح';
-                }
-                showError('loginError', errorMessage);
-            } finally {
-                document.getElementById('loginText').style.display = 'inline';
-                document.getElementById('loginSpinner').style.display = 'none';
-            }
-        }
-
-        // تحميل بيانات المستخدم من Firestore
-        async function loadUserData(uid) {
-            try {
-                const doc = await db.collection('users').doc(uid).get();
-                if (doc.exists) {
-                    const data = doc.data();
-                    userData = {
-                        name: data.name || 'زائر',
-                        grade: data.grade || '',
-                        age: data.age || '',
-                        avatar: data.avatar || '🧑',
-                        email: data.email || '',
-                        joinedDate: data.joinedDate || new Date().toISOString(),
-                        stats: data.stats || { completedTasks: 0, score: 0, streak: 0 }
-                    };
-                    
-                    if (data.missions) {
-                        missions = data.missions;
-                    }
-                    
-                    updateUI();
-                    renderMainMissions('daily');
-                    renderMainMissions('weekly');
-                    renderMainMissions('monthly');
-                    if (currentMainMission) {
-                        renderSubMissions(currentMainMission, currentCategory);
-                    }
-                    updateProgress();
-                }
-            } catch (error) {
-                console.error('خطأ في تحميل البيانات:', error);
-            }
-        }
-
-        // حفظ بيانات المستخدم في Firestore
-        async function saveUserData() {
-            if (auth && auth.currentUser) {
-                try {
-                    await db.collection('users').doc(auth.currentUser.uid).update({
-                        name: userData.name,
-                        grade: userData.grade,
-                        age: userData.age,
-                        avatar: userData.avatar,
-                        stats: userData.stats,
-                        missions: missions
-                    });
-                } catch (error) {
-                    console.error('خطأ في حفظ البيانات:', error);
-                }
+        // عرض الإشعارات
+        function renderNotifications() {
+            let l = document.getElementById('notificationsList');
+            if (notifications.length === 0) {
+                l.innerHTML = '<div style="text-align:center; padding:20px;">لا توجد إشعارات جديدة</div>';
             } else {
-                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-                if (currentUser) {
-                    currentUser.name = userData.name;
-                    currentUser.grade = userData.grade;
-                    currentUser.age = userData.age;
-                    currentUser.avatar = userData.avatar;
-                    currentUser.stats = userData.stats;
-                    currentUser.missions = missions;
+                l.innerHTML = notifications.map(n => {
+                    let snoozeBtn = n.missionId ? 
+                        `<button class="snooze-btn" onclick="event.stopPropagation(); snoozeNotification(${n.id}, 10)">⏰ ذكرني بعد 10 دقائق</button>` : '';
                     
-                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    let icon = 'fa-bell';
+                    if (n.source === 'prayer') {
+                        icon = 'fa-pray';
+                    } else if (n.type === 'urgent') {
+                        icon = 'fa-exclamation-circle';
+                    } else if (n.type === 'important') {
+                        icon = 'fa-exclamation-triangle';
+                    }
                     
-                    const localUsers = JSON.parse(localStorage.getItem('localUsers') || '[]');
-                    const index = localUsers.findIndex(u => u.email === currentUser.email);
-                    if (index !== -1) {
-                        localUsers[index] = currentUser;
-                        localStorage.setItem('localUsers', JSON.stringify(localUsers));
+                    return `<div class="notification-item ${n.read ? 'read' : ''} ${n.snoozeCount ? 'snooze-item' : ''}" onclick="markNotificationAsRead(${n.id}, this)">
+                        <div class="notification-text">
+                            <i class="fas ${icon}"></i> 
+                            ${n.text}
+                        </div>
+                        <div class="notification-time">${n.time}</div>
+                        ${snoozeBtn}
+                    </div>`;
+                }).join('');
+            }
+        }
+
+        // تحديد مستوى التنبيه بناءً على الأيام المتبقية
+        function getNotificationLevel(daysLeft) {
+            if (daysLeft <= 1) return 'urgent';
+            if (daysLeft <= 3) return 'important';
+            return 'normal';
+        }
+
+        // فحص المواعيد النهائية
+        function checkDeadlines() {
+            let now = new Date();
+            
+            for (let category in missions) {
+                if (category === 'daily') continue;
+                
+                for (let missionId in missions[category]) {
+                    let mission = missions[category][missionId];
+                    if (!mission.deadline) continue;
+                    
+                    let deadlineDate = new Date(mission.deadline.date);
+                    let daysLeft = Math.ceil((deadlineDate - now) / (1000 * 60 * 60 * 24));
+                    
+                    updateMissionUrgency(missionId, category, daysLeft);
+                    
+                    if (daysLeft === 3 && !mission.deadline.notified3) {
+                        addNotification(`⚠️ مهمة "${mission.title}" متبقى عليها 3 أيام!`, 'important', missionId);
+                        mission.deadline.notified3 = true;
+                        saveData();
+                    }
+                    
+                    if (daysLeft === 1 && !mission.deadline.notified1) {
+                        addNotification(`🔴 مهمة "${mission.title}" متبقى عليها يوم واحد فقط!`, 'urgent', missionId);
+                        mission.deadline.notified1 = true;
+                        saveData();
+                    }
+                    
+                    if (daysLeft === 0 && !mission.deadline.notified0) {
+                        addNotification(`⏰ مهمة "${mission.title}" موعدها النهائي اليوم!`, 'urgent', missionId);
+                        mission.deadline.notified0 = true;
+                        saveData();
+                    }
+                    
+                    if (daysLeft < 0 && !mission.deadline.notifiedLate) {
+                        addNotification(`⚠️ مهمة "${mission.title}" متأخرة ب ${Math.abs(daysLeft)} أيام!`, 'urgent', missionId);
+                        mission.deadline.notifiedLate = true;
+                        saveData();
                     }
                 }
             }
         }
 
-        // مراقبة حالة المصادقة
-        if (auth) {
-            auth.onAuthStateChanged(async (user) => {
-                if (user) {
-                    await loadUserData(user.uid);
-                } else {
-                    const localUser = JSON.parse(localStorage.getItem('currentUser'));
-                    if (localUser) {
-                        userData = {
-                            name: localUser.name,
-                            grade: localUser.grade,
-                            age: localUser.age,
-                            avatar: localUser.avatar,
-                            email: localUser.email,
-                            joinedDate: localUser.joinedDate,
-                            stats: localUser.stats
-                        };
-                        missions = localUser.missions || {
-                            daily: {},
-                            weekly: {},
-                            monthly: {}
-                        };
-                        updateUI();
-                        renderMainMissions('daily');
-                        renderMainMissions('weekly');
-                        renderMainMissions('monthly');
-                    } else {
-                        userData = {
-                            name: 'زائر',
-                            grade: '',
-                            age: '',
-                            avatar: '🧑',
-                            email: '',
-                            joinedDate: new Date().toISOString(),
-                            stats: {
-                                completedTasks: 0,
-                                score: 0,
-                                streak: 0
+        // تحديث لون المهمة حسب درجة الإلحاح
+        function updateMissionUrgency(missionId, category, daysLeft) {
+            let missionElement = document.querySelector(`[data-mission-id="${missionId}"]`);
+            if (missionElement) {
+                missionElement.classList.remove('urgent', 'important');
+                if (daysLeft <= 1) {
+                    missionElement.classList.add('urgent');
+                } else if (daysLeft <= 3) {
+                    missionElement.classList.add('important');
+                }
+            }
+        }
+
+        // بدء الفحص الدوري
+        function startPeriodicChecks() {
+            setInterval(checkDeadlines, 60 * 60 * 1000);
+            setInterval(checkOverdueTasks, 6 * 60 * 60 * 1000);
+            scheduleMorningReminder();
+            scheduleEveningReminder();
+        }
+
+        // فحص المهام المتأخرة
+        function checkOverdueTasks() {
+            let now = new Date();
+            let overdueTasks = [];
+            
+            for (let category in missions) {
+                if (category === 'daily') continue;
+                
+                for (let missionId in missions[category]) {
+                    let mission = missions[category][missionId];
+                    if (!mission.deadline) continue;
+                    
+                    let deadlineDate = new Date(mission.deadline.date);
+                    if (deadlineDate < now) {
+                        let daysLate = Math.ceil((now - deadlineDate) / (1000 * 60 * 60 * 24));
+                        overdueTasks.push({ mission, daysLate });
+                    }
+                }
+            }
+            
+            if (overdueTasks.length > 0 && notificationSettings.repeatInterval > 0) {
+                let repeatHours = notificationSettings.repeatInterval;
+                let lastReminder = localStorage.getItem('lastOverdueReminder');
+                
+                if (!lastReminder || (now - new Date(lastReminder)) > repeatHours * 60 * 60 * 1000) {
+                    let taskList = overdueTasks.map(t => `"${t.mission.title}" (${t.daysLate} أيام)`).join('، ');
+                    addNotification(`🔔 مهام متأخرة: ${taskList}`, 'urgent');
+                    localStorage.setItem('lastOverdueReminder', now.toISOString());
+                }
+            }
+        }
+
+        // تنبيه الصباح
+        function scheduleMorningReminder() {
+            let now = new Date();
+            let [hours, minutes] = notificationSettings.preferredTime.split(':').map(Number);
+            let reminderTime = new Date(now);
+            reminderTime.setHours(hours, minutes, 0, 0);
+            
+            if (reminderTime < now) {
+                reminderTime.setDate(reminderTime.getDate() + 1);
+            }
+            
+            let timeToReminder = reminderTime - now;
+            
+            setTimeout(() => {
+                showMorningReminder();
+                setInterval(showMorningReminder, 24 * 60 * 60 * 1000);
+            }, timeToReminder);
+        }
+
+        // عرض تنبيه الصباح
+        function showMorningReminder() {
+            let todayTasks = getTodayTasks();
+            if (todayTasks.length > 0) {
+                addNotification(`🌅 صباح الخير! لديك ${todayTasks.length} مهام اليوم`, 'normal');
+            }
+        }
+
+        // تنبيه المساء
+        function scheduleEveningReminder() {
+            let now = new Date();
+            let reminderTime = new Date(now);
+            reminderTime.setHours(20, 0, 0, 0);
+            
+            if (reminderTime < now) {
+                reminderTime.setDate(reminderTime.getDate() + 1);
+            }
+            
+            let timeToReminder = reminderTime - now;
+            
+            setTimeout(() => {
+                showEveningReminder();
+                setInterval(showEveningReminder, 24 * 60 * 60 * 1000);
+            }, timeToReminder);
+        }
+
+        // عرض تنبيه المساء
+        function showEveningReminder() {
+            let completed = userData.stats.completedTasks;
+            let score = userData.stats.score;
+            addNotification(`🌙 مساء الخير! أنجزت اليوم ${completed} مهام وحصلت على ${score} نقطة`, 'normal');
+        }
+
+        // الحصول على مهام اليوم
+        function getTodayTasks() {
+            let today = new Date().toDateString();
+            let tasks = [];
+            
+            for (let category in missions) {
+                for (let missionId in missions[category]) {
+                    let mission = missions[category][missionId];
+                    if (mission.tasks) {
+                        mission.tasks.forEach(task => {
+                            if (!task.completed) {
+                                tasks.push(task);
                             }
-                        };
-                        missions = {
-                            daily: {},
-                            weekly: {},
-                            monthly: {}
-                        };
-                        updateUI();
-                        renderMainMissions('daily');
-                        renderMainMissions('weekly');
-                        renderMainMissions('monthly');
+                        });
                     }
+                }
+            }
+            
+            return tasks;
+        }
+
+        // تنبيهات التقدم
+        function checkProgressMilestones() {
+            let total = 0;
+            let completed = 0;
+            
+            for (let category in missions) {
+                for (let mid in missions[category]) {
+                    if (missions[category][mid].tasks) {
+                        missions[category][mid].tasks.forEach(task => {
+                            total++;
+                            if (task.completed) completed++;
+                        });
+                    }
+                }
+            }
+            
+            let percentage = total ? Math.round((completed / total) * 100) : 0;
+            let milestones = [25, 50, 75, 100];
+            
+            milestones.forEach(m => {
+                let key = `progress_${m}`;
+                if (percentage >= m && !localStorage.getItem(key)) {
+                    addNotification(`🎯 رائع! وصلت لـ ${m}% من المهام!`, 'progress');
+                    localStorage.setItem(key, 'true');
                 }
             });
         }
 
-        // نسيان كلمة المرور
-        async function forgotPassword() {
-            const email = prompt('أدخل بريدك الإلكتروني لإعادة تعيين كلمة المرور:');
-            if (email && auth) {
-                try {
-                    await auth.sendPasswordResetEmail(email);
-                    showMessage('📧 تم إرسال رابط إعادة التعيين إلى بريدك');
-                } catch (error) {
-                    showError('loginError', 'حدث خطأ، تأكد من صحة البريد');
+        // تسجيل إنجاز مهمة بعد تنبيه
+        function recordTaskCompletionAfterNotification(taskId, missionId) {
+            let relevantNotification = notifications.find(n => 
+                n.missionId === missionId && 
+                n.taskId === taskId &&
+                new Date() - new Date(n.datetime) < 24 * 60 * 60 * 1000
+            );
+            
+            if (relevantNotification) {
+                notificationStats.completedAfter++;
+                
+                let type = relevantNotification.type;
+                if (notificationStats.byType[type]) {
+                    notificationStats.byType[type].completed++;
                 }
-            } else {
-                showMessage('📧 وظيفة استعادة كلمة المرور غير متاحة حالياً');
+                
+                let responseTime = (new Date() - new Date(relevantNotification.datetime)) / (1000 * 60);
+                notificationStats.responseTimes.push(responseTime);
+                
+                let avg = notificationStats.responseTimes.reduce((a, b) => a + b, 0) / notificationStats.responseTimes.length;
+                notificationStats.avgResponseTime = Math.round(avg);
+                
+                saveData();
+                updateNotificationStats();
             }
         }
 
-        // الدخول كزائر
-        function continueAsGuest() {
-            document.getElementById('authModal').style.display = 'none';
-            showMessage('👋 مرحباً بك كزائر');
-        }
-
-        // تسجيل الخروج
-        async function logout() {
-            if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
-                if (auth) {
-                    try {
-                        await auth.signOut();
-                    } catch (error) {
-                        console.error('خطأ في تسجيل الخروج:', error);
-                    }
-                }
+        // تحديث إحصائيات التنبيهات
+        function updateNotificationStats() {
+            let total = notificationStats.total || 1;
+            
+            let successRate = Math.round((notificationStats.completedAfter / total) * 100);
+            
+            let normalRate = notificationStats.byType.normal.sent ? 
+                Math.round((notificationStats.byType.normal.completed / notificationStats.byType.normal.sent) * 100) : 0;
+            let importantRate = notificationStats.byType.important.sent ? 
+                Math.round((notificationStats.byType.important.completed / notificationStats.byType.important.sent) * 100) : 0;
+            let urgentRate = notificationStats.byType.urgent.sent ? 
+                Math.round((notificationStats.byType.urgent.completed / notificationStats.byType.urgent.sent) * 100) : 0;
+            
+            if (document.getElementById('statsPage').classList.contains('active')) {
+                document.getElementById('totalNotifications').textContent = notificationStats.total;
+                document.getElementById('completedAfterNotification').textContent = notificationStats.completedAfter;
+                document.getElementById('avgResponseTime').textContent = notificationStats.avgResponseTime || 0;
+                document.getElementById('successRate').textContent = successRate + '%';
                 
-                localStorage.removeItem('currentUser');
+                document.getElementById('normalRate').textContent = normalRate + '%';
+                document.getElementById('normalProgress').style.width = normalRate + '%';
                 
-                userData = {
-                    name: 'زائر',
-                    grade: '',
-                    age: '',
-                    avatar: '🧑',
-                    email: '',
-                    joinedDate: new Date().toISOString(),
-                    stats: {
-                        completedTasks: 0,
-                        score: 0,
-                        streak: 0
-                    }
-                };
-                missions = {
-                    daily: {},
-                    weekly: {},
-                    monthly: {}
-                };
+                document.getElementById('importantRate').textContent = importantRate + '%';
+                document.getElementById('importantProgress').style.width = importantRate + '%';
                 
-                updateUI();
-                renderMainMissions('daily');
-                renderMainMissions('weekly');
-                renderMainMissions('monthly');
-                backToHome();
-                showMessage('👋 تم تسجيل الخروج');
+                document.getElementById('urgentRate').textContent = urgentRate + '%';
+                document.getElementById('urgentProgress').style.width = urgentRate + '%';
+                
+                generateWeeklyReport();
             }
         }
 
-        // تحديث الواجهة
+        // إنشاء التقرير الأسبوعي
+        function generateWeeklyReport() {
+            let reportDiv = document.getElementById('weeklyReport');
+            let today = new Date();
+            let weekDays = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+            
+            let report = '<div style="display: grid; gap: 10px;">';
+            
+            for (let i = 6; i >= 0; i--) {
+                let day = new Date(today);
+                day.setDate(day.getDate() - i);
+                let dayName = weekDays[day.getDay()];
+                let dateStr = day.toDateString();
+                
+                let dayNotifications = notifications.filter(n => 
+                    new Date(n.datetime).toDateString() === dateStr
+                ).length;
+                
+                let dayCompleted = completedTasks.filter(t => 
+                    new Date(t.completedAt || t.datetime).toDateString() === dateStr
+                ).length;
+                
+                report += `
+                    <div class="weekly-report-item" style="display: flex; justify-content: space-between; padding: 8px; background: #f8f9fa; border-radius: 8px; margin: 5px 0;">
+                        <span style="font-weight: 600;">${dayName}</span>
+                        <span>📊 ${dayNotifications} تنبيهات</span>
+                        <span>✅ ${dayCompleted} إنجاز</span>
+                    </div>
+                `;
+            }
+            
+            report += '</div>';
+            reportDiv.innerHTML = report;
+        }
+
+        // عرض صفحة الإحصائيات
+        function showNotificationStats() {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('statsPage').classList.add('active');
+            document.getElementById('welcomeMessage').style.display = 'none';
+            updateNotificationStats();
+            toggleNav();
+        }
+
+        // ==================== دوال المهام ====================
+
         function updateUI() {
             document.getElementById('userNameDisplay').textContent = userData.name;
             document.getElementById('userAvatar').innerHTML = userData.avatar;
@@ -2800,7 +3123,6 @@
             document.getElementById('statStreak').textContent = userData.stats.streak;
         }
 
-        // التنقل
         function toggleNav() {
             document.getElementById('navBar').classList.toggle('open');
         }
@@ -2830,6 +3152,7 @@
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('settingsPage').classList.add('active');
             document.getElementById('welcomeMessage').style.display = 'none';
+            updateToggleButtons();
             toggleNav();
         }
 
@@ -2849,7 +3172,6 @@
             }
         }
 
-        // تعديل الملف الشخصي
         function showEditProfileModal() {
             document.getElementById('editName').value = userData.name;
             document.getElementById('editGrade').value = userData.grade || '';
@@ -2889,12 +3211,42 @@
             };
 
             updateUI();
-            saveUserData();
+            saveData();
             closeEditProfileModal();
             showMessage('✅ تم تحديث الملف الشخصي');
         }
 
-        // اختيار نوع المهمة
+        function logout() {
+            if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
+                userData = {
+                    name: 'زائر',
+                    grade: '',
+                    age: '',
+                    avatar: '🧑',
+                    joinedDate: new Date().toISOString(),
+                    stats: {
+                        completedTasks: 0,
+                        score: 0,
+                        streak: 0
+                    }
+                };
+                missions = {
+                    daily: {},
+                    weekly: {},
+                    monthly: {}
+                };
+                completedTasks = [];
+                
+                saveData();
+                updateUI();
+                renderMainMissions('daily');
+                renderMainMissions('weekly');
+                renderMainMissions('monthly');
+                backToHome();
+                showMessage('👋 تم تسجيل الخروج');
+            }
+        }
+
         function selectMissionType(type, el) {
             currentMissionType = type;
             document.querySelectorAll('.type-option').forEach(opt => opt.classList.remove('active'));
@@ -2918,7 +3270,6 @@
             }
         }
 
-        // إضافة مهمة رئيسية
         let currentMissionType = 'daily';
 
         function showAddMainMissionForm(category) {
@@ -2968,11 +3319,11 @@
                     days: days,
                     date: deadlineDate.toISOString(),
                     message: `موعد المهمة "${title}" بعد ${days} أيام`,
-                    notified: false
+                    notified3: false,
+                    notified1: false,
+                    notified0: false,
+                    notifiedLate: false
                 };
-                
-                // جدولة التنبيهات
-                scheduleDeadlineReminders(missionId, currentMissionType, title, days, deadlineDate);
             }
 
             if (!missions[currentMissionType]) missions[currentMissionType] = {};
@@ -2987,7 +3338,7 @@
             };
 
             renderMainMissions(currentMissionType);
-            saveUserData();
+            saveData();
             document.getElementById('addMainMissionPanel').classList.add('hidden');
             showMessage('✅ تمت إضافة المهمة الرئيسية بنجاح');
             
@@ -3000,48 +3351,6 @@
             }
         }
 
-        // جدولة تنبيهات الموعد النهائي
-        function scheduleDeadlineReminders(missionId, type, title, days, deadlineDate) {
-            // تنبيه قبل 3 أيام
-            let reminder1 = new Date(deadlineDate);
-            reminder1.setDate(reminder1.getDate() - 3);
-            
-            // تنبيه قبل يوم واحد
-            let reminder2 = new Date(deadlineDate);
-            reminder2.setDate(reminder2.getDate() - 1);
-            
-            // تنبيه في نفس اليوم
-            let reminder3 = new Date(deadlineDate);
-            
-            let now = new Date();
-            
-            // جدولة التنبيهات إذا كانت في المستقبل
-            if (reminder1 > now) {
-                let timeToReminder1 = reminder1.getTime() - now.getTime();
-                setTimeout(() => {
-                    addNotification(`⚠️ مهمة "${title}" متبقى عليها 3 أيام!`, true);
-                    playLongSound();
-                }, timeToReminder1);
-            }
-            
-            if (reminder2 > now) {
-                let timeToReminder2 = reminder2.getTime() - now.getTime();
-                setTimeout(() => {
-                    addNotification(`⚠️ مهمة "${title}" متبقى عليها يوم واحد!`, true);
-                    playLongSound();
-                }, timeToReminder2);
-            }
-            
-            if (reminder3 > now) {
-                let timeToReminder3 = reminder3.getTime() - now.getTime();
-                setTimeout(() => {
-                    addNotification(`⏰ مهمة "${title}" موعدها النهائي اليوم!`, true);
-                    playLongSound();
-                }, timeToReminder3);
-            }
-        }
-
-        // إضافة مهمة فرعية
         function showAddSubMissionForm() {
             if (!currentMainMission) {
                 showMessage('❌ الرجاء اختيار مهمة رئيسية أولاً');
@@ -3067,7 +3376,6 @@
             editingTaskId = null;
         }
 
-        // إدارة النقاط الفرعية
         function addSubtaskField(value = '') {
             let c = document.getElementById('subtasksContainer');
             let i = subtaskFields.length;
@@ -3075,6 +3383,7 @@
             let h = `<div class="subtask-item" id="subtask-${i}">
                 <input type="checkbox" class="subtask-checkbox" disabled>
                 <input type="text" class="form-control" value="${value}" placeholder="نقطة ${i + 1}" style="flex:1;" onchange="updateSubtaskValue(${i}, this.value)">
+                <span class="subtask-alarm-icon" onclick="openAlarmModal('subtask', 'subtask-${i}', '${value || 'نقطة'}')">⏰</span>
                 <i class="fas fa-trash subtask-delete" onclick="removeSubtaskField(${i})"></i>
             </div>`;
             c.insertAdjacentHTML('beforeend', h);
@@ -3096,6 +3405,7 @@
                 c.innerHTML += `<div class="subtask-item" id="subtask-${i}">
                     <input type="checkbox" class="subtask-checkbox" disabled>
                     <input type="text" class="form-control" value="${v}" placeholder="نقطة ${i + 1}" style="flex:1;" onchange="updateSubtaskValue(${i}, this.value)">
+                    <span class="subtask-alarm-icon" onclick="openAlarmModal('subtask', 'subtask-${i}', '${v || 'نقطة'}')">⏰</span>
                     <i class="fas fa-trash subtask-delete" onclick="removeSubtaskField(${i})"></i>
                 </div>`;
             });
@@ -3155,7 +3465,7 @@
                 showMessage("✅ تمت إضافة المهمة");
             }
 
-            saveUserData();
+            saveData();
             document.getElementById('addSubMissionPanel').classList.add('hidden');
             document.getElementById('taskTitle').value = '';
             document.getElementById('taskTime').value = '';
@@ -3168,7 +3478,6 @@
             updateProgress();
         }
 
-        // عرض المهام الرئيسية
         function renderMainMissions(c) {
             let con = document.getElementById(c + 'MainMissions');
             if (!con) return;
@@ -3182,10 +3491,27 @@
             Object.values(missions[c]).forEach(m => {
                 let tc = m.tasks ? m.tasks.length : 0;
                 let cc = m.tasks ? m.tasks.filter(t => t.completed).length : 0;
-                let deadlineHtml = m.deadline ? `<span class="deadline-badge"><i class="fas fa-hourglass-half"></i> ${m.deadline.days} يوم</span>` : '';
+                
+                let urgencyClass = '';
+                let deadlineHtml = '';
+                
+                if (m.deadline) {
+                    let now = new Date();
+                    let deadlineDate = new Date(m.deadline.date);
+                    let daysLeft = Math.ceil((deadlineDate - now) / (1000 * 60 * 60 * 24));
+                    
+                    if (daysLeft <= 1) {
+                        urgencyClass = 'urgent';
+                    } else if (daysLeft <= 3) {
+                        urgencyClass = 'important';
+                    }
+                    
+                    deadlineHtml = `<span class="deadline-badge ${urgencyClass}"><i class="fas fa-hourglass-half"></i> ${daysLeft} يوم</span>`;
+                }
 
-                con.innerHTML += `<div class="main-mission-item">
+                con.innerHTML += `<div class="main-mission-item ${urgencyClass}" data-mission-id="${m.id}">
                     <span class="main-mission-title" onclick="selectMainMission('${m.id}','${c}')">${m.title}</span>
+                    <span class="mission-alarm-icon" onclick="event.stopPropagation(); openAlarmModal('mission', '${m.id}', '${m.title}')">⏰</span>
                     ${deadlineHtml}
                     <span class="main-mission-count">${cc}/${tc}</span>
                     <i class="fas fa-check-circle complete-main-mission" onclick="completeMainMission('${m.id}','${c}', event)"></i>
@@ -3203,7 +3529,6 @@
             backToHome();
         }
 
-        // عرض المهام الفرعية
         function renderSubMissions(id, c) {
             let g = document.getElementById('subMissionsGrid');
             let m = missions[c][id];
@@ -3223,10 +3548,28 @@
                 let subs = t.subtasks || [];
                 let cs = subs.filter(s => s.completed).length;
                 let ts = subs.length;
-                let deadlineMsg = m.deadline ? `<div class="deadline-badge"><i class="fas fa-clock"></i> موعد التسليم بعد ${m.deadline.days} يوم</div>` : '';
+                
+                let deadlineClass = '';
+                let deadlineMsg = '';
+                if (m.deadline) {
+                    let now = new Date();
+                    let deadlineDate = new Date(m.deadline.date);
+                    let daysLeft = Math.ceil((deadlineDate - now) / (1000 * 60 * 60 * 24));
+                    
+                    if (daysLeft <= 1) {
+                        deadlineClass = 'urgent';
+                    } else if (daysLeft <= 3) {
+                        deadlineClass = 'important';
+                    }
+                    
+                    deadlineMsg = `<div class="deadline-badge ${deadlineClass}"><i class="fas fa-clock"></i> موعد التسليم بعد ${daysLeft} يوم</div>`;
+                }
 
                 return `<div class="sub-mission-card">
-                    <div class="card-title">${t.title}</div>
+                    <div class="card-title">
+                        ${t.title}
+                        <span class="card-alarm-icon" onclick="openAlarmModal('task', ${t.id}, '${t.title}')">⏰</span>
+                    </div>
                     ${deadlineMsg}
                     ${subs.length ? `<div class="subtasks-section">
                         <div class="subtasks-title">
@@ -3236,6 +3579,7 @@
                         ${subs.map((s, i) => `<div class="subtask-item">
                             <input type="checkbox" class="subtask-checkbox" ${s.completed ? 'checked' : ''} onchange="toggleSubtask('${id}','${c}',${t.id},${i})">
                             <span class="subtask-text ${s.completed ? 'completed' : ''}">${s.text}</span>
+                            <span class="subtask-alarm-icon" onclick="event.stopPropagation(); openAlarmModal('subtask', '${t.id}-${i}', '${s.text}')">⏰</span>
                             <i class="fas fa-trash subtask-delete" onclick="deleteSubtask('${id}','${c}',${t.id},${i})"></i>
                         </div>`).join('')}
                     </div>` : ''}
@@ -3255,22 +3599,32 @@
             }).join('');
         }
 
-        // إكمال المهام
         function toggleTaskStatus(id, c, tid) {
             let t = missions[c][id].tasks.find(x => x.id === tid);
             if (t && !t.completed) {
                 t.completed = true;
-                completedTasks.push({ ...t, missionTitle: missions[c][id].title });
+                t.completedAt = new Date().toISOString();
+                
+                completedTasks.push({ 
+                    ...t, 
+                    missionTitle: missions[c][id].title,
+                    completedAt: t.completedAt 
+                });
+                
                 if (t.subtasks) t.subtasks.forEach(s => s.completed = true);
                 userData.stats.completedTasks++;
                 userData.stats.score += t.score;
+                
+                recordTaskCompletionAfterNotification(t.id, id);
+                
                 addNotification(`✅ أتممت المهمة: ${t.title}`);
                 playSound();
                 updateUI();
-                saveUserData();
+                saveData();
                 renderMainMissions(c);
                 renderSubMissions(id, c);
                 updateProgress();
+                checkProgressMilestones();
             }
         }
 
@@ -3283,14 +3637,23 @@
 
                 if (t.subtasks.every(s => s.completed) && !t.completed) {
                     t.completed = true;
+                    t.completedAt = new Date().toISOString();
                     userData.stats.completedTasks++;
                     userData.stats.score += t.score;
-                    completedTasks.push({ ...t, missionTitle: missions[c][id].title });
+                    completedTasks.push({ 
+                        ...t, 
+                        missionTitle: missions[c][id].title,
+                        completedAt: t.completedAt 
+                    });
+                    
+                    recordTaskCompletionAfterNotification(t.id, id);
+                    
                     updateUI();
-                    saveUserData();
+                    saveData();
                     renderMainMissions(c);
+                    checkProgressMilestones();
                 }
-                saveUserData();
+                saveData();
                 renderSubMissions(id, c);
                 updateProgress();
             }
@@ -3301,7 +3664,7 @@
             if (t && t.subtasks) {
                 t.subtasks.splice(i, 1);
                 t.score = calculateTaskScore(t.subtasks);
-                saveUserData();
+                saveData();
                 renderSubMissions(id, c);
             }
         }
@@ -3328,7 +3691,7 @@
             e.stopPropagation();
             if (confirm("هل أنت متأكد من حذف هذه المهمة؟")) {
                 missions[c][id].tasks = missions[c][id].tasks.filter(t => t.id !== tid);
-                saveUserData();
+                saveData();
                 renderMainMissions(c);
                 renderSubMissions(id, c);
                 updateProgress();
@@ -3347,10 +3710,17 @@
             m.tasks.forEach(t => {
                 if (!t.completed) {
                     t.completed = true;
+                    t.completedAt = new Date().toISOString();
                     cnt++;
                     scr += t.score || 20;
                     if (t.subtasks) t.subtasks.forEach(s => s.completed = true);
-                    completedTasks.push({ ...t, missionTitle: m.title });
+                    completedTasks.push({ 
+                        ...t, 
+                        missionTitle: m.title,
+                        completedAt: t.completedAt 
+                    });
+                    
+                    recordTaskCompletionAfterNotification(t.id, id);
                 }
             });
 
@@ -3358,12 +3728,13 @@
                 userData.stats.completedTasks += cnt;
                 userData.stats.score += scr;
                 addNotification(`🎉 تم إكمال "${m.title}" بالكامل! +${scr} نقطة`);
-                playAlarm(1000);
+                playLongSound();
                 updateUI();
-                saveUserData();
+                saveData();
                 renderMainMissions(c);
                 if (currentMainMission === id) renderSubMissions(id, c);
                 updateProgress();
+                checkProgressMilestones();
             } else {
                 showMessage("✨ كل المهام مكتملة بالفعل!");
             }
@@ -3373,7 +3744,7 @@
             e.stopPropagation();
             if (confirm("هل أنت متأكد من حذف هذه المهمة الرئيسية وجميع مهامها الفرعية؟")) {
                 delete missions[c][id];
-                saveUserData();
+                saveData();
 
                 if (currentMainMission === id) {
                     let f = Object.keys(missions[c])[0];
@@ -3381,46 +3752,13 @@
                         selectMainMission(f, c);
                     } else {
                         currentMainMission = null;
-                        document.getElementById('currentMainTitle').textContent = 'وَقُل رَّبِّ زِدْنِي عِلْمًا';
+                        document.getElementById('currentMainTitle').textContent = 'المهام';
                         document.getElementById('welcomeMessage').style.display = 'block';
                     }
                 }
 
                 renderMainMissions(c);
                 showMessage('✅ تم الحذف');
-            }
-        }
-
-        // الإشعارات
-        function addNotification(text, isImportant = false) {
-            let n = {
-                id: Date.now(),
-                text: text,
-                time: new Date().toLocaleTimeString('ar-EG'),
-                date: new Date().toDateString(),
-                read: false,
-                important: isImportant
-            };
-            
-            notifications.unshift(n);
-            unreadNotifications++;
-            
-            // تحديث عداد الإشعارات
-            updateNotificationBadge();
-            
-            // الاحتفاظ بآخر 50 إشعار فقط
-            notifications = notifications.slice(0, 50);
-            
-            renderNotifications();
-        }
-
-        function updateNotificationBadge() {
-            let badge = document.getElementById('notificationBadge');
-            if (unreadNotifications > 0) {
-                badge.textContent = unreadNotifications > 9 ? '9+' : unreadNotifications;
-                badge.style.display = 'flex';
-            } else {
-                badge.style.display = 'none';
             }
         }
 
@@ -3431,23 +3769,7 @@
                 unreadNotifications--;
                 updateNotificationBadge();
                 
-                // تغيير لون الإشعار عند القراءة
                 element.style.opacity = '0.7';
-            }
-        }
-
-        function renderNotifications() {
-            let l = document.getElementById('notificationsList');
-            if (notifications.length === 0) {
-                l.innerHTML = '<div style="text-align:center; padding:20px;">لا توجد إشعارات جديدة</div>';
-            } else {
-                l.innerHTML = notifications.map(n => `<div class="notification-item ${n.read ? 'read' : ''}" onclick="markNotificationAsRead(${n.id}, this)">
-                    <div class="notification-text">
-                        <i class="fas ${n.important ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i> 
-                        ${n.text}
-                    </div>
-                    <div class="notification-time">${n.time}</div>
-                </div>`).join('');
             }
         }
 
@@ -3459,7 +3781,6 @@
             }
         }
 
-        // المهام المكتملة
         function renderCompletedTasks() {
             let list = document.getElementById('completedTasksList');
             if (completedTasks.length === 0) {
@@ -3474,7 +3795,6 @@
             }
         }
 
-        // وظائف المنبه
         function toggleAlarm() {
             document.getElementById('alarmPanel').classList.toggle('show');
         }
@@ -3500,10 +3820,10 @@
                         timerSeconds--;
                     } else {
                         pauseTimer();
-                        playLongSound(); // 3 ثواني صوت
+                        playLongSound();
                         let msg = (userData.name !== 'زائر' ? userData.name + '، ' : '') + '⏰ انتهى الوقت!';
                         showMessage(msg);
-                        addNotification(msg, true);
+                        addNotification(msg, 'urgent');
                     }
                 } else {
                     timerSeconds++;
@@ -3535,7 +3855,6 @@
             document.getElementById('timerDisplay').textContent = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
         }
 
-        // جعل المنبة قابل للسحب
         let alarmPanel = document.getElementById('alarmPanel');
         let alarmHeader = document.getElementById('alarmHeader');
         let isDragging = false;
@@ -3566,7 +3885,6 @@
             alarmPanel.style.transition = '';
         };
 
-        // الأكواد السرية
         function toggleCodeInput() {
             let c = document.getElementById('codeInputContainer');
             c.style.display = c.style.display === 'none' ? 'flex' : 'none';
@@ -3581,11 +3899,10 @@
             let code = document.getElementById('codeInput').value.trim();
             let r = document.getElementById('codeResult');
 
-            // التحقق من كود الإدارة أولاً
-            if (code === '#1240#' || code === '1240') {
-                // التحويل الفوري إلى صفحة الإدارة
+            // التحقق من كود الإدارة (12424)
+            if (code === '12424') {
                 window.location.href = 'admin-panel.html';
-                return; // نوقف تنفيذ الدالة هنا
+                return;
             }
 
             // باقي الأكواد السرية
@@ -3608,7 +3925,6 @@
             }
         }
 
-        // الوضع الليلي
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
             let d = document.body.classList.contains('dark-mode');
@@ -3616,7 +3932,6 @@
             localStorage.setItem('darkMode', d);
         }
 
-        // التقدم
         function updateProgress() {
             let t = 0, c = 0;
             for (let cat in missions) {
@@ -3633,7 +3948,6 @@
             document.getElementById('progressCircle').textContent = p + '%';
         }
 
-        // رسالة نجاح
         function showMessage(t) {
             let m = document.getElementById('successMessage');
             document.getElementById('messageText').textContent = t;
@@ -3641,30 +3955,13 @@
             setTimeout(() => m.style.display = 'none', 2000);
         }
 
-        function showError(elementId, message) {
-            const errorEl = document.getElementById(elementId);
-            errorEl.textContent = message;
-            errorEl.style.display = 'block';
-            setTimeout(() => {
-                errorEl.style.display = 'none';
-            }, 3000);
-        }
-
-        // التهيئة
         window.onload = function () {
-            loadSecretCodes();
+            loadData();
             
             if (localStorage.getItem('darkMode') === 'true') {
                 document.body.classList.add('dark-mode');
                 document.querySelector('.top-btn i').className = 'fas fa-sun';
             }
-
-            setTimeout(() => {
-                const localUser = JSON.parse(localStorage.getItem('currentUser'));
-                if (!localUser && (!auth || !auth.currentUser)) {
-                    document.getElementById('authModal').style.display = 'flex';
-                }
-            }, 1000);
 
             updateUI();
             updateProgress();
