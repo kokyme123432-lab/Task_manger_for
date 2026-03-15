@@ -240,7 +240,7 @@
 
         /* ========== الناف بار ========== */
         .nav-bar {
-            width: 250px;
+            width: 280px;
             background: #fff;
             padding: 80px 20px 30px;
             position: fixed;
@@ -1837,7 +1837,7 @@
             </div>
             <input type="text" id="editName" class="modal-input" placeholder="الاسم">
             <select id="editGrade" class="modal-select">
-                <option value="">اختر الصف الدراسي:</option>
+                <option value="">اختر السنة الدراسية</option>
                 <option value="1 اعدادي">1 إعدادي</option>
                 <option value="2 اعدادي">2 إعدادي</option>
                 <option value="3 اعدادي">3 إعدادي</option>
@@ -1859,9 +1859,6 @@
                     <div class="avatar-option" data-avatar="👨‍🔧">👨‍🔧</div>
                     <div class="avatar-option" data-avatar="👩‍🎨">👩‍🎨</div>
                     <div class="avatar-option" data-avatar="👨‍🚒">👨‍🚒</div>
-                    <div class="avatar-option" data-avatar="👩‍🚀">👩‍🚀</div>
-                    <div class="avatar-option" data-avatar="👩‍🍳">👩‍🍳</div>
-                    
                 </div>
             </div>
             <div class="modal-buttons">
@@ -1913,6 +1910,8 @@
                         </div>
                         <div class="main-missions-content" id="dailyMainMissions"></div>
                     </div>
+                    <div class="category-add-btn" onclick="showAddMainMissionForm('daily')">
+                        <i class="fas fa-plus"></i> إضافة مهمة رئيسية
                     </div>
                 </div>
             </div>
@@ -1931,6 +1930,8 @@
                         </div>
                         <div class="main-missions-content" id="weeklyMainMissions"></div>
                     </div>
+                    <div class="category-add-btn" onclick="showAddMainMissionForm('weekly')">
+                        <i class="fas fa-plus"></i> إضافة مهمة رئيسية
                     </div>
                 </div>
             </div>
@@ -1949,11 +1950,9 @@
                         </div>
                         <div class="main-missions-content" id="monthlyMainMissions"></div>
                     </div>
-                    </div>
                     <div class="category-add-btn" onclick="showAddMainMissionForm('monthly')">
-                
                         <i class="fas fa-plus"></i> إضافة مهمة رئيسية
-                    
+                    </div>
                 </div>
             </div>
 
@@ -2094,7 +2093,7 @@
                             </div>
                         </div>
                         
-                        <!-- زر الشات الجديد -->
+                        <!-- زر الشات الجديد تحت في النص -->
                         <div style="margin: 20px 0;">
                             <button class="profile-btn" style="background: linear-gradient(145deg, #667eea, #764ba2); color: white;" onclick="goToChat()">
                                 <i class="fas fa-comment-dots"></i> Chat
@@ -3993,67 +3992,6 @@
                 }
             });
         };
-        // ==================== الربط مع لوحة التحكم ====================
-// الاستماع للتغييرات القادمة من لوحة التحكم
-window.addEventListener('storage', function(e) {
-    if (e.key === 'adminAction') {
-        let action = JSON.parse(e.newValue);
-        if (action.type === 'updateMissionTypes') {
-            // إعادة تحميل أنواع المهام
-            loadData();
-            renderMainMissions('daily');
-            renderMainMissions('weekly');
-            renderMainMissions('monthly');
-            showMessage('🔄 تم تحديث أنواع المهام من لوحة التحكم');
-        } else if (action.type === 'updateMissions') {
-            // إعادة تحميل المهام
-            loadData();
-            renderMainMissions('daily');
-            renderMainMissions('weekly');
-            renderMainMissions('monthly');
-            if (currentMainMission) {
-                renderSubMissions(currentMainMission, currentCategory);
-            }
-            updateProgress();
-            showMessage('🔄 تم تحديث المهام من لوحة التحكم');
-        } else if (action.type === 'updateCodes') {
-            // إعادة تحميل الأكواد السرية
-            loadSecretCodes();
-            showMessage('🔄 تم تحديث الأكواد السرية');
-        } else if (action.type === 'updateSettings') {
-            // إعادة تحميل الإعدادات
-            loadData();
-            showMessage('🔄 تم تحديث الإعدادات');
-        }
-    }
-});
-
-// دالة لاستقبال التحديثات من لوحة التحكم
-window.receiveAdminUpdate = function(data) {
-    if (data.type === 'missionTypes') {
-        localStorage.setItem('missionTypes', JSON.stringify(data.data));
-        loadData();
-        renderMainMissions('daily');
-        renderMainMissions('weekly');
-        renderMainMissions('monthly');
-    } else if (data.type === 'missions') {
-        localStorage.setItem('missionMasterMissions', JSON.stringify(data.data));
-        loadData();
-        renderMainMissions('daily');
-        renderMainMissions('weekly');
-        renderMainMissions('monthly');
-        if (currentMainMission) {
-            renderSubMissions(currentMainMission, currentCategory);
-        }
-        updateProgress();
-    } else if (data.type === 'codes') {
-        localStorage.setItem('secretCodes', JSON.stringify(data.data));
-        loadSecretCodes();
-    } else if (data.type === 'settings') {
-        localStorage.setItem('notificationSettings', JSON.stringify(data.data));
-        loadData();
-    }
-};
     </script>
 </body>
 </html>
