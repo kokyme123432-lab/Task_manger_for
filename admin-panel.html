@@ -1405,6 +1405,54 @@
                 }
             });
         };
+            <!-- كل الـ HTML بتاعك هنا ... -->
+
+    <script>
+        // كل دوالك القديمة هنا ...
+
+        // ===== أضف الكود الجديد هنا =====
+        function checkAdminCode() {
+            let code = prompt('أدخل الكود السري للدخول إلى لوحة التحكم:');
+            
+            // الكود السري للمدير (غيره لما تحب)
+            if (code === '1234') {
+                localStorage.setItem('isAdmin', 'true');
+                showAdminPanel();
+                showMessage('✅ مرحباً بك أيها المدير!');
+            } else {
+                alert('❌ كود خاطئ');
+            }
+        }
+
+        function showAdminPanel() {
+            // إظهار عناصر لوحة التحكم
+            document.querySelectorAll('.admin-only').forEach(el => {
+                el.style.display = 'block';
+            });
+            
+            // تفعيل الصفحات الإضافية
+            document.getElementById('adminPages').style.display = 'block';
+            
+            // إخفاء المحتوى العادي
+            document.getElementById('userContent').style.display = 'none';
+        }
+
+        function logoutAdmin() {
+            localStorage.removeItem('isAdmin');
+            location.reload();
+        }
+        // ===== نهاية الكود الجديد =====
+
+        // كمان لازم نضيف كود التحقق عند تحميل الصفحة
+        window.onload = function() {
+            // الكود القديم بتاعك هنا ...
+            
+            // تحقق إذا كان المستخدم Admin من قبل
+            if (localStorage.getItem('isAdmin') === 'true') {
+                showAdminPanel();
+            }
+        };
     </script>
 </body>
 </html>
+    
