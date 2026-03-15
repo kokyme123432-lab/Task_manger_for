@@ -3994,6 +3994,67 @@
                 }
             });
         };
+        // ==================== الربط مع لوحة التحكم ====================
+// الاستماع للتغييرات القادمة من لوحة التحكم
+window.addEventListener('storage', function(e) {
+    if (e.key === 'adminAction') {
+        let action = JSON.parse(e.newValue);
+        if (action.type === 'updateMissionTypes') {
+            // إعادة تحميل أنواع المهام
+            loadData();
+            renderMainMissions('daily');
+            renderMainMissions('weekly');
+            renderMainMissions('monthly');
+            showMessage('🔄 تم تحديث أنواع المهام من لوحة التحكم');
+        } else if (action.type === 'updateMissions') {
+            // إعادة تحميل المهام
+            loadData();
+            renderMainMissions('daily');
+            renderMainMissions('weekly');
+            renderMainMissions('monthly');
+            if (currentMainMission) {
+                renderSubMissions(currentMainMission, currentCategory);
+            }
+            updateProgress();
+            showMessage('🔄 تم تحديث المهام من لوحة التحكم');
+        } else if (action.type === 'updateCodes') {
+            // إعادة تحميل الأكواد السرية
+            loadSecretCodes();
+            showMessage('🔄 تم تحديث الأكواد السرية');
+        } else if (action.type === 'updateSettings') {
+            // إعادة تحميل الإعدادات
+            loadData();
+            showMessage('🔄 تم تحديث الإعدادات');
+        }
+    }
+});
+
+// دالة لاستقبال التحديثات من لوحة التحكم
+window.receiveAdminUpdate = function(data) {
+    if (data.type === 'missionTypes') {
+        localStorage.setItem('missionTypes', JSON.stringify(data.data));
+        loadData();
+        renderMainMissions('daily');
+        renderMainMissions('weekly');
+        renderMainMissions('monthly');
+    } else if (data.type === 'missions') {
+        localStorage.setItem('missionMasterMissions', JSON.stringify(data.data));
+        loadData();
+        renderMainMissions('daily');
+        renderMainMissions('weekly');
+        renderMainMissions('monthly');
+        if (currentMainMission) {
+            renderSubMissions(currentMainMission, currentCategory);
+        }
+        updateProgress();
+    } else if (data.type === 'codes') {
+        localStorage.setItem('secretCodes', JSON.stringify(data.data));
+        loadSecretCodes();
+    } else if (data.type === 'settings') {
+        localStorage.setItem('notificationSettings', JSON.stringify(data.data));
+        loadData();
+    }
+};
     </script>
 </body>
 </html>
