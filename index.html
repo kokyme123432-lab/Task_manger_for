@@ -3,9 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mission Master</title>
+    <title>Mission Master - السحابة</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -136,6 +142,23 @@
             color: #fff;
         }
 
+        /* ========== النقاط الفرعية في الوضع الليلي ========== */
+        body.dark-mode .subtask-item {
+            background: #2a2a3a;
+            color: #fff;
+        }
+
+        body.dark-mode .subtask-item input[type="text"] {
+            background: #1a1a24;
+            color: #fff;
+            border-color: #3a3a4a;
+        }
+
+        body:not(.dark-mode) .subtask-item {
+            background: #fff;
+            color: #1e1e2f;
+        }
+
         .app-container {
             display: flex;
             min-height: 100vh;
@@ -182,10 +205,33 @@
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
             transition: all 0.3s;
+            position: relative;
         }
 
         .top-btn:hover {
             transform: scale(1.1);
+        }
+
+        /* ========== عداد الإشعارات ========== */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            background: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border: 2px solid #fff;
+        }
+
+        body.dark-mode .notification-badge {
+            border-color: #0a0a12;
         }
 
         .nav-header {
@@ -646,6 +692,7 @@
             background: #fff;
             border-radius: 8px;
             margin: 5px 0;
+            transition: all 0.3s;
         }
 
         .subtask-checkbox {
@@ -1039,6 +1086,11 @@
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
         }
 
+        body.dark-mode .notifications-panel {
+            background: #1a1a24;
+            border-color: #2a2a3a;
+        }
+
         .notifications-panel.show {
             display: block;
         }
@@ -1050,6 +1102,7 @@
             border-radius: 20px 20px 0 0;
             display: flex;
             justify-content: space-between;
+            align-items: center;
         }
 
         .notifications-list {
@@ -1059,12 +1112,35 @@
         }
 
         .notification-item {
-            padding: 10px;
+            padding: 12px;
             border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        /* ========== ألوان الإشعارات حسب المود ========== */
+        body:not(.dark-mode) .notification-item {
+            background: #fff9e6; /* أبيض مصفر للايت مود */
+        }
+
+        body.dark-mode .notification-item {
+            background: #2a2a3a; /* رمادي غامق للدارك مود */
+            color: #fff;
+            border-bottom-color: #3a3a4a;
         }
 
         .notification-item:hover {
-            background: #f8f9fa;
+            background: #667eea !important;
+            color: #fff !important;
+        }
+
+        .notification-item:hover .notification-text i,
+        .notification-item:hover .notification-time {
+            color: #fff !important;
+        }
+
+        .notification-item.read {
+            opacity: 0.7;
         }
 
         .notification-text {
@@ -1267,36 +1343,6 @@
             border-color: #764ba2;
         }
 
-        /* ========== رسالة الكود السري ========== */
-        .secret-message {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: linear-gradient(145deg, #667eea, #764ba2);
-            color: #fff;
-            padding: 30px 50px;
-            border-radius: 60px;
-            font-size: 1.8rem;
-            z-index: 3000;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            border: 3px solid #fff;
-            animation: messagePop 0.5s;
-        }
-
-        @keyframes messagePop {
-            from {
-                opacity: 0;
-                transform: translate(-50%, -30%);
-            }
-            to {
-                opacity: 1;
-                transform: translate(-50%, -50%);
-            }
-        }
-
         /* ========== صفحة المهام المكتملة ========== */
         .completed-missions-page {
             padding: 20px;
@@ -1391,6 +1437,223 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+
+        /* ========== نافذة تسجيل الدخول الجديدة ========== */
+        .auth-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .auth-card {
+            background: #fff;
+            border-radius: 30px;
+            padding: 40px;
+            width: 90%;
+            max-width: 450px;
+            animation: modalPop 0.3s;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-mode .auth-card {
+            background: #1a1a24;
+            color: #fff;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-header i {
+            font-size: 4rem;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .auth-header h2 {
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s;
+            color: #888;
+        }
+
+        .auth-tab.active {
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            color: #fff;
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .auth-input, .auth-select {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #f0f0f0;
+            border-radius: 15px;
+            font-size: 1rem;
+            background: #f8f9fa;
+            transition: all 0.3s;
+        }
+
+        .auth-input:focus, .auth-select:focus {
+            outline: 0;
+            border-color: #667eea;
+        }
+
+        body.dark-mode .auth-input, body.dark-mode .auth-select {
+            background: #2a2a3a;
+            color: #fff;
+            border-color: #3a3a4a;
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+
+        .auth-btn:hover {
+            transform: scale(1.02);
+        }
+
+        .social-auth {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .social-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .social-btn.google {
+            background: #DB4437;
+            color: #fff;
+        }
+
+        .social-btn.facebook {
+            background: #4267B2;
+            color: #fff;
+        }
+
+        .social-btn:hover {
+            transform: scale(1.02);
+        }
+
+        .auth-link {
+            text-align: center;
+            color: #667eea;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin: 10px 0;
+        }
+
+        .auth-link:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            text-align: center;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .password-strength {
+            height: 5px;
+            border-radius: 5px;
+            margin-top: 5px;
+            transition: all 0.3s;
+        }
+
+        .strength-weak {
+            background: #ff6b6b;
+            width: 33%;
+        }
+
+        .strength-medium {
+            background: #ffd93e;
+            width: 66%;
+        }
+
+        .strength-strong {
+            background: #6bcf7f;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -1420,42 +1683,119 @@
     </div>
 
     <!-- نافذة تسجيل الدخول -->
-    <div class="modal" id="authModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <i class="fas fa-user-astronaut"></i>
-                <h2>مرحباً بك في Mission Master</h2>
+    <div id="authModal" class="auth-modal" style="display: none;">
+        <div class="auth-card">
+            <div class="auth-header">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h2>Mission Master Cloud</h2>
+                <p style="color: #888;">سجل دخولك لحفظ بياناتك في السحابة</p>
             </div>
-            <input type="text" id="userName" class="modal-input" placeholder="الاسم" autocomplete="off">
-            <select id="userGrade" class="modal-select">
-                <option value="">اختر السنة الدراسية</option>
-                <option value="1 اعدادي">1 إعدادي</option>
-                <option value="2 اعدادي">2 إعدادي</option>
-                <option value="3 اعدادي">3 إعدادي</option>
-                <option value="1 ثانوي">1 ثانوي</option>
-                <option value="2 ثانوي">2 ثانوي</option>
-                <option value="3 ثانوي">3 ثانوي</option>
-                <option value="جامعة">جامعة</option>
-                <option value="خريج">خريج</option>
-            </select>
-            <input type="number" id="userAge" class="modal-input" placeholder="العمر" min="10" max="100">
-            <div>
-                <label style="color: #667eea; font-weight: 600;">اختر صورتك الرمزية:</label>
-                <div class="avatar-selector" id="avatarSelector">
-                    <div class="avatar-option selected" data-avatar="🧑"><i class="fas fa-user"></i></div>
-                    <div class="avatar-option" data-avatar="👨‍🎓"><i class="fas fa-graduation-cap"></i></div>
-                    <div class="avatar-option" data-avatar="👩‍🔬"><i class="fas fa-flask"></i></div>
-                    <div class="avatar-option" data-avatar="👨‍💻"><i class="fas fa-laptop-code"></i></div>
-                    <div class="avatar-option" data-avatar="👩‍🏫"><i class="fas fa-chalkboard-teacher"></i></div>
-                    <div class="avatar-option" data-avatar="👨‍🔧"><i class="fas fa-tools"></i></div>
-                    <div class="avatar-option" data-avatar="👩‍🎨"><i class="fas fa-paint-brush"></i></div>
-                    <div class="avatar-option" data-avatar="👨‍🚒"><i class="fas fa-fire-extinguisher"></i></div>
+
+            <div class="auth-tabs">
+                <div class="auth-tab active" onclick="switchAuthTab('login')">تسجيل الدخول</div>
+                <div class="auth-tab" onclick="switchAuthTab('register')">إنشاء حساب</div>
+            </div>
+
+            <!-- نموذج تسجيل الدخول -->
+            <div id="loginForm" class="auth-form active">
+                <div class="form-group">
+                    <label><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
+                    <input type="email" id="loginEmail" class="auth-input" placeholder="أدخل بريدك الإلكتروني">
                 </div>
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> كلمة المرور</label>
+                    <input type="password" id="loginPassword" class="auth-input" placeholder="أدخل كلمة المرور">
+                </div>
+                
+                <!-- أزرار تسجيل الدخول الاجتماعي -->
+                <div class="social-auth">
+                    <button class="social-btn google" onclick="loginWithGoogle()">
+                        <i class="fab fa-google"></i> Google
+                    </button>
+                    <button class="social-btn facebook" onclick="loginWithFacebook()">
+                        <i class="fab fa-facebook-f"></i> Facebook
+                    </button>
+                </div>
+
+                <button class="auth-btn" onclick="loginUser()">
+                    <span id="loginText">تسجيل الدخول</span>
+                    <span id="loginSpinner" class="loading-spinner" style="display: none;"></span>
+                </button>
+                <div class="auth-link" onclick="forgotPassword()">نسيت كلمة المرور؟</div>
+                <div id="loginError" class="error-message"></div>
             </div>
-            <div class="modal-buttons">
-                <button class="modal-btn primary" onclick="saveUserProfile()">تسجيل الدخول</button>
-                <button class="modal-btn secondary" onclick="closeAuthModal()">دخول كزائر</button>
+
+            <!-- نموذج إنشاء حساب -->
+            <div id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> الاسم الكامل</label>
+                    <input type="text" id="regName" class="auth-input" placeholder="أدخل اسمك">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
+                    <input type="email" id="regEmail" class="auth-input" placeholder="أدخل بريدك الإلكتروني">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-graduation-cap"></i> السنة الدراسية</label>
+                    <select id="regGrade" class="auth-select">
+                        <option value="">اختر السنة الدراسية</option>
+                        <option value="1 اعدادي">1 إعدادي</option>
+                        <option value="2 اعدادي">2 إعدادي</option>
+                        <option value="3 اعدادي">3 إعدادي</option>
+                        <option value="1 ثانوي">1 ثانوي</option>
+                        <option value="2 ثانوي">2 ثانوي</option>
+                        <option value="3 ثانوي">3 ثانوي</option>
+                        <option value="جامعة">جامعة</option>
+                        <option value="خريج">خريج</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-calendar"></i> العمر</label>
+                    <input type="number" id="regAge" class="auth-input" placeholder="العمر" min="10" max="100">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> كلمة المرور</label>
+                    <input type="password" id="regPassword" class="auth-input" placeholder="أدخل كلمة المرور" onkeyup="checkPasswordStrength()">
+                    <div id="passwordStrength" class="password-strength"></div>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> تأكيد كلمة المرور</label>
+                    <input type="password" id="regConfirmPassword" class="auth-input" placeholder="أعد إدخال كلمة المرور">
+                </div>
+                <div>
+                    <label style="color: #667eea; font-weight: 600; margin-bottom: 10px; display: block;">
+                        <i class="fas fa-smile"></i> اختر صورتك الرمزية:
+                    </label>
+                    <div class="avatar-selector" id="regAvatarSelector">
+                        <div class="avatar-option selected" data-avatar="🧑">🧑</div>
+                        <div class="avatar-option" data-avatar="👨‍🎓">👨‍🎓</div>
+                        <div class="avatar-option" data-avatar="👩‍🔬">👩‍🔬</div>
+                        <div class="avatar-option" data-avatar="👨‍💻">👨‍💻</div>
+                        <div class="avatar-option" data-avatar="👩‍🏫">👩‍🏫</div>
+                        <div class="avatar-option" data-avatar="👨‍🔧">👨‍🔧</div>
+                        <div class="avatar-option" data-avatar="👩‍🎨">👩‍🎨</div>
+                        <div class="avatar-option" data-avatar="👨‍🚒">👨‍🚒</div>
+                    </div>
+                </div>
+                
+                <!-- أزرار التسجيل الاجتماعي -->
+                <div class="social-auth">
+                    <button class="social-btn google" onclick="registerWithGoogle()">
+                        <i class="fab fa-google"></i> Google
+                    </button>
+                    <button class="social-btn facebook" onclick="registerWithFacebook()">
+                        <i class="fab fa-facebook-f"></i> Facebook
+                    </button>
+                </div>
+
+                <button class="auth-btn" onclick="registerUser()">
+                    <span id="registerText">إنشاء حساب</span>
+                    <span id="registerSpinner" class="loading-spinner" style="display: none;"></span>
+                </button>
+                <div id="registerError" class="error-message"></div>
             </div>
+
+            <div class="auth-link" onclick="continueAsGuest()">دخول كزائر (بدون حفظ)</div>
         </div>
     </div>
 
@@ -1482,14 +1822,14 @@
             <div>
                 <label style="color: #667eea; font-weight: 600;">اختر صورتك الرمزية:</label>
                 <div class="avatar-selector" id="editAvatarSelector">
-                    <div class="avatar-option selected" data-avatar="🧑"><i class="fas fa-user"></i></div>
-                    <div class="avatar-option" data-avatar="👨‍🎓"><i class="fas fa-graduation-cap"></i></div>
-                    <div class="avatar-option" data-avatar="👩‍🔬"><i class="fas fa-flask"></i></div>
-                    <div class="avatar-option" data-avatar="👨‍💻"><i class="fas fa-laptop-code"></i></div>
-                    <div class="avatar-option" data-avatar="👩‍🏫"><i class="fas fa-chalkboard-teacher"></i></div>
-                    <div class="avatar-option" data-avatar="👨‍🔧"><i class="fas fa-tools"></i></div>
-                    <div class="avatar-option" data-avatar="👩‍🎨"><i class="fas fa-paint-brush"></i></div>
-                    <div class="avatar-option" data-avatar="👨‍🚒"><i class="fas fa-fire-extinguisher"></i></div>
+                    <div class="avatar-option selected" data-avatar="🧑">🧑</div>
+                    <div class="avatar-option" data-avatar="👨‍🎓">👨‍🎓</div>
+                    <div class="avatar-option" data-avatar="👩‍🔬">👩‍🔬</div>
+                    <div class="avatar-option" data-avatar="👨‍💻">👨‍💻</div>
+                    <div class="avatar-option" data-avatar="👩‍🏫">👩‍🏫</div>
+                    <div class="avatar-option" data-avatar="👨‍🔧">👨‍🔧</div>
+                    <div class="avatar-option" data-avatar="👩‍🎨">👩‍🎨</div>
+                    <div class="avatar-option" data-avatar="👨‍🚒">👨‍🚒</div>
                 </div>
             </div>
             <div class="modal-buttons">
@@ -1512,7 +1852,10 @@
         <!-- الأزرار العلوية -->
         <div class="top-bar">
             <button class="top-btn" onclick="toggleDarkMode()"><i class="fas fa-moon"></i></button>
-            <button class="top-btn" id="notificationsButton" onclick="toggleNotifications()"><i class="fas fa-bell"></i></button>
+            <button class="top-btn" id="notificationsButton" onclick="toggleNotifications()">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+            </button>
             <button class="top-btn" onclick="toggleNav()"><i class="fas fa-bars"></i></button>
         </div>
 
@@ -1520,7 +1863,7 @@
         <div class="nav-bar" id="navBar">
             <div class="nav-header" onclick="showProfilePage()">
                 <div class="logo"><i class="fas fa-rocket"></i><span>Mission Master</span></div>
-                <div class="user-avatar" id="userAvatar"><i class="fas fa-user"></i></div>
+                <div class="user-avatar" id="userAvatar">🧑</div>
             </div>
             <div class="user-name-small" id="userNameDisplay">زائر</div>
 
@@ -1747,13 +2090,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- زر الدخول للمدير (مخفي) -->
-<div style="position: fixed; bottom: 20px; left: 20px; z-index: 9999;">
-    <a href="admin-login.html" style="background: linear-gradient(145deg,#667eea,#764ba2); color: white; padding: 12px 25px; border-radius: 50px; text-decoration: none; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 15px rgba(102,126,234,0.4);">
-        <i class="fas fa-crown"></i>
-        <span>دخول المدير</span>
-    </a>
-</div>
             </div>
 
             <!-- صفحة المهام المكتملة -->
@@ -1785,7 +2121,30 @@
     </div>
 
     <script>
-        // بيانات المستخدم
+        // ==================== تهيئة Firebase ====================
+        const firebaseConfig = {
+            apiKey: "AIzaSyBkXx7Y7QvZ1Q3R5T7N9L2M4N6P8Q0R2T4V6",
+            authDomain: "mission-master-12345.firebaseapp.com",
+            projectId: "mission-master-12345",
+            storageBucket: "mission-master-12345.appspot.com",
+            messagingSenderId: "123456789012",
+            appId: "1:123456789012:web:abcdef1234567890"
+        };
+
+        // تهيئة Firebase
+        let firebaseApp, auth, db;
+        
+        try {
+            firebaseApp = firebase.initializeApp(firebaseConfig);
+            auth = firebase.auth();
+            db = firebase.firestore();
+            console.log('✅ Firebase initialized successfully');
+        } catch (error) {
+            console.error('❌ Firebase initialization error:', error);
+            console.log('Using localStorage as fallback');
+        }
+
+        // ==================== متغيرات عامة ====================
         let userData = {
             name: 'زائر',
             grade: '',
@@ -1819,6 +2178,7 @@
         
         // الإشعارات والمهام المكتملة
         let notifications = [];
+        let unreadNotifications = 0;
         let completedTasks = [];
         
         // حقول النقاط الفرعية
@@ -1841,35 +2201,40 @@
                     { code: '#0080#', message: 'عمك بكر بيمسي عليك يلا ذاكر', icon: 'fa-book' },
                     { code: '#9912#', message: 'اللهم صل وسلم على سيدنا ومولانا رسول الله', icon: 'fa-mosque' },
                     { code: '#12345#', message: 'ذاكر يا دوك عين شمس تنتظرك', icon: 'fa-graduation-cap' },
-                    { code: '*000#', message: 'ذاكري عشان العيد ميبقاش فيه كحكين 👀', icon: 'fa-star' }
+                    { code: '*000#', message: 'ذاكري عشان العيد ميبقاش فيه كحكين 👀', icon: 'fa-star' },
+                    { code: '#1240#', message: 'admin', icon: 'fa-crown' }
                 ];
                 localStorage.setItem('secretCodes', JSON.stringify(secretCodes));
             }
         }
 
-        // حفظ جميع المستخدمين
-        function saveUserToList() {
-            if (userData.name !== 'زائر') {
-                let allUsers = localStorage.getItem('allUsers');
-                allUsers = allUsers ? JSON.parse(allUsers) : [];
+        // دالة الصوت مع مدة أطول (٣ ثواني)
+        function playLongSound() {
+            try {
+                let a = new (window.AudioContext || window.webkitAudioContext)();
+                let startTime = a.currentTime;
                 
-                if (!allUsers.find(u => u.email === userData.email)) {
-                    allUsers.push({
-                        id: Date.now(),
-                        name: userData.name,
-                        email: userData.email || 'user' + Date.now() + '@example.com',
-                        grade: userData.grade,
-                        tasks: userData.stats.completedTasks,
-                        score: userData.stats.score,
-                        status: 'online',
-                        lastSeen: 'الآن'
-                    });
-                    localStorage.setItem('allUsers', JSON.stringify(allUsers));
+                // تشغيل صوت لمدة 3 ثواني
+                function playBeep() {
+                    if (a.currentTime - startTime < 3) {
+                        let o = a.createOscillator();
+                        let g = a.createGain();
+                        o.type = 'sine';
+                        o.frequency.value = 880;
+                        g.gain.value = 0.1;
+                        o.connect(g);
+                        g.connect(a.destination);
+                        o.start();
+                        o.stop(a.currentTime + 0.2);
+                        
+                        setTimeout(playBeep, 300);
+                    }
                 }
-            }
+                
+                playBeep();
+            } catch (e) { }
         }
 
-        // دالة الصوت
         function playSound() {
             try {
                 let a = new (window.AudioContext || window.webkitAudioContext)();
@@ -1904,55 +2269,519 @@
             }, 200);
         }
 
-        // نافذة التسجيل
+        // ==================== دوال المصادقة ====================
         function showAuthModal() {
-            document.getElementById('authModal').classList.add('show');
+            document.getElementById('authModal').style.display = 'flex';
         }
 
-        function closeAuthModal() {
-            document.getElementById('authModal').classList.remove('show');
+        function switchAuthTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            
+            if (tab === 'login') {
+                document.querySelector('.auth-tab:first-child').classList.add('active');
+                document.getElementById('loginForm').classList.add('active');
+            } else {
+                document.querySelector('.auth-tab:last-child').classList.add('active');
+                document.getElementById('registerForm').classList.add('active');
+            }
         }
 
-        // اختيار الصورة الرمزية
-        document.querySelectorAll('#avatarSelector .avatar-option').forEach(o => {
-            o.addEventListener('click', function () {
-                document.querySelectorAll('#avatarSelector .avatar-option').forEach(x => x.classList.remove('selected'));
-                this.classList.add('selected');
-            });
+        // تسجيل الدخول بجوجل
+        async function loginWithGoogle() {
+            try {
+                const provider = new firebase.auth.GoogleAuthProvider();
+                const result = await auth.signInWithPopup(provider);
+                showMessage('✅ تم تسجيل الدخول بجوجل بنجاح');
+                setTimeout(() => {
+                    document.getElementById('authModal').style.display = 'none';
+                }, 1500);
+            } catch (error) {
+                console.error('Google login error:', error);
+                showError('loginError', 'فشل تسجيل الدخول بجوجل');
+            }
+        }
+
+        // تسجيل الدخول بفيسبوك
+        async function loginWithFacebook() {
+            try {
+                const provider = new firebase.auth.FacebookAuthProvider();
+                const result = await auth.signInWithPopup(provider);
+                showMessage('✅ تم تسجيل الدخول بفيسبوك بنجاح');
+                setTimeout(() => {
+                    document.getElementById('authModal').style.display = 'none';
+                }, 1500);
+            } catch (error) {
+                console.error('Facebook login error:', error);
+                showError('loginError', 'فشل تسجيل الدخول بفيسبوك');
+            }
+        }
+
+        // التسجيل بجوجل
+        async function registerWithGoogle() {
+            await loginWithGoogle();
+        }
+
+        // التسجيل بفيسبوك
+        async function registerWithFacebook() {
+            await loginWithFacebook();
+        }
+
+        // اختيار الصورة الرمزية للتسجيل
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                document.querySelectorAll('#regAvatarSelector .avatar-option').forEach(opt => {
+                    opt.addEventListener('click', function() {
+                        document.querySelectorAll('#regAvatarSelector .avatar-option').forEach(x => x.classList.remove('selected'));
+                        this.classList.add('selected');
+                    });
+                });
+
+                document.querySelectorAll('#editAvatarSelector .avatar-option').forEach(opt => {
+                    opt.addEventListener('click', function() {
+                        document.querySelectorAll('#editAvatarSelector .avatar-option').forEach(x => x.classList.remove('selected'));
+                        this.classList.add('selected');
+                    });
+                });
+            }, 500);
         });
 
-        document.querySelectorAll('#editAvatarSelector .avatar-option').forEach(o => {
-            o.addEventListener('click', function () {
-                document.querySelectorAll('#editAvatarSelector .avatar-option').forEach(x => x.classList.remove('selected'));
-                this.classList.add('selected');
-            });
-        });
+        // التحقق من قوة كلمة المرور
+        function checkPasswordStrength() {
+            const password = document.getElementById('regPassword').value;
+            const strengthDiv = document.getElementById('passwordStrength');
+            
+            if (password.length === 0) {
+                strengthDiv.className = 'password-strength';
+                return;
+            }
+            
+            let strength = 0;
+            if (password.match(/[a-z]+/)) strength++;
+            if (password.match(/[A-Z]+/)) strength++;
+            if (password.match(/[0-9]+/)) strength++;
+            if (password.match(/[$@#&!]+/)) strength++;
+            if (password.length > 7) strength++;
+            
+            if (strength < 2) {
+                strengthDiv.className = 'password-strength strength-weak';
+            } else if (strength < 4) {
+                strengthDiv.className = 'password-strength strength-medium';
+            } else {
+                strengthDiv.className = 'password-strength strength-strong';
+            }
+        }
 
-        // حفظ الملف الشخصي
-        function saveUserProfile() {
-            let n = document.getElementById('userName').value.trim();
-            let g = document.getElementById('userGrade').value;
-            let a = document.getElementById('userAge').value;
-            let av = document.querySelector('#avatarSelector .avatar-option.selected').dataset.avatar;
+        // إنشاء حساب جديد
+        async function registerUser() {
+            console.log('registerUser function called');
+            
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const grade = document.getElementById('regGrade').value;
+            const age = document.getElementById('regAge').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+            
+            // الحصول على الصورة الرمزية المحددة
+            let avatar = '🧑';
+            const selectedAvatar = document.querySelector('#regAvatarSelector .avatar-option.selected');
+            if (selectedAvatar) {
+                avatar = selectedAvatar.dataset.avatar;
+            }
 
-            if (!n) {
-                showMessage('❌ الرجاء إدخال الاسم');
+            // التحقق من المدخلات
+            if (!name || !email || !password) {
+                showError('registerError', 'الرجاء ملء جميع الحقول المطلوبة');
                 return;
             }
 
-            userData = {
-                ...userData,
-                name: n,
-                grade: g || 'لم يحدد',
-                age: a || '--',
-                avatar: av,
-                email: 'user' + Date.now() + '@example.com'
-            };
+            if (password.length < 6) {
+                showError('registerError', 'كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+                return;
+            }
 
-            updateUI();
-            saveUserToList();
-            closeAuthModal();
-            showMessage(`✨ مرحباً ${n}!`);
+            if (password !== confirmPassword) {
+                showError('registerError', 'كلمة المرور غير متطابقة');
+                return;
+            }
+
+            // إظهار مؤشر التحميل
+            document.getElementById('registerText').style.display = 'none';
+            document.getElementById('registerSpinner').style.display = 'inline-block';
+
+            try {
+                if (auth && db) {
+                    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                    const user = userCredential.user;
+
+                    await user.updateProfile({
+                        displayName: name
+                    });
+
+                    const userDataToSave = {
+                        uid: user.uid,
+                        name: name,
+                        email: email,
+                        grade: grade || 'لم يحدد',
+                        age: age || '',
+                        avatar: avatar,
+                        joinedDate: new Date().toISOString(),
+                        stats: {
+                            completedTasks: 0,
+                            score: 0,
+                            streak: 0
+                        },
+                        missions: {
+                            daily: {},
+                            weekly: {},
+                            monthly: {}
+                        }
+                    };
+
+                    await db.collection('users').doc(user.uid).set(userDataToSave);
+                    
+                    showMessage('✅ تم إنشاء الحساب بنجاح');
+                    
+                    setTimeout(() => {
+                        document.getElementById('authModal').style.display = 'none';
+                    }, 1500);
+                } else {
+                    const localUsers = JSON.parse(localStorage.getItem('localUsers') || '[]');
+                    const existingUser = localUsers.find(u => u.email === email);
+                    
+                    if (existingUser) {
+                        throw { code: 'auth/email-already-in-use' };
+                    }
+                    
+                    const newUser = {
+                        id: 'local_' + Date.now(),
+                        name: name,
+                        email: email,
+                        password: btoa(password),
+                        grade: grade || 'لم يحدد',
+                        age: age || '',
+                        avatar: avatar,
+                        joinedDate: new Date().toISOString(),
+                        stats: {
+                            completedTasks: 0,
+                            score: 0,
+                            streak: 0
+                        },
+                        missions: {
+                            daily: {},
+                            weekly: {},
+                            monthly: {}
+                        }
+                    };
+                    
+                    localUsers.push(newUser);
+                    localStorage.setItem('localUsers', JSON.stringify(localUsers));
+                    
+                    localStorage.setItem('currentUser', JSON.stringify(newUser));
+                    
+                    userData = {
+                        name: newUser.name,
+                        grade: newUser.grade,
+                        age: newUser.age,
+                        avatar: newUser.avatar,
+                        email: newUser.email,
+                        joinedDate: newUser.joinedDate,
+                        stats: newUser.stats
+                    };
+                    
+                    missions = newUser.missions;
+                    
+                    updateUI();
+                    renderMainMissions('daily');
+                    renderMainMissions('weekly');
+                    renderMainMissions('monthly');
+                    
+                    showMessage('✅ تم إنشاء الحساب بنجاح (محلياً)');
+                    
+                    setTimeout(() => {
+                        document.getElementById('authModal').style.display = 'none';
+                    }, 1500);
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                let errorMessage = 'حدث خطأ أثناء إنشاء الحساب';
+                if (error.code === 'auth/email-already-in-use') {
+                    errorMessage = 'البريد الإلكتروني مستخدم بالفعل';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = 'البريد الإلكتروني غير صالح';
+                } else if (error.code === 'auth/weak-password') {
+                    errorMessage = 'كلمة المرور ضعيفة جداً';
+                }
+                showError('registerError', errorMessage);
+            } finally {
+                document.getElementById('registerText').style.display = 'inline';
+                document.getElementById('registerSpinner').style.display = 'none';
+            }
+        }
+
+        // تسجيل الدخول
+        async function loginUser() {
+            console.log('loginUser function called');
+            
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            if (!email || !password) {
+                showError('loginError', 'الرجاء إدخال البريد الإلكتروني وكلمة المرور');
+                return;
+            }
+
+            document.getElementById('loginText').style.display = 'none';
+            document.getElementById('loginSpinner').style.display = 'inline-block';
+
+            try {
+                if (auth && db) {
+                    const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                    
+                    showMessage('✅ تم تسجيل الدخول بنجاح');
+                    setTimeout(() => {
+                        document.getElementById('authModal').style.display = 'none';
+                    }, 1500);
+                } else {
+                    const localUsers = JSON.parse(localStorage.getItem('localUsers') || '[]');
+                    const user = localUsers.find(u => u.email === email && atob(u.password) === password);
+                    
+                    if (user) {
+                        localStorage.setItem('currentUser', JSON.stringify(user));
+                        
+                        userData = {
+                            name: user.name,
+                            grade: user.grade,
+                            age: user.age,
+                            avatar: user.avatar,
+                            email: user.email,
+                            joinedDate: user.joinedDate,
+                            stats: user.stats
+                        };
+                        
+                        missions = user.missions || {
+                            daily: {},
+                            weekly: {},
+                            monthly: {}
+                        };
+                        
+                        updateUI();
+                        renderMainMissions('daily');
+                        renderMainMissions('weekly');
+                        renderMainMissions('monthly');
+                        
+                        showMessage('✅ تم تسجيل الدخول بنجاح (محلياً)');
+                        
+                        setTimeout(() => {
+                            document.getElementById('authModal').style.display = 'none';
+                        }, 1500);
+                    } else {
+                        throw { code: 'auth/user-not-found' };
+                    }
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                let errorMessage = 'خطأ في تسجيل الدخول';
+                if (error.code === 'auth/user-not-found') {
+                    errorMessage = 'لا يوجد حساب بهذا البريد';
+                } else if (error.code === 'auth/wrong-password') {
+                    errorMessage = 'كلمة المرور غير صحيحة';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = 'البريد الإلكتروني غير صالح';
+                }
+                showError('loginError', errorMessage);
+            } finally {
+                document.getElementById('loginText').style.display = 'inline';
+                document.getElementById('loginSpinner').style.display = 'none';
+            }
+        }
+
+        // تحميل بيانات المستخدم من Firestore
+        async function loadUserData(uid) {
+            try {
+                const doc = await db.collection('users').doc(uid).get();
+                if (doc.exists) {
+                    const data = doc.data();
+                    userData = {
+                        name: data.name || 'زائر',
+                        grade: data.grade || '',
+                        age: data.age || '',
+                        avatar: data.avatar || '🧑',
+                        email: data.email || '',
+                        joinedDate: data.joinedDate || new Date().toISOString(),
+                        stats: data.stats || { completedTasks: 0, score: 0, streak: 0 }
+                    };
+                    
+                    if (data.missions) {
+                        missions = data.missions;
+                    }
+                    
+                    updateUI();
+                    renderMainMissions('daily');
+                    renderMainMissions('weekly');
+                    renderMainMissions('monthly');
+                    if (currentMainMission) {
+                        renderSubMissions(currentMainMission, currentCategory);
+                    }
+                    updateProgress();
+                }
+            } catch (error) {
+                console.error('خطأ في تحميل البيانات:', error);
+            }
+        }
+
+        // حفظ بيانات المستخدم في Firestore
+        async function saveUserData() {
+            if (auth && auth.currentUser) {
+                try {
+                    await db.collection('users').doc(auth.currentUser.uid).update({
+                        name: userData.name,
+                        grade: userData.grade,
+                        age: userData.age,
+                        avatar: userData.avatar,
+                        stats: userData.stats,
+                        missions: missions
+                    });
+                } catch (error) {
+                    console.error('خطأ في حفظ البيانات:', error);
+                }
+            } else {
+                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                if (currentUser) {
+                    currentUser.name = userData.name;
+                    currentUser.grade = userData.grade;
+                    currentUser.age = userData.age;
+                    currentUser.avatar = userData.avatar;
+                    currentUser.stats = userData.stats;
+                    currentUser.missions = missions;
+                    
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    
+                    const localUsers = JSON.parse(localStorage.getItem('localUsers') || '[]');
+                    const index = localUsers.findIndex(u => u.email === currentUser.email);
+                    if (index !== -1) {
+                        localUsers[index] = currentUser;
+                        localStorage.setItem('localUsers', JSON.stringify(localUsers));
+                    }
+                }
+            }
+        }
+
+        // مراقبة حالة المصادقة
+        if (auth) {
+            auth.onAuthStateChanged(async (user) => {
+                if (user) {
+                    await loadUserData(user.uid);
+                } else {
+                    const localUser = JSON.parse(localStorage.getItem('currentUser'));
+                    if (localUser) {
+                        userData = {
+                            name: localUser.name,
+                            grade: localUser.grade,
+                            age: localUser.age,
+                            avatar: localUser.avatar,
+                            email: localUser.email,
+                            joinedDate: localUser.joinedDate,
+                            stats: localUser.stats
+                        };
+                        missions = localUser.missions || {
+                            daily: {},
+                            weekly: {},
+                            monthly: {}
+                        };
+                        updateUI();
+                        renderMainMissions('daily');
+                        renderMainMissions('weekly');
+                        renderMainMissions('monthly');
+                    } else {
+                        userData = {
+                            name: 'زائر',
+                            grade: '',
+                            age: '',
+                            avatar: '🧑',
+                            email: '',
+                            joinedDate: new Date().toISOString(),
+                            stats: {
+                                completedTasks: 0,
+                                score: 0,
+                                streak: 0
+                            }
+                        };
+                        missions = {
+                            daily: {},
+                            weekly: {},
+                            monthly: {}
+                        };
+                        updateUI();
+                        renderMainMissions('daily');
+                        renderMainMissions('weekly');
+                        renderMainMissions('monthly');
+                    }
+                }
+            });
+        }
+
+        // نسيان كلمة المرور
+        async function forgotPassword() {
+            const email = prompt('أدخل بريدك الإلكتروني لإعادة تعيين كلمة المرور:');
+            if (email && auth) {
+                try {
+                    await auth.sendPasswordResetEmail(email);
+                    showMessage('📧 تم إرسال رابط إعادة التعيين إلى بريدك');
+                } catch (error) {
+                    showError('loginError', 'حدث خطأ، تأكد من صحة البريد');
+                }
+            } else {
+                showMessage('📧 وظيفة استعادة كلمة المرور غير متاحة حالياً');
+            }
+        }
+
+        // الدخول كزائر
+        function continueAsGuest() {
+            document.getElementById('authModal').style.display = 'none';
+            showMessage('👋 مرحباً بك كزائر');
+        }
+
+        // تسجيل الخروج
+        async function logout() {
+            if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
+                if (auth) {
+                    try {
+                        await auth.signOut();
+                    } catch (error) {
+                        console.error('خطأ في تسجيل الخروج:', error);
+                    }
+                }
+                
+                localStorage.removeItem('currentUser');
+                
+                userData = {
+                    name: 'زائر',
+                    grade: '',
+                    age: '',
+                    avatar: '🧑',
+                    email: '',
+                    joinedDate: new Date().toISOString(),
+                    stats: {
+                        completedTasks: 0,
+                        score: 0,
+                        streak: 0
+                    }
+                };
+                missions = {
+                    daily: {},
+                    weekly: {},
+                    monthly: {}
+                };
+                
+                updateUI();
+                renderMainMissions('daily');
+                renderMainMissions('weekly');
+                renderMainMissions('monthly');
+                backToHome();
+                showMessage('👋 تم تسجيل الخروج');
+            }
         }
 
         // تحديث الواجهة
@@ -1963,7 +2792,7 @@
             document.getElementById('profileName').textContent = userData.name;
             document.getElementById('profileBio').textContent = userData.grade ? `طالب في ${userData.grade}` : 'عضو في Mission Master';
             document.getElementById('infoGrade').textContent = userData.grade || 'لم يحدد';
-            document.getElementById('infoAge').textContent = userData.age + ' سنة';
+            document.getElementById('infoAge').textContent = userData.age ? userData.age + ' سنة' : '-- سنة';
             document.getElementById('infoJoined').textContent = new Date(userData.joinedDate).toLocaleDateString('ar-EG');
 
             document.getElementById('statTasks').textContent = userData.stats.completedTasks;
@@ -2060,26 +2889,9 @@
             };
 
             updateUI();
-            saveUserToList();
+            saveUserData();
             closeEditProfileModal();
             showMessage('✅ تم تحديث الملف الشخصي');
-        }
-
-        function logout() {
-            if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
-                userData = {
-                    name: 'زائر',
-                    grade: '',
-                    age: '',
-                    avatar: '🧑',
-                    email: '',
-                    joinedDate: new Date().toISOString(),
-                    stats: userData.stats
-                };
-                updateUI();
-                backToHome();
-                showMessage('👋 تم تسجيل الخروج');
-            }
         }
 
         // اختيار نوع المهمة
@@ -2155,13 +2967,12 @@
                 deadline = {
                     days: days,
                     date: deadlineDate.toISOString(),
-                    message: `موعد المهمة "${title}" بعد ${days} أيام`
+                    message: `موعد المهمة "${title}" بعد ${days} أيام`,
+                    notified: false
                 };
                 
-                setTimeout(() => {
-                    addNotification(`⏰ ${deadline.message}`);
-                    playSound();
-                }, 5000);
+                // جدولة التنبيهات
+                scheduleDeadlineReminders(missionId, currentMissionType, title, days, deadlineDate);
             }
 
             if (!missions[currentMissionType]) missions[currentMissionType] = {};
@@ -2176,6 +2987,7 @@
             };
 
             renderMainMissions(currentMissionType);
+            saveUserData();
             document.getElementById('addMainMissionPanel').classList.add('hidden');
             showMessage('✅ تمت إضافة المهمة الرئيسية بنجاح');
             
@@ -2185,6 +2997,47 @@
                 document.getElementById('currentMainTitle').textContent = title;
                 document.getElementById('welcomeMessage').style.display = 'none';
                 renderSubMissions(missionId, currentMissionType);
+            }
+        }
+
+        // جدولة تنبيهات الموعد النهائي
+        function scheduleDeadlineReminders(missionId, type, title, days, deadlineDate) {
+            // تنبيه قبل 3 أيام
+            let reminder1 = new Date(deadlineDate);
+            reminder1.setDate(reminder1.getDate() - 3);
+            
+            // تنبيه قبل يوم واحد
+            let reminder2 = new Date(deadlineDate);
+            reminder2.setDate(reminder2.getDate() - 1);
+            
+            // تنبيه في نفس اليوم
+            let reminder3 = new Date(deadlineDate);
+            
+            let now = new Date();
+            
+            // جدولة التنبيهات إذا كانت في المستقبل
+            if (reminder1 > now) {
+                let timeToReminder1 = reminder1.getTime() - now.getTime();
+                setTimeout(() => {
+                    addNotification(`⚠️ مهمة "${title}" متبقى عليها 3 أيام!`, true);
+                    playLongSound();
+                }, timeToReminder1);
+            }
+            
+            if (reminder2 > now) {
+                let timeToReminder2 = reminder2.getTime() - now.getTime();
+                setTimeout(() => {
+                    addNotification(`⚠️ مهمة "${title}" متبقى عليها يوم واحد!`, true);
+                    playLongSound();
+                }, timeToReminder2);
+            }
+            
+            if (reminder3 > now) {
+                let timeToReminder3 = reminder3.getTime() - now.getTime();
+                setTimeout(() => {
+                    addNotification(`⏰ مهمة "${title}" موعدها النهائي اليوم!`, true);
+                    playLongSound();
+                }, timeToReminder3);
             }
         }
 
@@ -2302,6 +3155,7 @@
                 showMessage("✅ تمت إضافة المهمة");
             }
 
+            saveUserData();
             document.getElementById('addSubMissionPanel').classList.add('hidden');
             document.getElementById('taskTitle').value = '';
             document.getElementById('taskTime').value = '';
@@ -2413,6 +3267,7 @@
                 addNotification(`✅ أتممت المهمة: ${t.title}`);
                 playSound();
                 updateUI();
+                saveUserData();
                 renderMainMissions(c);
                 renderSubMissions(id, c);
                 updateProgress();
@@ -2432,8 +3287,10 @@
                     userData.stats.score += t.score;
                     completedTasks.push({ ...t, missionTitle: missions[c][id].title });
                     updateUI();
+                    saveUserData();
                     renderMainMissions(c);
                 }
+                saveUserData();
                 renderSubMissions(id, c);
                 updateProgress();
             }
@@ -2444,6 +3301,7 @@
             if (t && t.subtasks) {
                 t.subtasks.splice(i, 1);
                 t.score = calculateTaskScore(t.subtasks);
+                saveUserData();
                 renderSubMissions(id, c);
             }
         }
@@ -2470,6 +3328,7 @@
             e.stopPropagation();
             if (confirm("هل أنت متأكد من حذف هذه المهمة؟")) {
                 missions[c][id].tasks = missions[c][id].tasks.filter(t => t.id !== tid);
+                saveUserData();
                 renderMainMissions(c);
                 renderSubMissions(id, c);
                 updateProgress();
@@ -2501,6 +3360,7 @@
                 addNotification(`🎉 تم إكمال "${m.title}" بالكامل! +${scr} نقطة`);
                 playAlarm(1000);
                 updateUI();
+                saveUserData();
                 renderMainMissions(c);
                 if (currentMainMission === id) renderSubMissions(id, c);
                 updateProgress();
@@ -2513,6 +3373,7 @@
             e.stopPropagation();
             if (confirm("هل أنت متأكد من حذف هذه المهمة الرئيسية وجميع مهامها الفرعية؟")) {
                 delete missions[c][id];
+                saveUserData();
 
                 if (currentMainMission === id) {
                     let f = Object.keys(missions[c])[0];
@@ -2531,17 +3392,48 @@
         }
 
         // الإشعارات
-        function addNotification(t) {
+        function addNotification(text, isImportant = false) {
             let n = {
                 id: Date.now(),
-                text: t,
+                text: text,
                 time: new Date().toLocaleTimeString('ar-EG'),
-                date: new Date().toDateString()
+                date: new Date().toDateString(),
+                read: false,
+                important: isImportant
             };
+            
             notifications.unshift(n);
-            notifications = notifications.filter(n => n.date === new Date().toDateString());
-            document.getElementById('notificationsButton').classList.toggle('has-notifications', notifications.length > 0);
+            unreadNotifications++;
+            
+            // تحديث عداد الإشعارات
+            updateNotificationBadge();
+            
+            // الاحتفاظ بآخر 50 إشعار فقط
+            notifications = notifications.slice(0, 50);
+            
             renderNotifications();
+        }
+
+        function updateNotificationBadge() {
+            let badge = document.getElementById('notificationBadge');
+            if (unreadNotifications > 0) {
+                badge.textContent = unreadNotifications > 9 ? '9+' : unreadNotifications;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        function markNotificationAsRead(notificationId, element) {
+            let notification = notifications.find(n => n.id === notificationId);
+            if (notification && !notification.read) {
+                notification.read = true;
+                unreadNotifications--;
+                updateNotificationBadge();
+                
+                // تغيير لون الإشعار عند القراءة
+                element.style.opacity = '0.7';
+            }
         }
 
         function renderNotifications() {
@@ -2549,8 +3441,11 @@
             if (notifications.length === 0) {
                 l.innerHTML = '<div style="text-align:center; padding:20px;">لا توجد إشعارات جديدة</div>';
             } else {
-                l.innerHTML = notifications.map(n => `<div class="notification-item">
-                    <div class="notification-text"><i class="fas fa-check-circle"></i> ${n.text}</div>
+                l.innerHTML = notifications.map(n => `<div class="notification-item ${n.read ? 'read' : ''}" onclick="markNotificationAsRead(${n.id}, this)">
+                    <div class="notification-text">
+                        <i class="fas ${n.important ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i> 
+                        ${n.text}
+                    </div>
                     <div class="notification-time">${n.time}</div>
                 </div>`).join('');
             }
@@ -2559,7 +3454,9 @@
         function toggleNotifications() {
             let p = document.getElementById('notificationsPanel');
             p.classList.toggle('show');
-            if (p.classList.contains('show')) renderNotifications();
+            if (p.classList.contains('show')) {
+                renderNotifications();
+            }
         }
 
         // المهام المكتملة
@@ -2603,10 +3500,10 @@
                         timerSeconds--;
                     } else {
                         pauseTimer();
-                        playAlarm(3000);
+                        playLongSound(); // 3 ثواني صوت
                         let msg = (userData.name !== 'زائر' ? userData.name + '، ' : '') + '⏰ انتهى الوقت!';
                         showMessage(msg);
-                        addNotification(msg);
+                        addNotification(msg, true);
                     }
                 } else {
                     timerSeconds++;
@@ -2684,7 +3581,16 @@
             let code = document.getElementById('codeInput').value.trim();
             let r = document.getElementById('codeResult');
 
+            // التحقق من كود الإدارة أولاً
+            if (code === '#1240#' || code === '1240') {
+                // التحويل الفوري إلى صفحة الإدارة
+                window.location.href = 'admin-panel.html';
+                return; // نوقف تنفيذ الدالة هنا
+            }
+
+            // باقي الأكواد السرية
             let found = secretCodes.find(c => c.code === code);
+            
             if (found) {
                 r.innerHTML = `<div style="background:linear-gradient(145deg,#667eea,#764ba2); color:#fff; padding:20px; border-radius:12px; text-align:center;">
                     <i class="fas ${found.icon}" style="font-size:2rem; margin-bottom:10px;"></i>
@@ -2735,20 +3641,34 @@
             setTimeout(() => m.style.display = 'none', 2000);
         }
 
+        function showError(elementId, message) {
+            const errorEl = document.getElementById(elementId);
+            errorEl.textContent = message;
+            errorEl.style.display = 'block';
+            setTimeout(() => {
+                errorEl.style.display = 'none';
+            }, 3000);
+        }
+
         // التهيئة
         window.onload = function () {
             loadSecretCodes();
-            setTimeout(showAuthModal, 1000);
-
+            
             if (localStorage.getItem('darkMode') === 'true') {
                 document.body.classList.add('dark-mode');
                 document.querySelector('.top-btn i').className = 'fas fa-sun';
             }
 
+            setTimeout(() => {
+                const localUser = JSON.parse(localStorage.getItem('currentUser'));
+                if (!localUser && (!auth || !auth.currentUser)) {
+                    document.getElementById('authModal').style.display = 'flex';
+                }
+            }, 1000);
+
             updateUI();
             updateProgress();
 
-            // إغلاق النوافذ عند الضغط خارجها
             document.addEventListener('click', function (e) {
                 let navBar = document.getElementById('navBar');
                 let menuBtn = document.querySelector('.top-btn:last-child');
