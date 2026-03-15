@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <style>
-        /* نفس الـ CSS السابق */
         * {
             margin: 0;
             padding: 0;
@@ -17,20 +17,53 @@
         }
 
         body {
-            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
-            color: #fff;
+            background: #f4f7fc;
+            color: #1e1e2f;
             min-height: 100vh;
+            transition: all 0.3s;
         }
 
         body.dark-mode {
             background: #0a0a0f;
+            color: #fff;
         }
 
-        body.dark-mode .stat-card,
-        body.dark-mode .user-card,
-        body.dark-mode .message-card,
+        body.dark-mode .sidebar {
+            background: #0a0a12;
+            border-left: 1px solid #2a2a3a;
+        }
+
+        body.dark-mode .main-content {
+            background: #0f0f15;
+        }
+
+        body.dark-mode .card {
+            background: #1a1a24;
+            color: #fff;
+            border-color: #2a2a3a;
+        }
+
+        body.dark-mode .table {
+            color: #fff;
+        }
+
+        body.dark-mode .table thead th {
+            border-color: #3a3a4a;
+        }
+
+        body.dark-mode .table tbody td {
+            border-color: #3a3a4a;
+        }
+
         body.dark-mode .modal-content {
             background: #1a1a24;
+            color: #fff;
+        }
+
+        body.dark-mode .form-control {
+            background: #2a2a3a;
+            color: #fff;
+            border-color: #3a3a4a;
         }
 
         .app-container {
@@ -38,16 +71,17 @@
             min-height: 100vh;
         }
 
+        /* ========== القائمة الجانبية ========== */
         .sidebar {
             width: 280px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
+            background: #fff;
             padding: 30px 20px;
-            border-left: 1px solid rgba(255, 255, 255, 0.2);
             position: fixed;
             right: 0;
             top: 0;
             bottom: 0;
+            z-index: 1000;
+            box-shadow: -5px 0 20px rgba(0, 0, 0, 0.1);
             overflow-y: auto;
         }
 
@@ -55,16 +89,21 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 700;
-            color: #fff;
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 40px;
             padding-bottom: 20px;
             border-bottom: 2px solid #667eea;
         }
 
         .logo i {
-            color: #667eea;
+            font-size: 2rem;
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .menu-item {
@@ -72,47 +111,93 @@
             align-items: center;
             gap: 15px;
             padding: 15px;
-            margin: 5px 0;
             border-radius: 12px;
             cursor: pointer;
+            color: #666;
             transition: all 0.3s;
-            color: #fff;
+            margin-bottom: 5px;
         }
 
-        .menu-item:hover,
-        .menu-item.active {
-            background: linear-gradient(145deg, #667eea, #764ba2);
+        .menu-item:hover {
+            background: rgba(102, 126, 234, 0.1);
             transform: translateX(-5px);
         }
 
+        .menu-item.active {
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            color: #fff;
+        }
+
+        .menu-item i {
+            width: 25px;
+            font-size: 1.2rem;
+        }
+
+        .menu-item span {
+            flex: 1;
+        }
+
+        .menu-item .badge {
+            background: #ff6b6b;
+            color: #fff;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        /* ========== المحتوى الرئيسي ========== */
         .main-content {
             flex: 1;
             margin-right: 280px;
             padding: 30px;
+            transition: all 0.4s;
         }
 
-        .page {
-            display: none;
-        }
-
-        .page.active {
-            display: block;
-        }
-
-        .page-header {
+        .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 30px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
 
-        .page-header h1 {
-            font-size: 2rem;
+        body.dark-mode .top-bar {
+            background: #1a1a24;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .top-actions {
             display: flex;
-            align-items: center;
-            gap: 10px;
+            gap: 15px;
         }
 
+        .top-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            border: none;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .top-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* ========== البطاقات ========== */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -120,269 +205,161 @@
             margin-bottom: 30px;
         }
 
-        .stat-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+        .card {
+            background: #fff;
             border-radius: 20px;
             padding: 25px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f0f0f0;
         }
 
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
-        }
-
-        .stat-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(145deg, #667eea, #764ba2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-        }
-
-        .stat-info h3 {
-            font-size: 1rem;
-            opacity: 0.8;
-            margin-bottom: 5px;
-        }
-
-        .stat-info .stat-number {
-            font-size: 2rem;
-            font-weight: 700;
-        }
-
-        .chart-container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 30px;
-            height: 300px;
-        }
-
-        .users-table {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            overflow: hidden;
-        }
-
-        .table-header {
-            display: grid;
-            grid-template-columns: 0.5fr 1.5fr 1.5fr 1fr 1fr 1fr 1.5fr;
-            padding: 15px 20px;
-            background: rgba(102, 126, 234, 0.3);
-            font-weight: 600;
-        }
-
-        .user-row {
-            display: grid;
-            grid-template-columns: 0.5fr 1.5fr 1.5fr 1fr 1fr 1fr 1.5fr;
-            padding: 15px 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s;
-        }
-
-        .user-row:hover {
-            background: rgba(102, 126, 234, 0.2);
-        }
-
-        .status-badge {
-            padding: 5px 10px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            display: inline-block;
-        }
-
-        .status-online {
-            background: #4caf50;
-            color: #fff;
-        }
-
-        .status-offline {
-            background: #ff6b6b;
-            color: #fff;
-        }
-
-        .action-btn {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            border: none;
-            background: rgba(255, 255, 255, 0.2);
-            color: #fff;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin: 0 5px;
-        }
-
-        .action-btn:hover {
-            background: linear-gradient(145deg, #667eea, #764ba2);
-            transform: scale(1.1);
-        }
-
-        .search-box {
-            display: flex;
-            gap: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 10px 20px;
-            width: 300px;
-        }
-
-        .search-box input {
-            background: transparent;
-            border: none;
-            color: #fff;
-            width: 100%;
-            outline: none;
-        }
-
-        .search-box input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .message-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .message-type-selector {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-        }
-
-        .type-option {
-            flex: 1;
-            padding: 15px;
-            text-align: center;
-            border: 2px solid rgba(102, 126, 234, 0.3);
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .type-option:hover,
-        .type-option.active {
-            background: linear-gradient(145deg, #667eea, #764ba2);
-            border-color: transparent;
-        }
-
-        .user-select {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            color: #fff;
-            margin-bottom: 20px;
-            outline: none;
-        }
-
-        .user-select option {
-            background: #1a1a2e;
-        }
-
-        .message-input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            color: #fff;
-            margin-bottom: 20px;
-            outline: none;
-            resize: none;
-            height: 120px;
-        }
-
-        .send-btn {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 12px;
-            background: linear-gradient(145deg, #667eea, #764ba2);
-            color: #fff;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .send-btn:hover {
-            transform: scale(1.02);
-        }
-
-        .codes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .code-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 20px;
-        }
-
-        .code-header {
+        .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
         }
 
-        .code-value {
-            font-size: 1.5rem;
+        .card-header h3 {
+            color: #667eea;
+            font-size: 1.1rem;
+        }
+
+        .card-header i {
+            font-size: 2rem;
+            color: #667eea;
+            opacity: 0.5;
+        }
+
+        .card-value {
+            font-size: 2.5rem;
             font-weight: 700;
             color: #667eea;
         }
 
-        .code-message {
-            margin: 15px 0;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
+        .card-label {
+            color: #888;
+            font-size: 0.9rem;
         }
 
-        .code-actions {
+        /* ========== الجداول ========== */
+        .section-header {
             display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0 20px;
+        }
+
+        .section-header h2 {
+            color: #667eea;
+            display: flex;
+            align-items: center;
             gap: 10px;
         }
 
-        .add-code-btn {
-            padding: 15px 30px;
-            border: none;
-            border-radius: 12px;
+        .add-btn {
+            padding: 10px 20px;
             background: linear-gradient(145deg, #667eea, #764ba2);
             color: #fff;
-            font-size: 1.1rem;
-            font-weight: 600;
+            border: none;
+            border-radius: 10px;
             cursor: pointer;
-            margin-bottom: 20px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
+        .add-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: 15px;
+            background: #fff;
+            padding: 20px;
+        }
+
+        body.dark-mode .table-responsive {
+            background: #1a1a24;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead th {
+            text-align: right;
+            padding: 15px;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        tbody td {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 5px;
+        }
+
+        .action-btn {
+            width: 35px;
+            height: 35px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #fff;
+        }
+
+        .edit-btn {
+            background: #48dbfb;
+        }
+
+        .delete-btn {
+            background: #ff6b6b;
+        }
+
+        .view-btn {
+            background: #667eea;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #6bcf7f20;
+            color: #6bcf7f;
+        }
+
+        .status-inactive {
+            background: #ff6b6b20;
+            color: #ff6b6b;
+        }
+
+        /* ========== النوافذ المنبثقة ========== */
         .modal {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
             display: none;
             justify-content: center;
             align-items: center;
@@ -394,47 +371,143 @@
         }
 
         .modal-content {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 30px;
-            padding: 40px;
+            background: #fff;
+            border-radius: 20px;
+            padding: 30px;
             width: 90%;
-            max-width: 500px;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalPop 0.3s;
+        }
+
+        @keyframes modalPop {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .modal-header {
-            text-align: center;
-            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #667eea;
         }
 
-        .modal-header i {
-            font-size: 3rem;
+        .modal-header h2 {
             color: #667eea;
         }
 
-        .modal-input,
-        .modal-select {
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #888;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .form-control {
             width: 100%;
-            padding: 15px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
+            padding: 12px 15px;
+            border: 2px solid #f0f0f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            outline: 0;
+            border-color: #667eea;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .color-picker {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .color-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .color-option.selected {
+            border-color: #667eea;
+            transform: scale(1.1);
+        }
+
+        .icon-selector {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+        }
+
+        .icon-option {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            background: rgba(102, 126, 234, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #667eea;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .icon-option:hover {
+            transform: scale(1.1);
+            background: linear-gradient(145deg, #667eea, #764ba2);
             color: #fff;
-            margin-bottom: 15px;
-            outline: none;
+        }
+
+        .icon-option.selected {
+            border-color: #667eea;
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            color: #fff;
         }
 
         .modal-buttons {
             display: flex;
             gap: 10px;
+            margin-top: 20px;
         }
 
         .modal-btn {
             flex: 1;
-            padding: 15px;
+            padding: 12px;
             border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
+            border-radius: 10px;
+            font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s;
         }
@@ -445,946 +518,940 @@
         }
 
         .modal-btn.secondary {
-            background: rgba(255, 255, 255, 0.2);
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        .modal-btn:hover {
+            transform: scale(1.02);
+        }
+
+        .danger-btn {
+            background: #ff6b6b;
             color: #fff;
         }
 
-        .settings-group {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 20px;
-        }
-
-        .settings-group h2 {
-            margin-bottom: 20px;
+        /* ========== التبويبات ========== */
+        .tabs {
             display: flex;
-            align-items: center;
             gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
         }
 
-        .settings-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .toggle-switch {
-            width: 60px;
-            height: 30px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 30px;
-            position: relative;
+        .tab {
+            padding: 10px 20px;
             cursor: pointer;
-        }
-
-        .toggle-switch::after {
-            content: '';
-            width: 26px;
-            height: 26px;
-            background: #fff;
-            border-radius: 50%;
-            position: absolute;
-            top: 2px;
-            right: 2px;
+            border-radius: 8px;
             transition: all 0.3s;
+            color: #888;
         }
 
-        .toggle-switch.active {
+        .tab.active {
             background: linear-gradient(145deg, #667eea, #764ba2);
+            color: #fff;
         }
 
-        .toggle-switch.active::after {
-            right: 32px;
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* ========== الرسم البياني ========== */
+        .chart-container {
+            background: #fff;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        body.dark-mode .chart-container {
+            background: #1a1a24;
         }
     </style>
 </head>
 <body>
     <div class="app-container">
-        <!-- الشريط الجانبي -->
+        <!-- القائمة الجانبية -->
         <div class="sidebar">
             <div class="logo">
                 <i class="fas fa-crown"></i>
-                <span>Admin Panel</span>
+                <span>لوحة التحكم</span>
             </div>
 
-            <div class="menu-item active" onclick="switchPage('dashboard')">
+            <div class="menu-item active" onclick="showSection('dashboard')">
                 <i class="fas fa-chart-pie"></i>
                 <span>لوحة المعلومات</span>
             </div>
 
-            <div class="menu-item" onclick="switchPage('users')">
+            <div class="menu-item" onclick="showSection('users')">
                 <i class="fas fa-users"></i>
                 <span>المستخدمين</span>
-                <span class="stat-badge" style="background:#ff6b6b; padding:2px 8px; border-radius:30px; font-size:0.8rem; margin-right:auto;">0</span>
+                <span class="badge" id="usersCount">0</span>
             </div>
 
-            <div class="menu-item" onclick="switchPage('messages')">
-                <i class="fas fa-envelope"></i>
-                <span>الرسائل</span>
+            <div class="menu-item" onclick="showSection('missionTypes')">
+                <i class="fas fa-tasks"></i>
+                <span>أنواع المهام</span>
+                <span class="badge" id="typesCount">0</span>
             </div>
 
-            <div class="menu-item" onclick="switchPage('codes')">
+            <div class="menu-item" onclick="showSection('missions')">
+                <i class="fas fa-clipboard-list"></i>
+                <span>جميع المهام</span>
+                <span class="badge" id="missionsCount">0</span>
+            </div>
+
+            <div class="menu-item" onclick="showSection('alarms')">
+                <i class="fas fa-bell"></i>
+                <span>التنبيهات</span>
+                <span class="badge" id="alarmsCount">0</span>
+            </div>
+
+            <div class="menu-item" onclick="showSection('secretCodes')">
                 <i class="fas fa-key"></i>
                 <span>الأكواد السرية</span>
+                <span class="badge" id="codesCount">0</span>
             </div>
 
-            <div class="menu-item" onclick="switchPage('settings')">
+            <div class="menu-item" onclick="showSection('settings')">
                 <i class="fas fa-cog"></i>
-                <span>الإعدادات</span>
+                <span>الإعدادات العامة</span>
             </div>
 
-            <div style="margin-top: auto; padding-top: 20px;">
-                <div class="menu-item" onclick="toggleDarkMode()">
-                    <i class="fas fa-moon"></i>
-                    <span>الوضع الليلي</span>
-                </div>
-                <div class="menu-item" onclick="logout()">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>تسجيل خروج</span>
-                </div>
+            <div class="menu-item" onclick="showSection('backup')">
+                <i class="fas fa-database"></i>
+                <span>النسخ الاحتياطي</span>
+            </div>
+
+            <div class="menu-item" onclick="showSection('logs')">
+                <i class="fas fa-history"></i>
+                <span>سجل النشاطات</span>
+            </div>
+
+            <div class="menu-item" onclick="window.location.href='index.html'">
+                <i class="fas fa-arrow-right"></i>
+                <span>العودة للموقع</span>
             </div>
         </div>
 
         <!-- المحتوى الرئيسي -->
         <div class="main-content">
-            <!-- صفحة لوحة المعلومات -->
-            <div id="dashboard" class="page active">
-                <div class="page-header">
-                    <h1><i class="fas fa-chart-pie"></i> لوحة المعلومات</h1>
-                    <button class="action-btn" style="width:auto; padding:0 20px;" onclick="refreshData()">
-                        <i class="fas fa-sync-alt"></i> تحديث
-                    </button>
+            <div class="top-bar">
+                <div class="page-title" id="pageTitle">لوحة المعلومات</div>
+                <div class="top-actions">
+                    <button class="top-btn" onclick="toggleDarkMode()"><i class="fas fa-moon"></i></button>
+                    <button class="top-btn" onclick="refreshData()"><i class="fas fa-sync-alt"></i></button>
+                </div>
+            </div>
+
+            <!-- لوحة المعلومات -->
+            <div id="dashboardSection" class="section active">
+                <div class="stats-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>إجمالي المستخدمين</h3>
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="card-value" id="totalUsers">0</div>
+                        <div class="card-label">مستخدم نشط</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>إجمالي المهام</h3>
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="card-value" id="totalTasks">0</div>
+                        <div class="card-label">مهمة مضافة</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>مهام مكتملة</h3>
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="card-value" id="completedTasks">0</div>
+                        <div class="card-label">بنسبة <span id="completionRate">0%</span></div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>إجمالي النقاط</h3>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="card-value" id="totalScore">0</div>
+                        <div class="card-label">نقطة مكتسبة</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="tasksChart"></canvas>
                 </div>
 
                 <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon"><i class="fas fa-users"></i></div>
-                        <div class="stat-info">
-                            <h3>إجمالي المستخدمين</h3>
-                            <div class="stat-number" id="totalUsers">0</div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>التنبيهات المرسلة</h3>
+                            <i class="fas fa-bell"></i>
                         </div>
+                        <div class="card-value" id="totalAlerts">0</div>
+                        <div class="card-label">تنبيه</div>
                     </div>
 
-                    <div class="stat-card">
-                        <div class="stat-icon"><i class="fas fa-user-check"></i></div>
-                        <div class="stat-info">
-                            <h3>نشطين حالياً</h3>
-                            <div class="stat-number" id="activeUsers">0</div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>نسبة النجاح</h3>
+                            <i class="fas fa-percent"></i>
                         </div>
+                        <div class="card-value" id="successRate">0%</div>
+                        <div class="card-label">مهام أنجزت بعد التنبيه</div>
                     </div>
 
-                    <div class="stat-card">
-                        <div class="stat-icon"><i class="fas fa-tasks"></i></div>
-                        <div class="stat-info">
-                            <h3>إجمالي المهام</h3>
-                            <div class="stat-number" id="totalTasks">0</div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>أنواع المهام</h3>
+                            <i class="fas fa-tag"></i>
                         </div>
+                        <div class="card-value" id="missionTypesCount">0</div>
+                        <div class="card-label">نوع مختلف</div>
                     </div>
 
-                    <div class="stat-card">
-                        <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
-                        <div class="stat-info">
-                            <h3>مهام مكتملة</h3>
-                            <div class="stat-number" id="completedTasks">0</div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>الأكواد السرية</h3>
+                            <i class="fas fa-key"></i>
                         </div>
+                        <div class="card-value" id="secretCodesCount">0</div>
+                        <div class="card-label">كود سري</div>
                     </div>
-                </div>
-
-                <!-- الرسم البياني -->
-                <div class="chart-container">
-                    <canvas id="visitsChart"></canvas>
-                </div>
-            </div>
-
-            <!-- صفحة المستخدمين -->
-            <div id="users" class="page">
-                <div class="page-header">
-                    <h1><i class="fas fa-users"></i> إدارة المستخدمين</h1>
-                    <div style="display: flex; gap: 10px;">
-                        <div class="search-box">
-                            <i class="fas fa-search"></i>
-                            <input type="text" id="userSearch" placeholder="بحث عن مستخدم..." onkeyup="searchUsers()">
-                        </div>
-                        <button class="action-btn" style="width:auto; padding:0 20px;" onclick="showAddUserModal()">
-                            <i class="fas fa-user-plus"></i> إضافة مستخدم
-                        </button>
-                    </div>
-                </div>
-
-                <div class="users-table">
-                    <div class="table-header">
-                        <div>#</div>
-                        <div>الاسم</div>
-                        <div>الدراسة</div>
-                        <div>المهام</div>
-                        <div>النقاط</div>
-                        <div>الحالة</div>
-                        <div>الإجراءات</div>
-                    </div>
-                    <div id="usersList"></div>
                 </div>
             </div>
 
-            <!-- صفحة الرسائل -->
-            <div id="messages" class="page">
-                <div class="page-header">
-                    <h1><i class="fas fa-envelope"></i> إرسال الرسائل</h1>
+            <!-- قسم المستخدمين -->
+            <div id="usersSection" class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-users"></i> إدارة المستخدمين</h2>
                 </div>
+                <div class="table-responsive">
+                    <table id="usersTable">
+                        <thead>
+                            <tr>
+                                <th>المستخدم</th>
+                                <th>البريد</th>
+                                <th>المهام</th>
+                                <th>النقاط</th>
+                                <th>الحالة</th>
+                                <th>آخر ظهور</th>
+                                <th>التحكم</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <tr>
+                                <td colspan="7" style="text-align: center;">لا يوجد مستخدمين</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-                <div class="message-card">
-                    <div class="message-type-selector">
-                        <div class="type-option active" onclick="selectMessageType('single', this)">مستخدم واحد</div>
-                        <div class="type-option" onclick="selectMessageType('all', this)">جميع المستخدمين</div>
+            <!-- قسم أنواع المهام -->
+            <div id="missionTypesSection" class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-tasks"></i> أنواع المهام</h2>
+                    <button class="add-btn" onclick="openAddMissionTypeModal()">
+                        <i class="fas fa-plus"></i> إضافة نوع جديد
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table id="missionTypesTable">
+                        <thead>
+                            <tr>
+                                <th>الأيقونة</th>
+                                <th>الاسم</th>
+                                <th>اللون</th>
+                                <th>عدد المهام</th>
+                                <th>تنبيهات</th>
+                                <th>الحالة</th>
+                                <th>التحكم</th>
+                            </tr>
+                        </thead>
+                        <tbody id="missionTypesTableBody">
+                            <tr>
+                                <td colspan="7" style="text-align: center;">لا يوجد أنواع مهام</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- قسم جميع المهام -->
+            <div id="missionsSection" class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-clipboard-list"></i> جميع المهام</h2>
+                </div>
+                <div class="tabs">
+                    <div class="tab active" onclick="filterMissions('all')">الكل</div>
+                    <div class="tab" onclick="filterMissions('daily')">يومية</div>
+                    <div class="tab" onclick="filterMissions('weekly')">أسبوعية</div>
+                    <div class="tab" onclick="filterMissions('monthly')">شهرية</div>
+                    <div class="tab" onclick="filterMissions('yearly')">سنوية</div>
+                    <div class="tab" onclick="filterMissions('custom')">أنواع مخصصة</div>
+                </div>
+                <div class="table-responsive">
+                    <table id="missionsTable">
+                        <thead>
+                            <tr>
+                                <th>المهمة</th>
+                                <th>النوع</th>
+                                <th>المستخدم</th>
+                                <th>الحالة</th>
+                                <th>الموعد</th>
+                                <th>النقاط</th>
+                                <th>التحكم</th>
+                            </tr>
+                        </thead>
+                        <tbody id="missionsTableBody">
+                            <tr>
+                                <td colspan="7" style="text-align: center;">لا يوجد مهام</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- قسم التنبيهات -->
+            <div id="alarmsSection" class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-bell"></i> إدارة التنبيهات</h2>
+                    <button class="add-btn" onclick="openSendAlarmModal()">
+                        <i class="fas fa-paper-plane"></i> إرسال تنبيه جماعي
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table id="alarmsTable">
+                        <thead>
+                            <tr>
+                                <th>الرسالة</th>
+                                <th>النوع</th>
+                                <th>المستلم</th>
+                                <th>التاريخ</th>
+                                <th>الحالة</th>
+                                <th>التحكم</th>
+                            </tr>
+                        </thead>
+                        <tbody id="alarmsTableBody">
+                            <tr>
+                                <td colspan="6" style="text-align: center;">لا يوجد تنبيهات</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- قسم الأكواد السرية -->
+            <div id="secretCodesSection" class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-key"></i> الأكواد السرية</h2>
+                    <button class="add-btn" onclick="openAddCodeModal()">
+                        <i class="fas fa-plus"></i> إضافة كود سري
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table id="codesTable">
+                        <thead>
+                            <tr>
+                                <th>الكود</th>
+                                <th>الرسالة</th>
+                                <th>الأيقونة</th>
+                                <th>الحالة</th>
+                                <th>التحكم</th>
+                            </tr>
+                        </thead>
+                        <tbody id="codesTableBody">
+                            <tr>
+                                <td colspan="5" style="text-align: center;">لا يوجد أكواد سرية</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- قسم الإعدادات العامة -->
+            <div id="settingsSection" class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-cog"></i> الإعدادات العامة</h2>
+                </div>
+                <div class="card">
+                    <div class="form-group">
+                        <label>السماح بالتسجيل</label>
+                        <div class="toggle-switch" id="registrationToggle" onclick="toggleSetting('registration')"></div>
                     </div>
-
-                    <div id="singleUserSection">
-                        <select id="userSelect" class="user-select">
-                            <option value="">اختر المستخدم...</option>
+                    <div class="form-group">
+                        <label>تفعيل التنبيهات التلقائية</label>
+                        <div class="toggle-switch" id="autoAlertsToggle" onclick="toggleSetting('autoAlerts')"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>وقت التنبيه الافتراضي</label>
+                        <input type="time" id="defaultAlertTime" class="form-control" value="09:00">
+                    </div>
+                    <div class="form-group">
+                        <label>عدد أيام التذكير قبل الموعد</label>
+                        <select id="reminderDays" class="form-control">
+                            <option value="1">يوم واحد</option>
+                            <option value="3">3 أيام</option>
+                            <option value="5">5 أيام</option>
+                            <option value="7">أسبوع</option>
                         </select>
                     </div>
-
-                    <textarea id="messageText" class="message-input" placeholder="اكتب رسالتك هنا..."></textarea>
-
-                    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                        <input type="number" id="pointsToSend" class="modal-input" placeholder="نقاط (موجب للإضافة، سالب للخصم)" value="0">
-                    </div>
-
-                    <button class="send-btn" onclick="sendMessage()">
-                        <i class="fas fa-paper-plane"></i> إرسال الرسالة
-                    </button>
+                    <button class="add-btn" onclick="saveGeneralSettings()">حفظ الإعدادات</button>
                 </div>
             </div>
 
-            <!-- صفحة الأكواد السرية -->
-            <div id="codes" class="page">
-                <div class="page-header">
-                    <h1><i class="fas fa-key"></i> إدارة الأكواد السرية</h1>
-                    <button class="add-code-btn" onclick="showAddCodeModal()">
-                        <i class="fas fa-plus"></i> إضافة كود جديد
+            <!-- قسم النسخ الاحتياطي -->
+            <div id="backupSection" class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-database"></i> النسخ الاحتياطي</h2>
+                </div>
+                <div class="stats-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>حجم البيانات</h3>
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <div class="card-value" id="dataSize">0 KB</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>آخر نسخة</h3>
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="card-value" id="lastBackup">-</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <button class="add-btn" onclick="createBackup()" style="width: 100%; margin-bottom: 10px;">
+                        <i class="fas fa-download"></i> إنشاء نسخة احتياطية
+                    </button>
+                    <button class="add-btn" onclick="restoreBackup()" style="width: 100%; background: #48dbfb;">
+                        <i class="fas fa-upload"></i> استعادة نسخة
                     </button>
                 </div>
-
-                <div class="codes-grid" id="codesList"></div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>التاريخ</th>
+                                <th>الحجم</th>
+                                <th>التحكم</th>
+                            </tr>
+                        </thead>
+                        <tbody id="backupsList"></tbody>
+                    </table>
+                </div>
             </div>
 
-            <!-- صفحة الإعدادات -->
-            <div id="settings" class="page">
-                <div class="page-header">
-                    <h1><i class="fas fa-cog"></i> الإعدادات</h1>
+            <!-- قسم سجل النشاطات -->
+            <div id="logsSection" class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-history"></i> سجل النشاطات</h2>
                 </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>المستخدم</th>
+                                <th>النشاط</th>
+                                <th>التفاصيل</th>
+                                <th>التاريخ</th>
+                                <th>IP</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                <div class="settings-group">
-                    <h2><i class="fas fa-palette"></i> إعدادات الألوان</h2>
-                    <div class="settings-row">
-                        <span>اللون الأساسي</span>
-                        <input type="color" id="primaryColor" value="#667eea" onchange="changeColor('primary', this.value)">
-                    </div>
-                    <div class="settings-row">
-                        <span>اللون الثانوي</span>
-                        <input type="color" id="secondaryColor" value="#764ba2" onchange="changeColor('secondary', this.value)">
-                    </div>
+    <!-- نافذة إضافة/تعديل نوع مهمة -->
+    <div class="modal" id="missionTypeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="missionTypeModalTitle">إضافة نوع مهمة جديد</h2>
+                <button class="close-modal" onclick="closeMissionTypeModal()">&times;</button>
+            </div>
+            <div class="form-group">
+                <label>اسم النوع</label>
+                <input type="text" id="typeName" class="form-control" placeholder="مثال: سنوية">
+            </div>
+            <div class="form-group">
+                <label>اللون</label>
+                <div class="color-picker" id="colorPicker">
+                    <div class="color-option selected" style="background: #667eea;" onclick="selectColor('#667eea')"></div>
+                    <div class="color-option" style="background: #48dbfb;" onclick="selectColor('#48dbfb')"></div>
+                    <div class="color-option" style="background: #6bcf7f;" onclick="selectColor('#6bcf7f')"></div>
+                    <div class="color-option" style="background: #ffd93e;" onclick="selectColor('#ffd93e')"></div>
+                    <div class="color-option" style="background: #ff6b6b;" onclick="selectColor('#ff6b6b')"></div>
+                    <div class="color-option" style="background: #a57eea;" onclick="selectColor('#a57eea')"></div>
                 </div>
-
-                <div class="settings-group">
-                    <h2><i class="fas fa-volume-up"></i> إعدادات الصوت</h2>
-                    <div class="settings-row">
-                        <span>تشغيل صوت الإشعارات</span>
-                        <div class="toggle-switch active" onclick="toggleSetting('sound', this)"></div>
-                    </div>
+                <input type="hidden" id="selectedColor" value="#667eea">
+            </div>
+            <div class="form-group">
+                <label>الأيقونة</label>
+                <div class="icon-selector" id="iconSelector">
+                    <div class="icon-option selected" onclick="selectIcon('fa-calendar')"><i class="fas fa-calendar"></i></div>
+                    <div class="icon-option" onclick="selectIcon('fa-calendar-week')"><i class="fas fa-calendar-week"></i></div>
+                    <div class="icon-option" onclick="selectIcon('fa-calendar-alt')"><i class="fas fa-calendar-alt"></i></div>
+                    <div class="icon-option" onclick="selectIcon('fa-sun')"><i class="fas fa-sun"></i></div>
+                    <div class="icon-option" onclick="selectIcon('fa-moon')"><i class="fas fa-moon"></i></div>
+                    <div class="icon-option" onclick="selectIcon('fa-star')"><i class="fas fa-star"></i></div>
+                    <div class="icon-option" onclick="selectIcon('fa-clock')"><i class="fas fa-clock"></i></div>
+                    <div class="icon-option" onclick="selectIcon('fa-hourglass')"><i class="fas fa-hourglass"></i></div>
+                    <div class="icon-option" onclick="selectIcon('fa-flag')"><i class="fas fa-flag"></i></div>
+                    <div class="icon-option" onclick="selectIcon('fa-book')"><i class="fas fa-book"></i></div>
+                    <div class="icon-option" onclick="selectIcon('fa-graduation-cap')"><i class="fas fa-graduation-cap"></i></div>
+                    <div class="icon-option" onclick="selectIcon('fa-briefcase')"><i class="fas fa-briefcase"></i></div>
                 </div>
-
-                <div class="settings-group">
-                    <h2><i class="fas fa-bell"></i> إعدادات الإشعارات</h2>
-                    <div class="settings-row">
-                        <span>إشعارات سطح المكتب</span>
-                        <button class="action-btn" style="width:auto; padding:0 15px;" onclick="requestNotificationPermission()">تفعيل</button>
-                    </div>
+                <input type="hidden" id="selectedIcon" value="fa-calendar">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>تفعيل التنبيهات</label>
+                    <select id="typeAlerts" class="form-control">
+                        <option value="1">نعم</option>
+                        <option value="0">لا</option>
+                    </select>
                 </div>
-
-                <div class="settings-group">
-                    <h2><i class="fas fa-shield-alt"></i> إعدادات الأمان</h2>
-                    <div class="settings-row">
-                        <span>تغيير كلمة مرور المدير</span>
-                        <button class="action-btn" style="width:auto; padding:0 15px;" onclick="changePassword()">تغيير</button>
-                    </div>
-                    <div class="settings-row">
-                        <span>الكود السري (حالي: 1234)</span>
-                        <button class="action-btn" style="width:auto; padding:0 15px;" onclick="changeSecretCode()">تغيير</button>
-                    </div>
+                <div class="form-group">
+                    <label>عدد أيام التذكير</label>
+                    <input type="number" id="typeReminderDays" class="form-control" value="3" min="1" max="30">
                 </div>
+            </div>
+            <div class="form-group">
+                <label>النقاط الافتراضية</label>
+                <input type="number" id="typeDefaultScore" class="form-control" value="20" min="0" max="100">
+            </div>
+            <div class="form-group">
+                <label>الحالة</label>
+                <select id="typeStatus" class="form-control">
+                    <option value="1">مفعل</option>
+                    <option value="0">معطل</option>
+                </select>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn primary" onclick="saveMissionType()">حفظ</button>
+                <button class="modal-btn secondary" onclick="closeMissionTypeModal()">إلغاء</button>
+            </div>
+            <div class="modal-buttons" id="deleteTypeBtnContainer" style="display: none;">
+                <button class="modal-btn danger-btn" onclick="deleteMissionType()">حذف النوع</button>
             </div>
         </div>
     </div>
 
     <!-- نافذة إضافة كود سري -->
-    <div class="modal" id="addCodeModal">
+    <div class="modal" id="codeModal">
         <div class="modal-content">
             <div class="modal-header">
-                <i class="fas fa-key"></i>
-                <h2>إضافة كود سري جديد</h2>
+                <h2>إضافة كود سري</h2>
+                <button class="close-modal" onclick="closeCodeModal()">&times;</button>
             </div>
-            <input type="text" id="codeValue" class="modal-input" placeholder="الكود (مثال: #9999#)" maxlength="6">
-            <input type="text" id="codeMessage" class="modal-input" placeholder="الرسالة">
-            <select id="codeIcon" class="modal-select">
-                <option value="fa-book">📚 كتاب</option>
-                <option value="fa-mosque">🕌 مسجد</option>
-                <option value="fa-graduation-cap">🎓 تخرج</option>
-                <option value="fa-star">⭐ نجمة</option>
-            </select>
+            <div class="form-group">
+                <label>الكود</label>
+                <input type="text" id="codeValue" class="form-control" placeholder="مثال: #1240#">
+            </div>
+            <div class="form-group">
+                <label>الرسالة</label>
+                <input type="text" id="codeMessage" class="form-control" placeholder="الرسالة التي ستظهر">
+            </div>
+            <div class="form-group">
+                <label>الأيقونة</label>
+                <select id="codeIcon" class="form-control">
+                    <option value="fa-key">مفتاح</option>
+                    <option value="fa-crown">تاج</option>
+                    <option value="fa-star">نجمة</option>
+                    <option value="fa-gift">هدية</option>
+                    <option value="fa-mosque">مسجد</option>
+                    <option value="fa-book">كتاب</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>الحالة</label>
+                <select id="codeStatus" class="form-control">
+                    <option value="1">مفعل</option>
+                    <option value="0">معطل</option>
+                </select>
+            </div>
             <div class="modal-buttons">
-                <button class="modal-btn primary" onclick="saveNewCode()">إضافة</button>
-                <button class="modal-btn secondary" onclick="closeModal('addCodeModal')">إلغاء</button>
+                <button class="modal-btn primary" onclick="saveCode()">حفظ</button>
+                <button class="modal-btn secondary" onclick="closeCodeModal()">إلغاء</button>
             </div>
         </div>
     </div>
 
-    <!-- نافذة إضافة مستخدم -->
-    <div class="modal" id="addUserModal">
+    <!-- نافذة إرسال تنبيه جماعي -->
+    <div class="modal" id="sendAlarmModal">
         <div class="modal-content">
             <div class="modal-header">
-                <i class="fas fa-user-plus"></i>
-                <h2>إضافة مستخدم جديد</h2>
+                <h2>إرسال تنبيه جماعي</h2>
+                <button class="close-modal" onclick="closeSendAlarmModal()">&times;</button>
             </div>
-            <input type="text" id="newUserName" class="modal-input" placeholder="الاسم">
-            <select id="newUserGrade" class="modal-select">
-                <option value="">اختر السنة الدراسية</option>
-                <option value="1 اعدادي">1 إعدادي</option>
-                <option value="2 اعدادي">2 إعدادي</option>
-                <option value="3 اعدادي">3 إعدادي</option>
-                <option value="1 ثانوي">1 ثانوي</option>
-                <option value="2 ثانوي">2 ثانوي</option>
-                <option value="3 ثانوي">3 ثانوي</option>
-            </select>
-            <input type="number" id="newUserPoints" class="modal-input" placeholder="النقاط الابتدائية" value="0">
+            <div class="form-group">
+                <label>المستلمين</label>
+                <select id="alarmRecipients" class="form-control">
+                    <option value="all">جميع المستخدمين</option>
+                    <option value="active">المستخدمين النشطين فقط</option>
+                    <option value="inactive">المستخدمين الغير نشطين</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>نوع التنبيه</label>
+                <select id="alarmType" class="form-control">
+                    <option value="normal">عادي</option>
+                    <option value="important">مهم</option>
+                    <option value="urgent">عاجل</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>الرسالة</label>
+                <textarea id="alarmMessage" class="form-control" rows="4" placeholder="اكتب رسالة التنبيه"></textarea>
+            </div>
+            <div class="form-group">
+                <label>تشغيل الصوت</label>
+                <select id="alarmSound" class="form-control">
+                    <option value="1">نعم</option>
+                    <option value="0">لا</option>
+                </select>
+            </div>
             <div class="modal-buttons">
-                <button class="modal-btn primary" onclick="saveNewUser()">إضافة</button>
-                <button class="modal-btn secondary" onclick="closeModal('addUserModal')">إلغاء</button>
+                <button class="modal-btn primary" onclick="sendBulkAlarm()">إرسال</button>
+                <button class="modal-btn secondary" onclick="closeSendAlarmModal()">إلغاء</button>
             </div>
         </div>
-    </div>
-
-    <!-- نافذة تعديل النقاط -->
-    <div class="modal" id="pointsModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <i class="fas fa-coins"></i>
-                <h2>تعديل النقاط</h2>
-            </div>
-            <input type="number" id="pointsAmount" class="modal-input" placeholder="عدد النقاط (موجب للإضافة، سالب للخصم)">
-            <input type="text" id="pointsReason" class="modal-input" placeholder="سبب التعديل">
-            <input type="hidden" id="currentUserId">
-            <div class="modal-buttons">
-                <button class="modal-btn primary" onclick="savePointsChange()">حفظ</button>
-                <button class="modal-btn secondary" onclick="closeModal('pointsModal')">إلغاء</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- نافذة الكود السري الأولية -->
-    <div class="modal" id="secretCodeModal" style="display: flex;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <i class="fas fa-lock"></i>
-                <h2>مرحباً بك في لوحة التحكم</h2>
-                <p style="margin-top: 10px;">أدخل الكود السري للمتابعة</p>
-            </div>
-            <input type="password" id="secretCodeInput" class="modal-input" placeholder="****" maxlength="4" style="text-align: center; font-size: 2rem; letter-spacing: 10px;">
-            <div class="modal-buttons">
-                <button class="modal-btn primary" onclick="checkSecretCode()">دخول</button>
-                <button class="modal-btn secondary" onclick="enterAsGuest()">دخول كزائر</button>
-            </div>
-            <div id="codeError" style="color: #ff6b6b; text-align: center; margin-top: 10px; display: none;">الكود غير صحيح!</div>
-        </div>
-    </div>
-
-    <!-- رسالة النجاح -->
-    <div id="successMessage" style="display: none; position: fixed; top: 20px; right: 50%; transform: translateX(50%); background: #4caf50; color: #fff; padding: 15px 30px; border-radius: 50px; z-index: 4000; box-shadow: 0 5px 20px rgba(0,0,0,0.2);">
-        <i class="fas fa-check-circle"></i> <span id="messageText">تمت العملية بنجاح</span>
     </div>
 
     <script>
-        // البيانات
+        // ==================== متغيرات عامة ====================
+        let missionTypes = [];
         let users = [];
+        let allMissions = [];
         let secretCodes = [];
-        let currentUserId = null;
-        let isAdmin = false;
-        let secretCode = '1234'; // الكود السري الافتراضي
         let notifications = [];
+        let logs = [];
+        let backups = [];
+        let editingTypeId = null;
+        let charts = {};
 
         // تحميل البيانات من localStorage
         function loadData() {
-            // تحميل المستخدمين
-            let savedUsers = localStorage.getItem('allUsers');
-            if (savedUsers) {
-                users = JSON.parse(savedUsers);
-            } else {
-                // بيانات تجريبية
-                users = [
-                    { id: 1, name: 'أحمد محمد', grade: '3 ثانوي', tasks: 15, score: 350, status: 'online' },
-                    { id: 2, name: 'فاطمة علي', grade: '2 ثانوي', tasks: 12, score: 280, status: 'offline' },
-                    { id: 3, name: 'محمود حسن', grade: '1 ثانوي', tasks: 8, score: 190, status: 'online' },
-                    { id: 4, name: 'سارة أحمد', grade: '3 اعدادي', tasks: 20, score: 450, status: 'offline' }
-                ];
-                localStorage.setItem('allUsers', JSON.stringify(users));
-            }
+            try {
+                // تحميل أنواع المهام
+                let savedTypes = localStorage.getItem('missionTypes');
+                if (savedTypes) {
+                    missionTypes = JSON.parse(savedTypes);
+                } else {
+                    // أنواع المهام الافتراضية
+                    missionTypes = [
+                        { id: 'daily', name: 'يومية', icon: 'fa-sun', color: '#667eea', alerts: true, reminderDays: 1, defaultScore: 10, status: 1 },
+                        { id: 'weekly', name: 'أسبوعية', icon: 'fa-calendar-week', color: '#48dbfb', alerts: true, reminderDays: 3, defaultScore: 20, status: 1 },
+                        { id: 'monthly', name: 'شهرية', icon: 'fa-calendar-alt', color: '#6bcf7f', alerts: true, reminderDays: 5, defaultScore: 30, status: 1 },
+                        { id: 'yearly', name: 'سنوية', icon: 'fa-calendar', color: '#ffd93e', alerts: true, reminderDays: 7, defaultScore: 50, status: 1 }
+                    ];
+                    localStorage.setItem('missionTypes', JSON.stringify(missionTypes));
+                }
 
-            // تحميل الأكواد السرية
-            let savedCodes = localStorage.getItem('secretCodes');
-            if (savedCodes) {
-                secretCodes = JSON.parse(savedCodes);
-            } else {
-                secretCodes = [
-                    { code: '#0080#', message: 'عمك بكر بيمسي عليك يلا ذاكر', icon: 'fa-book' },
-                    { code: '#9912#', message: 'اللهم صل وسلم على سيدنا رسول الله', icon: 'fa-mosque' },
-                    { code: '#1234#', message: 'أنت بطل! استمر في المذاكرة', icon: 'fa-star' }
-                ];
-                localStorage.setItem('secretCodes', JSON.stringify(secretCodes));
-            }
+                // تحميل المستخدمين
+                let savedUsers = localStorage.getItem('localUsers');
+                if (savedUsers) {
+                    users = JSON.parse(savedUsers);
+                }
 
-            // تحميل الإشعارات
-            let savedNotifications = localStorage.getItem('notifications');
-            if (savedNotifications) {
-                notifications = JSON.parse(savedNotifications);
-            }
+                // تحميل المهام
+                let savedMissions = localStorage.getItem('missionMasterMissions');
+                if (savedMissions) {
+                    let missions = JSON.parse(savedMissions);
+                    // تحويل المهام إلى مصفوفة مسطحة
+                    allMissions = [];
+                    for (let type in missions) {
+                        for (let id in missions[type]) {
+                            allMissions.push(missions[type][id]);
+                        }
+                    }
+                }
 
-            // تحميل الكود السري
-            let savedSecretCode = localStorage.getItem('adminSecretCode');
-            if (savedSecretCode) {
-                secretCode = savedSecretCode;
-            }
+                // تحميل الأكواد السرية
+                let savedCodes = localStorage.getItem('secretCodes');
+                if (savedCodes) {
+                    secretCodes = JSON.parse(savedCodes);
+                }
 
-            updateStats();
-            renderUsers();
-            renderCodes();
-            updateUserSelect();
-        }
+                // تحميل الإشعارات
+                let savedNotifications = localStorage.getItem('missionMasterNotifications');
+                if (savedNotifications) {
+                    notifications = JSON.parse(savedNotifications);
+                }
 
-        // التحقق من الكود السري
-        function checkSecretCode() {
-            let inputCode = document.getElementById('secretCodeInput').value;
-            if (inputCode === secretCode) {
-                isAdmin = true;
-                document.getElementById('secretCodeModal').style.display = 'none';
-                showMessage('مرحباً بك أيها المدير! 👑');
-                loadData();
-            } else {
-                document.getElementById('codeError').style.display = 'block';
-                document.getElementById('secretCodeInput').value = '';
-            }
-        }
+                // تحميل الإعدادات
+                let savedSettings = localStorage.getItem('notificationSettings');
+                if (savedSettings) {
+                    settings = JSON.parse(savedSettings);
+                    updateToggleButtons();
+                }
 
-        function enterAsGuest() {
-            isAdmin = false;
-            document.getElementById('secretCodeModal').style.display = 'none';
-            showMessage('مرحباً بك كزائر 👋');
-            loadData();
-        }
-
-        function logout() {
-            isAdmin = false;
-            document.getElementById('secretCodeModal').style.display = 'flex';
-            document.getElementById('secretCodeInput').value = '';
-            document.getElementById('codeError').style.display = 'none';
-        }
-
-        function changeSecretCode() {
-            let newCode = prompt('أدخل الكود السري الجديد (4 أرقام):', secretCode);
-            if (newCode && newCode.length === 4 && !isNaN(newCode)) {
-                secretCode = newCode;
-                localStorage.setItem('adminSecretCode', secretCode);
-                showMessage('✅ تم تغيير الكود السري');
-            } else {
-                alert('الرجاء إدخال 4 أرقام صحيحة');
+                updateUI();
+            } catch (error) {
+                console.error('خطأ في تحميل البيانات:', error);
             }
         }
 
-        // تحديث الإحصائيات
-        function updateStats() {
+        // تحديث واجهة المستخدم
+        function updateUI() {
+            // تحديث الإحصائيات
             document.getElementById('totalUsers').textContent = users.length;
-            document.getElementById('activeUsers').textContent = users.filter(u => u.status === 'online').length;
+            document.getElementById('totalTasks').textContent = allMissions.length;
+            document.getElementById('completedTasks').textContent = allMissions.filter(m => m.completed).length;
+            document.getElementById('totalScore').textContent = allMissions.reduce((sum, m) => sum + (m.score || 0), 0);
+            document.getElementById('totalAlerts').textContent = notifications.length;
+            document.getElementById('missionTypesCount').textContent = missionTypes.length;
+            document.getElementById('secretCodesCount').textContent = secretCodes.length;
             
-            let totalTasks = users.reduce((sum, u) => sum + (u.tasks || 0), 0);
-            let totalScore = users.reduce((sum, u) => sum + (u.score || 0), 0);
+            let completed = allMissions.filter(m => m.completed).length;
+            let total = allMissions.length || 1;
+            let rate = Math.round((completed / total) * 100);
+            document.getElementById('completionRate').textContent = rate + '%';
             
-            document.getElementById('totalTasks').textContent = totalTasks;
-            document.getElementById('completedTasks').textContent = Math.floor(totalTasks * 0.7);
-            
-            document.querySelector('.stat-badge').textContent = users.length;
-        }
+            let successRate = notifications.length ? Math.round((allMissions.filter(m => m.completedAfterAlert || false).length / notifications.length) * 100) : 0;
+            document.getElementById('successRate').textContent = successRate + '%';
 
-        // التبديل بين الصفحات
-        function switchPage(page) {
-            if (!isAdmin && page !== 'dashboard' && page !== 'settings') {
-                showMessage('⚠️ هذه الصفحة متاحة للمدير فقط');
-                return;
-            }
-            
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
-            document.getElementById(page).classList.add('active');
-            event.currentTarget.classList.add('active');
-            
-            if (page === 'users') renderUsers();
-            if (page === 'codes') renderCodes();
-            if (page === 'messages') updateUserSelect();
+            document.getElementById('usersCount').textContent = users.length;
+            document.getElementById('typesCount').textContent = missionTypes.length;
+            document.getElementById('missionsCount').textContent = allMissions.length;
+            document.getElementById('alarmsCount').textContent = notifications.length;
+            document.getElementById('codesCount').textContent = secretCodes.length;
+
+            // عرض المستخدمين
+            renderUsersTable();
+            // عرض أنواع المهام
+            renderMissionTypesTable();
+            // عرض المهام
+            renderMissionsTable();
+            // عرض التنبيهات
+            renderAlarmsTable();
+            // عرض الأكواد السرية
+            renderCodesTable();
+            // عرض السجلات
+            renderLogsTable();
+            // تحديث الرسم البياني
+            updateChart();
         }
 
         // عرض المستخدمين
-        function renderUsers() {
-            let html = '';
-            users.forEach((u, i) => {
-                html += `
-                    <div class="user-row">
-                        <div>${i + 1}</div>
-                        <div>${u.name}</div>
-                        <div>${u.grade || 'غير محدد'}</div>
-                        <div>${u.tasks || 0}</div>
-                        <div>${u.score || 0}</div>
-                        <div><span class="status-badge ${u.status === 'online' ? 'status-online' : 'status-offline'}">${u.status === 'online' ? 'متصل' : 'غير متصل'}</span></div>
-                        <div>
-                            <button class="action-btn" onclick="editUser(${u.id})"><i class="fas fa-edit"></i></button>
-                            <button class="action-btn" onclick="showPointsModal(${u.id})"><i class="fas fa-coins"></i></button>
-                            <button class="action-btn" onclick="sendMessageToUser(${u.id})"><i class="fas fa-envelope"></i></button>
-                            <button class="action-btn" onclick="deleteUser(${u.id})"><i class="fas fa-trash"></i></button>
+        function renderUsersTable() {
+            let tbody = document.getElementById('usersTableBody');
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">لا يوجد مستخدمين</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = users.map(user => `
+                <tr>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 1.5rem;">${user.avatar || '🧑'}</span>
+                            <span>${user.name || 'مستخدم'}</span>
                         </div>
-                    </div>
-                `;
-            });
-            document.getElementById('usersList').innerHTML = html;
+                    </td>
+                    <td>${user.email || 'لا يوجد'}</td>
+                    <td>${user.stats?.completedTasks || 0}</td>
+                    <td>${user.stats?.score || 0}</td>
+                    <td><span class="status-badge ${user.status === 'online' ? 'status-active' : 'status-inactive'}">${user.status === 'online' ? 'نشط' : 'غير نشط'}</span></td>
+                    <td>${user.lastSeen || 'الآن'}</td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="action-btn view-btn" onclick="viewUser('${user.id}')"><i class="fas fa-eye"></i></button>
+                            <button class="action-btn edit-btn" onclick="editUser('${user.id}')"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn delete-btn" onclick="deleteUser('${user.id}')"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // عرض أنواع المهام
+        function renderMissionTypesTable() {
+            let tbody = document.getElementById('missionTypesTableBody');
+            if (missionTypes.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">لا يوجد أنواع مهام</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = missionTypes.map(type => `
+                <tr>
+                    <td><i class="fas ${type.icon || 'fa-calendar'}" style="color: ${type.color || '#667eea'}; font-size: 1.2rem;"></i></td>
+                    <td>${type.name}</td>
+                    <td><span style="display: inline-block; width: 20px; height: 20px; background: ${type.color || '#667eea'}; border-radius: 4px;"></span></td>
+                    <td>${allMissions.filter(m => m.type === type.id).length}</td>
+                    <td>${type.alerts ? 'مفعل' : 'معطل'}</td>
+                    <td><span class="status-badge ${type.status ? 'status-active' : 'status-inactive'}">${type.status ? 'مفعل' : 'معطل'}</span></td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="action-btn edit-btn" onclick="editMissionType('${type.id}')"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn delete-btn" onclick="deleteMissionType('${type.id}')"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // عرض المهام
+        function renderMissionsTable(filter = 'all') {
+            let tbody = document.getElementById('missionsTableBody');
+            let filteredMissions = allMissions;
+            
+            if (filter !== 'all') {
+                if (filter === 'custom') {
+                    filteredMissions = allMissions.filter(m => !['daily', 'weekly', 'monthly', 'yearly'].includes(m.type));
+                } else {
+                    filteredMissions = allMissions.filter(m => m.type === filter);
+                }
+            }
+
+            if (filteredMissions.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">لا يوجد مهام</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = filteredMissions.map(mission => `
+                <tr>
+                    <td>${mission.title}</td>
+                    <td>${missionTypes.find(t => t.id === mission.type)?.name || mission.type}</td>
+                    <td>${mission.userName || 'غير معروف'}</td>
+                    <td><span class="status-badge ${mission.completed ? 'status-active' : 'status-inactive'}">${mission.completed ? 'مكتملة' : 'قيد التنفيذ'}</span></td>
+                    <td>${mission.deadline ? new Date(mission.deadline.date).toLocaleDateString('ar-EG') : 'لا يوجد'}</td>
+                    <td>${mission.score || 0}</td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="action-btn view-btn" onclick="viewMission('${mission.id}')"><i class="fas fa-eye"></i></button>
+                            <button class="action-btn delete-btn" onclick="deleteMission('${mission.id}')"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // عرض التنبيهات
+        function renderAlarmsTable() {
+            let tbody = document.getElementById('alarmsTableBody');
+            if (notifications.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">لا يوجد تنبيهات</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = notifications.slice(0, 20).map(notification => `
+                <tr>
+                    <td>${notification.text}</td>
+                    <td><span class="status-badge ${notification.type === 'urgent' ? 'status-active' : ''}">${notification.type}</span></td>
+                    <td>${notification.userName || 'الكل'}</td>
+                    <td>${new Date(notification.datetime).toLocaleString('ar-EG')}</td>
+                    <td><span class="status-badge ${notification.read ? 'status-inactive' : 'status-active'}">${notification.read ? 'مقروء' : 'غير مقروء'}</span></td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="action-btn delete-btn" onclick="deleteNotification('${notification.id}')"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
         }
 
         // عرض الأكواد السرية
-        function renderCodes() {
-            let html = '';
-            secretCodes.forEach((c, index) => {
-                html += `
-                    <div class="code-card">
-                        <div class="code-header">
-                            <span class="code-value">${c.code}</span>
-                            <div class="code-actions">
-                                <button class="action-btn" onclick="editCode(${index})"><i class="fas fa-edit"></i></button>
-                                <button class="action-btn" onclick="deleteCode(${index})"><i class="fas fa-trash"></i></button>
-                            </div>
+        function renderCodesTable() {
+            let tbody = document.getElementById('codesTableBody');
+            if (secretCodes.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">لا يوجد أكواد سرية</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = secretCodes.map((code, index) => `
+                <tr>
+                    <td><code>${code.code}</code></td>
+                    <td>${code.message}</td>
+                    <td><i class="fas ${code.icon || 'fa-key'}"></i></td>
+                    <td><span class="status-badge ${code.status !== false ? 'status-active' : 'status-inactive'}">${code.status !== false ? 'مفعل' : 'معطل'}</span></td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="action-btn edit-btn" onclick="editCode(${index})"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn delete-btn" onclick="deleteCode(${index})"><i class="fas fa-trash"></i></button>
                         </div>
-                        <div class="code-message">
-                            <i class="fas ${c.icon}" style="color: #667eea; margin-left: 10px;"></i>
-                            ${c.message}
-                        </div>
-                    </div>
-                `;
-            });
-            document.getElementById('codesList').innerHTML = html;
+                    </td>
+                </tr>
+            `).join('');
         }
 
-        // تحديث قائمة المستخدمين في صندوق الاختيار
-        function updateUserSelect() {
-            let select = document.getElementById('userSelect');
-            if (!select) return;
+        // عرض سجل النشاطات
+        function renderLogsTable() {
+            let tbody = document.getElementById('logsTableBody');
+            tbody.innerHTML = logs.map(log => `
+                <tr>
+                    <td>${log.user}</td>
+                    <td>${log.action}</td>
+                    <td>${log.details}</td>
+                    <td>${new Date(log.time).toLocaleString('ar-EG')}</td>
+                    <td>${log.ip || '127.0.0.1'}</td>
+                </tr>
+            `).join('');
+        }
+
+        // تحديث الرسم البياني
+        function updateChart() {
+            let ctx = document.getElementById('tasksChart').getContext('2d');
             
-            let options = '<option value="">اختر المستخدم...</option>';
-            users.forEach(u => {
-                options += `<option value="${u.id}">${u.name} (${u.score} نقطة)</option>`;
-            });
-            select.innerHTML = options;
-        }
-
-        // البحث في المستخدمين
-        function searchUsers() {
-            let term = document.getElementById('userSearch').value.toLowerCase();
-            let filtered = users.filter(u => u.name.toLowerCase().includes(term));
-            
-            let html = '';
-            filtered.forEach((u, i) => {
-                html += `
-                    <div class="user-row">
-                        <div>${i + 1}</div>
-                        <div>${u.name}</div>
-                        <div>${u.grade || 'غير محدد'}</div>
-                        <div>${u.tasks || 0}</div>
-                        <div>${u.score || 0}</div>
-                        <div><span class="status-badge ${u.status === 'online' ? 'status-online' : 'status-offline'}">${u.status === 'online' ? 'متصل' : 'غير متصل'}</span></div>
-                        <div>
-                            <button class="action-btn" onclick="editUser(${u.id})"><i class="fas fa-edit"></i></button>
-                            <button class="action-btn" onclick="showPointsModal(${u.id})"><i class="fas fa-coins"></i></button>
-                            <button class="action-btn" onclick="sendMessageToUser(${u.id})"><i class="fas fa-envelope"></i></button>
-                            <button class="action-btn" onclick="deleteUser(${u.id})"><i class="fas fa-trash"></i></button>
-                        </div>
-                    </div>
-                `;
-            });
-            document.getElementById('usersList').innerHTML = html;
-        }
-
-        // إضافة مستخدم جديد
-        function showAddUserModal() {
-            document.getElementById('addUserModal').classList.add('show');
-        }
-
-        function saveNewUser() {
-            let name = document.getElementById('newUserName').value.trim();
-            let grade = document.getElementById('newUserGrade').value;
-            let points = parseInt(document.getElementById('newUserPoints').value) || 0;
-
-            if (!name) {
-                alert('الرجاء إدخال الاسم');
-                return;
+            // تدمير الرسم البياني القديم إذا وجد
+            if (charts.tasksChart) {
+                charts.tasksChart.destroy();
             }
 
-            let newUser = {
-                id: Date.now(),
-                name: name,
-                grade: grade || 'غير محدد',
-                tasks: 0,
-                score: points,
-                status: 'offline'
-            };
-
-            users.push(newUser);
-            localStorage.setItem('allUsers', JSON.stringify(users));
+            // تجهيز البيانات
+            let days = [];
+            let completedData = [];
+            let createdData = [];
             
-            updateStats();
-            renderUsers();
-            updateUserSelect();
-            closeModal('addUserModal');
-            
-            document.getElementById('newUserName').value = '';
-            document.getElementById('newUserPoints').value = '0';
-            
-            showMessage('✅ تم إضافة المستخدم بنجاح');
-        }
-
-        // تعديل المستخدم
-        function editUser(id) {
-            let user = users.find(u => u.id === id);
-            if (!user) return;
-            
-            let newName = prompt('تعديل الاسم:', user.name);
-            if (newName) {
-                user.name = newName;
-                localStorage.setItem('allUsers', JSON.stringify(users));
-                renderUsers();
-                updateUserSelect();
-                showMessage('✅ تم تعديل الاسم');
-            }
-        }
-
-        // حذف مستخدم
-        function deleteUser(id) {
-            if (confirm('هل أنت متأكد من حذف هذا المستخدم؟')) {
-                users = users.filter(u => u.id !== id);
-                localStorage.setItem('allUsers', JSON.stringify(users));
-                updateStats();
-                renderUsers();
-                updateUserSelect();
-                showMessage('✅ تم حذف المستخدم');
-            }
-        }
-
-        // تعديل النقاط
-        function showPointsModal(userId) {
-            currentUserId = userId;
-            document.getElementById('currentUserId').value = userId;
-            document.getElementById('pointsModal').classList.add('show');
-        }
-
-        function savePointsChange() {
-            let userId = document.getElementById('currentUserId').value;
-            let points = parseInt(document.getElementById('pointsAmount').value);
-            let reason = document.getElementById('pointsReason').value.trim();
-
-            if (isNaN(points) || points === 0) {
-                alert('الرجاء إدخال قيمة صحيحة');
-                return;
-            }
-
-            let user = users.find(u => u.id == userId);
-            if (user) {
-                let oldScore = user.score || 0;
-                user.score = oldScore + points;
+            for (let i = 6; i >= 0; i--) {
+                let date = new Date();
+                date.setDate(date.getDate() - i);
+                let dateStr = date.toDateString();
                 
-                localStorage.setItem('allUsers', JSON.stringify(users));
+                let dayName = date.toLocaleDateString('ar-EG', { weekday: 'short' });
+                days.push(dayName);
                 
-                // إضافة إشعار
-                let message = points > 0 
-                    ? `🎉 تم إضافة ${points} نقطة إلى رصيد ${user.name} ${reason ? '(' + reason + ')' : ''}`
-                    : `⚠️ تم خصم ${Math.abs(points)} نقطة من رصيد ${user.name} ${reason ? '(' + reason + ')' : ''}`;
+                let completed = allMissions.filter(m => 
+                    m.completedAt && new Date(m.completedAt).toDateString() === dateStr
+                ).length;
                 
-                addNotification(message);
+                let created = allMissions.filter(m => 
+                    new Date(m.createdAt).toDateString() === dateStr
+                ).length;
                 
-                updateStats();
-                renderUsers();
-                closeModal('pointsModal');
-                
-                document.getElementById('pointsAmount').value = '';
-                document.getElementById('pointsReason').value = '';
-                
-                showMessage(`✅ تم ${points > 0 ? 'إضافة' : 'خصم'} النقاط بنجاح`);
-            }
-        }
-
-        // إرسال رسالة
-        function selectMessageType(type, element) {
-            document.querySelectorAll('.type-option').forEach(opt => opt.classList.remove('active'));
-            element.classList.add('active');
-            
-            document.getElementById('singleUserSection').style.display = type === 'single' ? 'block' : 'none';
-        }
-
-        function sendMessage() {
-            let activeType = document.querySelector('.type-option.active');
-            let type = activeType && activeType.textContent.includes('مستخدم واحد') ? 'single' : 'all';
-            
-            let message = document.getElementById('messageText').value.trim();
-            let points = parseInt(document.getElementById('pointsToSend').value) || 0;
-            
-            if (!message) {
-                alert('الرجاء كتابة الرسالة');
-                return;
+                completedData.push(completed);
+                createdData.push(created);
             }
 
-            if (type === 'single') {
-                let userId = document.getElementById('userSelect').value;
-                if (!userId) {
-                    alert('الرجاء اختيار مستخدم');
-                    return;
-                }
-                
-                let user = users.find(u => u.id == userId);
-                if (user) {
-                    let fullMessage = `📨 إلى ${user.name}: ${message}`;
-                    
-                    if (points !== 0) {
-                        user.score = (user.score || 0) + points;
-                        fullMessage += points > 0 
-                            ? `\n🎁 تم إضافة ${points} نقطة إلى رصيدك!` 
-                            : `\n⚠️ تم خصم ${Math.abs(points)} نقطة من رصيدك`;
-                        
-                        localStorage.setItem('allUsers', JSON.stringify(users));
-                        updateStats();
-                        renderUsers();
-                    }
-                    
-                    addNotification(fullMessage);
-                }
-            } else {
-                let fullMessage = `📢 إلى الجميع: ${message}`;
-                
-                if (points !== 0) {
-                    users.forEach(user => {
-                        user.score = (user.score || 0) + points;
-                    });
-                    
-                    fullMessage += points > 0 
-                        ? `\n🎁 تم إضافة ${points} نقطة للجميع!` 
-                        : `\n⚠️ تم خصم ${Math.abs(points)} نقطة من الجميع`;
-                    
-                    localStorage.setItem('allUsers', JSON.stringify(users));
-                    updateStats();
-                    renderUsers();
-                }
-                
-                addNotification(fullMessage);
-            }
-
-            document.getElementById('messageText').value = '';
-            document.getElementById('pointsToSend').value = '0';
-            showMessage('✅ تم إرسال الرسالة');
-        }
-
-        function sendMessageToUser(userId) {
-            let select = document.getElementById('userSelect');
-            if (select) {
-                select.value = userId;
-            }
-            
-            let options = document.querySelectorAll('.type-option');
-            if (options.length > 0) {
-                options[0].click();
-            }
-            
-            switchPage('messages');
-        }
-
-        // إضافة كود سري
-        function showAddCodeModal() {
-            document.getElementById('addCodeModal').classList.add('show');
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('show');
-        }
-
-        function saveNewCode() {
-            let code = document.getElementById('codeValue').value.trim();
-            let message = document.getElementById('codeMessage').value.trim();
-            let icon = document.getElementById('codeIcon').value;
-
-            if (!code || !message) {
-                alert('الرجاء إدخال الكود والرسالة');
-                return;
-            }
-
-            secretCodes.push({ code, message, icon });
-            localStorage.setItem('secretCodes', JSON.stringify(secretCodes));
-            renderCodes();
-            closeModal('addCodeModal');
-            
-            document.getElementById('codeValue').value = '';
-            document.getElementById('codeMessage').value = '';
-            showMessage('✅ تم إضافة الكود السري');
-        }
-
-        function deleteCode(index) {
-            if (confirm('هل أنت متأكد من حذف هذا الكود؟')) {
-                secretCodes.splice(index, 1);
-                localStorage.setItem('secretCodes', JSON.stringify(secretCodes));
-                renderCodes();
-                showMessage('✅ تم حذف الكود');
-            }
-        }
-
-        function editCode(index) {
-            let code = secretCodes[index];
-            let newCode = prompt('تعديل الكود:', code.code);
-            if (newCode) {
-                code.code = newCode;
-            }
-            let newMessage = prompt('تعديل الرسالة:', code.message);
-            if (newMessage) {
-                code.message = newMessage;
-            }
-            localStorage.setItem('secretCodes', JSON.stringify(secretCodes));
-            renderCodes();
-            showMessage('✅ تم تعديل الكود');
-        }
-
-        // الإشعارات
-        function addNotification(message) {
-            let newNotification = {
-                id: Date.now(),
-                message: message,
-                time: new Date().toLocaleString('ar-EG'),
-                read: false
-            };
-            
-            notifications.unshift(newNotification);
-            notifications = notifications.slice(0, 50);
-            localStorage.setItem('notifications', JSON.stringify(notifications));
-            
-            // عرض رسالة نجاح
-            showMessage(message);
-            
-            // تشغيل صوت إذا كان مفعل
-            let soundEnabled = localStorage.getItem('sound') !== 'false';
-            if (soundEnabled) {
-                playNotificationSound();
-            }
-        }
-
-        function playNotificationSound() {
-            try {
-                let audio = new Audio();
-                audio.src = 'data:audio/wav;base64,UklGRlwAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YVoAAACAgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f38=';
-                audio.play().catch(e => {});
-            } catch (e) {}
-        }
-
-        // طلب إذن الإشعارات
-        function requestNotificationPermission() {
-            if ('Notification' in window) {
-                Notification.requestPermission().then(perm => {
-                    if (perm === 'granted') {
-                        showMessage('✅ تم تفعيل إشعارات سطح المكتب');
-                    }
-                });
-            }
-        }
-
-        // تحديث البيانات
-        function refreshData() {
-            loadData();
-            showMessage('تم تحديث البيانات');
-        }
-
-        // الوضع الليلي
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-            let isDark = document.body.classList.contains('dark-mode');
-            localStorage.setItem('darkMode', isDark);
-            event.currentTarget.innerHTML = isDark ? '<i class="fas fa-sun"></i> الوضع النهاري' : '<i class="fas fa-moon"></i> الوضع الليلي';
-        }
-
-        // تغيير الألوان
-        function changeColor(type, color) {
-            if (type === 'primary') {
-                document.documentElement.style.setProperty('--primary-color', color);
-            } else {
-                document.documentElement.style.setProperty('--secondary-color', color);
-            }
-            localStorage.setItem(type + 'Color', color);
-        }
-
-        // تغيير الإعدادات
-        function toggleSetting(setting, element) {
-            element.classList.toggle('active');
-            let isActive = element.classList.contains('active');
-            localStorage.setItem(setting, isActive);
-        }
-
-        function changePassword() {
-            let newPass = prompt('أدخل كلمة المرور الجديدة:');
-            if (newPass) {
-                localStorage.setItem('adminPassword', newPass);
-                showMessage('✅ تم تغيير كلمة المرور');
-            }
-        }
-
-        // رسالة نجاح
-        function showMessage(text) {
-            let msg = document.getElementById('successMessage');
-            document.getElementById('messageText').textContent = text;
-            msg.style.display = 'block';
-            setTimeout(() => msg.style.display = 'none', 3000);
-        }
-
-        // التهيئة
-        window.onload = function() {
-            // التحقق من صلاحيات الإشعارات
-            if ('Notification' in window && Notification.permission === 'default') {
-                Notification.requestPermission();
-            }
-
-            // تحميل الإعدادات
-            let darkMode = localStorage.getItem('darkMode');
-            if (darkMode === 'true') {
-                document.body.classList.add('dark-mode');
-            }
-
-            let primaryColor = localStorage.getItem('primaryColor');
-            if (primaryColor) {
-                document.documentElement.style.setProperty('--primary-color', primaryColor);
-                document.getElementById('primaryColor').value = primaryColor;
-            }
-
-            let secondaryColor = localStorage.getItem('secondaryColor');
-            if (secondaryColor) {
-                document.documentElement.style.setProperty('--secondary-color', secondaryColor);
-                document.getElementById('secondaryColor').value = secondaryColor;
-            }
-
-            // رسم بياني
-            let ctx = document.getElementById('visitsChart').getContext('2d');
-            new Chart(ctx, {
+            charts.tasksChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['السبت', 'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'],
+                    labels: days,
                     datasets: [{
-                        label: 'المستخدمين النشطين',
-                        data: [5, 8, 12, 9, 15, 10, 6],
+                        label: 'مهام مكتملة',
+                        data: completedData,
+                        borderColor: '#6bcf7f',
+                        backgroundColor: 'rgba(107, 207, 127, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'مهام مضافة',
+                        data: createdData,
                         borderColor: '#667eea',
                         backgroundColor: 'rgba(102, 126, 234, 0.1)',
                         tension: 0.4
@@ -1392,67 +1459,471 @@
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            labels: { color: '#fff' }
+                            position: 'top',
                         }
-                    },
-                    scales: {
-                        y: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#fff' } },
-                        x: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#fff' } }
                     }
                 }
             });
-        };
-            <!-- كل الـ HTML بتاعك هنا ... -->
-
-    <script>
-        // كل دوالك القديمة هنا ...
-
-        // ===== أضف الكود الجديد هنا =====
-        function checkAdminCode() {
-            let code = prompt('أدخل الكود السري للدخول إلى لوحة التحكم:');
-            
-            // الكود السري للمدير (غيره لما تحب)
-            if (code === '1234') {
-                localStorage.setItem('isAdmin', 'true');
-                showAdminPanel();
-                showMessage('✅ مرحباً بك أيها المدير!');
-            } else {
-                alert('❌ كود خاطئ');
-            }
         }
 
-        function showAdminPanel() {
-            // إظهار عناصر لوحة التحكم
-            document.querySelectorAll('.admin-only').forEach(el => {
-                el.style.display = 'block';
+        // ==================== دوال التحكم في أنواع المهام ====================
+
+        function openAddMissionTypeModal() {
+            editingTypeId = null;
+            document.getElementById('missionTypeModalTitle').textContent = 'إضافة نوع مهمة جديد';
+            document.getElementById('typeName').value = '';
+            document.getElementById('selectedColor').value = '#667eea';
+            document.getElementById('selectedIcon').value = 'fa-calendar';
+            document.getElementById('typeAlerts').value = '1';
+            document.getElementById('typeReminderDays').value = '3';
+            document.getElementById('typeDefaultScore').value = '20';
+            document.getElementById('typeStatus').value = '1';
+            document.getElementById('deleteTypeBtnContainer').style.display = 'none';
+            
+            // إعادة تعيين التحديدات
+            document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
+            document.querySelector('.color-option').classList.add('selected');
+            document.querySelectorAll('.icon-option').forEach(opt => opt.classList.remove('selected'));
+            document.querySelector('.icon-option').classList.add('selected');
+            
+            document.getElementById('missionTypeModal').classList.add('show');
+        }
+
+        function editMissionType(typeId) {
+            let type = missionTypes.find(t => t.id === typeId);
+            if (!type) return;
+
+            editingTypeId = typeId;
+            document.getElementById('missionTypeModalTitle').textContent = 'تعديل نوع المهمة';
+            document.getElementById('typeName').value = type.name;
+            document.getElementById('selectedColor').value = type.color || '#667eea';
+            document.getElementById('selectedIcon').value = type.icon || 'fa-calendar';
+            document.getElementById('typeAlerts').value = type.alerts ? '1' : '0';
+            document.getElementById('typeReminderDays').value = type.reminderDays || 3;
+            document.getElementById('typeDefaultScore').value = type.defaultScore || 20;
+            document.getElementById('typeStatus').value = type.status ? '1' : '0';
+            document.getElementById('deleteTypeBtnContainer').style.display = 'flex';
+            
+            // تحديث التحديدات
+            document.querySelectorAll('.color-option').forEach(opt => {
+                opt.classList.remove('selected');
+                if (opt.style.background.includes(type.color)) {
+                    opt.classList.add('selected');
+                }
             });
             
-            // تفعيل الصفحات الإضافية
-            document.getElementById('adminPages').style.display = 'block';
+            document.querySelectorAll('.icon-option').forEach(opt => {
+                opt.classList.remove('selected');
+                if (opt.querySelector('i').className.includes(type.icon)) {
+                    opt.classList.add('selected');
+                }
+            });
             
-            // إخفاء المحتوى العادي
-            document.getElementById('userContent').style.display = 'none';
+            document.getElementById('missionTypeModal').classList.add('show');
         }
 
-        function logoutAdmin() {
-            localStorage.removeItem('isAdmin');
-            location.reload();
+        function closeMissionTypeModal() {
+            document.getElementById('missionTypeModal').classList.remove('show');
         }
-        // ===== نهاية الكود الجديد =====
 
-        // كمان لازم نضيف كود التحقق عند تحميل الصفحة
-        window.onload = function() {
-            // الكود القديم بتاعك هنا ...
-            
-            // تحقق إذا كان المستخدم Admin من قبل
-            if (localStorage.getItem('isAdmin') === 'true') {
-                showAdminPanel();
+        function selectColor(color) {
+            document.getElementById('selectedColor').value = color;
+            document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
+            event.target.classList.add('selected');
+        }
+
+        function selectIcon(icon) {
+            document.getElementById('selectedIcon').value = icon;
+            document.querySelectorAll('.icon-option').forEach(opt => opt.classList.remove('selected'));
+            event.target.classList.add('selected');
+        }
+
+        function saveMissionType() {
+            let name = document.getElementById('typeName').value.trim();
+            if (!name) {
+                alert('الرجاء إدخال اسم النوع');
+                return;
             }
+
+            let typeData = {
+                id: editingTypeId || name.toLowerCase().replace(/\s+/g, '') + '_' + Date.now(),
+                name: name,
+                color: document.getElementById('selectedColor').value,
+                icon: document.getElementById('selectedIcon').value,
+                alerts: document.getElementById('typeAlerts').value === '1',
+                reminderDays: parseInt(document.getElementById('typeReminderDays').value),
+                defaultScore: parseInt(document.getElementById('typeDefaultScore').value),
+                status: document.getElementById('typeStatus').value === '1'
+            };
+
+            if (editingTypeId) {
+                // تعديل نوع موجود
+                let index = missionTypes.findIndex(t => t.id === editingTypeId);
+                if (index !== -1) {
+                    missionTypes[index] = { ...missionTypes[index], ...typeData };
+                }
+            } else {
+                // إضافة نوع جديد
+                missionTypes.push(typeData);
+            }
+
+            localStorage.setItem('missionTypes', JSON.stringify(missionTypes));
+            closeMissionTypeModal();
+            renderMissionTypesTable();
+            updateUI();
+            addLog('admin', 'تعديل أنواع المهام', `تم ${editingTypeId ? 'تعديل' : 'إضافة'} نوع المهمة: ${name}`);
+        }
+
+        function deleteMissionType(typeId) {
+            if (!confirm('هل أنت متأكد من حذف هذا النوع؟')) return;
+
+            missionTypes = missionTypes.filter(t => t.id !== typeId);
+            localStorage.setItem('missionTypes', JSON.stringify(missionTypes));
+            closeMissionTypeModal();
+            renderMissionTypesTable();
+            updateUI();
+            addLog('admin', 'حذف نوع مهمة', `تم حذف نوع المهمة: ${typeId}`);
+        }
+
+        // ==================== دوال التحكم في المستخدمين ====================
+
+        function viewUser(userId) {
+            let user = users.find(u => u.id === userId);
+            if (user) {
+                alert(`عرض المستخدم: ${user.name}\nالبريد: ${user.email}\nالمهام: ${user.stats?.completedTasks || 0}\nالنقاط: ${user.stats?.score || 0}`);
+            }
+        }
+
+        function editUser(userId) {
+            alert('ميزة تعديل المستخدم قيد التطوير');
+        }
+
+        function deleteUser(userId) {
+            if (!confirm('هل أنت متأكد من حذف هذا المستخدم؟')) return;
+            users = users.filter(u => u.id !== userId);
+            localStorage.setItem('localUsers', JSON.stringify(users));
+            renderUsersTable();
+            updateUI();
+            addLog('admin', 'حذف مستخدم', `تم حذف المستخدم: ${userId}`);
+        }
+
+        // ==================== دوال التحكم في المهام ====================
+
+        function filterMissions(type) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            renderMissionsTable(type);
+        }
+
+        function viewMission(missionId) {
+            let mission = allMissions.find(m => m.id === missionId);
+            if (mission) {
+                alert(`المهمة: ${mission.title}\nالنوع: ${mission.type}\nالحالة: ${mission.completed ? 'مكتملة' : 'قيد التنفيذ'}\nالنقاط: ${mission.score || 0}`);
+            }
+        }
+
+        function deleteMission(missionId) {
+            if (!confirm('هل أنت متأكد من حذف هذه المهمة؟')) return;
+            
+            // حذف من الذاكرة المؤقتة
+            allMissions = allMissions.filter(m => m.id !== missionId);
+            
+            // حذف من localStorage
+            for (let type in missions) {
+                if (missions[type][missionId]) {
+                    delete missions[type][missionId];
+                }
+            }
+            
+            localStorage.setItem('missionMasterMissions', JSON.stringify(missions));
+            renderMissionsTable();
+            updateUI();
+            addLog('admin', 'حذف مهمة', `تم حذف المهمة: ${missionId}`);
+        }
+
+        // ==================== دوال التحكم في التنبيهات ====================
+
+        function openSendAlarmModal() {
+            document.getElementById('sendAlarmModal').classList.add('show');
+        }
+
+        function closeSendAlarmModal() {
+            document.getElementById('sendAlarmModal').classList.remove('show');
+        }
+
+        function sendBulkAlarm() {
+            let message = document.getElementById('alarmMessage').value.trim();
+            if (!message) {
+                alert('الرجاء إدخال رسالة التنبيه');
+                return;
+            }
+
+            let alarm = {
+                id: Date.now(),
+                text: message,
+                type: document.getElementById('alarmType').value,
+                recipients: document.getElementById('alarmRecipients').value,
+                sound: document.getElementById('alarmSound').value === '1',
+                datetime: new Date().toISOString(),
+                read: false
+            };
+
+            notifications.unshift(alarm);
+            localStorage.setItem('missionMasterNotifications', JSON.stringify(notifications));
+            
+            closeSendAlarmModal();
+            renderAlarmsTable();
+            updateUI();
+            addLog('admin', 'إرسال تنبيه جماعي', message);
+        }
+
+        function deleteNotification(notificationId) {
+            if (!confirm('هل أنت متأكد من حذف هذا التنبيه؟')) return;
+            notifications = notifications.filter(n => n.id !== notificationId);
+            localStorage.setItem('missionMasterNotifications', JSON.stringify(notifications));
+            renderAlarmsTable();
+            updateUI();
+        }
+
+        // ==================== دوال التحكم في الأكواد السرية ====================
+
+        function openAddCodeModal() {
+            document.getElementById('codeModal').classList.add('show');
+        }
+
+        function closeCodeModal() {
+            document.getElementById('codeModal').classList.remove('show');
+        }
+
+        function saveCode() {
+            let code = document.getElementById('codeValue').value.trim();
+            let message = document.getElementById('codeMessage').value.trim();
+            
+            if (!code || !message) {
+                alert('الرجاء إدخال الكود والرسالة');
+                return;
+            }
+
+            secretCodes.push({
+                code: code,
+                message: message,
+                icon: document.getElementById('codeIcon').value,
+                status: document.getElementById('codeStatus').value === '1'
+            });
+
+            localStorage.setItem('secretCodes', JSON.stringify(secretCodes));
+            closeCodeModal();
+            renderCodesTable();
+            updateUI();
+            addLog('admin', 'إضافة كود سري', `تم إضافة الكود: ${code}`);
+        }
+
+        function editCode(index) {
+            let code = secretCodes[index];
+            document.getElementById('codeValue').value = code.code;
+            document.getElementById('codeMessage').value = code.message;
+            document.getElementById('codeIcon').value = code.icon || 'fa-key';
+            document.getElementById('codeStatus').value = code.status ? '1' : '0';
+            openAddCodeModal();
+            
+            // تعديل الحفظ ليكون تحديث
+            let oldSave = saveCode;
+            saveCode = function() {
+                secretCodes[index] = {
+                    code: document.getElementById('codeValue').value.trim(),
+                    message: document.getElementById('codeMessage').value.trim(),
+                    icon: document.getElementById('codeIcon').value,
+                    status: document.getElementById('codeStatus').value === '1'
+                };
+                localStorage.setItem('secretCodes', JSON.stringify(secretCodes));
+                closeCodeModal();
+                renderCodesTable();
+                updateUI();
+                saveCode = oldSave;
+            };
+        }
+
+        function deleteCode(index) {
+            if (!confirm('هل أنت متأكد من حذف هذا الكود؟')) return;
+            secretCodes.splice(index, 1);
+            localStorage.setItem('secretCodes', JSON.stringify(secretCodes));
+            renderCodesTable();
+            updateUI();
+            addLog('admin', 'حذف كود سري', `تم حذف كود سري`);
+        }
+
+        // ==================== دوال الإعدادات ====================
+
+        function toggleSetting(setting) {
+            let toggle = document.getElementById(setting + 'Toggle');
+            toggle.classList.toggle('active');
+        }
+
+        function saveGeneralSettings() {
+            let settings = {
+                registration: document.getElementById('registrationToggle').classList.contains('active'),
+                autoAlerts: document.getElementById('autoAlertsToggle').classList.contains('active'),
+                defaultAlertTime: document.getElementById('defaultAlertTime').value,
+                reminderDays: document.getElementById('reminderDays').value
+            };
+            localStorage.setItem('generalSettings', JSON.stringify(settings));
+            alert('✅ تم حفظ الإعدادات بنجاح');
+            addLog('admin', 'تعديل الإعدادات', 'تم تعديل الإعدادات العامة');
+        }
+
+        // ==================== دوال النسخ الاحتياطي ====================
+
+        function createBackup() {
+            let backup = {
+                id: Date.now(),
+                date: new Date().toISOString(),
+                users: users,
+                missions: allMissions,
+                types: missionTypes,
+                codes: secretCodes,
+                notifications: notifications
+            };
+            
+            backups.push(backup);
+            localStorage.setItem('backups', JSON.stringify(backups));
+            
+            // تحديث حجم البيانات
+            let size = new Blob([JSON.stringify(backup)]).size;
+            document.getElementById('dataSize').textContent = (size / 1024).toFixed(2) + ' KB';
+            document.getElementById('lastBackup').textContent = new Date().toLocaleString('ar-EG');
+            
+            // عرض قائمة النسخ
+            let backupsList = document.getElementById('backupsList');
+            backupsList.innerHTML = backups.slice(-5).reverse().map(b => `
+                <tr>
+                    <td>${new Date(b.date).toLocaleString('ar-EG')}</td>
+                    <td>${(new Blob([JSON.stringify(b)]).size / 1024).toFixed(2)} KB</td>
+                    <td>
+                        <button class="action-btn view-btn" onclick="restoreBackup('${b.id}')">استعادة</button>
+                    </td>
+                </tr>
+            `).join('');
+            
+            addLog('admin', 'إنشاء نسخة احتياطية', 'تم إنشاء نسخة احتياطية جديدة');
+        }
+
+        function restoreBackup(backupId) {
+            if (!confirm('هل أنت متأكد من استعادة هذه النسخة؟ سيتم فقدان البيانات الحالية')) return;
+            
+            let backup = backups.find(b => b.id == backupId);
+            if (backup) {
+                users = backup.users;
+                allMissions = backup.missions;
+                missionTypes = backup.types;
+                secretCodes = backup.codes;
+                notifications = backup.notifications;
+                
+                localStorage.setItem('localUsers', JSON.stringify(users));
+                localStorage.setItem('missionMasterMissions', JSON.stringify(missions));
+                localStorage.setItem('missionTypes', JSON.stringify(missionTypes));
+                localStorage.setItem('secretCodes', JSON.stringify(secretCodes));
+                localStorage.setItem('missionMasterNotifications', JSON.stringify(notifications));
+                
+                updateUI();
+                addLog('admin', 'استعادة نسخة احتياطية', 'تم استعادة نسخة احتياطية');
+            }
+        }
+
+        // ==================== دوال مساعدة ====================
+
+        function showSection(section) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(section + 'Section').classList.add('active');
+            
+            document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+            event.target.closest('.menu-item').classList.add('active');
+            
+            let titles = {
+                dashboard: 'لوحة المعلومات',
+                users: 'إدارة المستخدمين',
+                missionTypes: 'أنواع المهام',
+                missions: 'جميع المهام',
+                alarms: 'إدارة التنبيهات',
+                secretCodes: 'الأكواد السرية',
+                settings: 'الإعدادات العامة',
+                backup: 'النسخ الاحتياطي',
+                logs: 'سجل النشاطات'
+            };
+            document.getElementById('pageTitle').textContent = titles[section];
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            let isDark = document.body.classList.contains('dark-mode');
+            document.querySelector('.top-btn i').className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+            localStorage.setItem('adminDarkMode', isDark);
+        }
+
+        function refreshData() {
+            loadData();
+            showMessage('🔄 تم تحديث البيانات');
+        }
+
+        function addLog(user, action, details) {
+            logs.unshift({
+                user: user,
+                action: action,
+                details: details,
+                time: new Date().toISOString(),
+                ip: '127.0.0.1'
+            });
+            
+            // الاحتفاظ بآخر 100 سجل فقط
+            logs = logs.slice(0, 100);
+            localStorage.setItem('adminLogs', JSON.stringify(logs));
+        }
+
+        function showMessage(text) {
+            let msg = document.createElement('div');
+            msg.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #48dbfb;
+                color: #fff;
+                padding: 15px 30px;
+                border-radius: 50px;
+                z-index: 10000;
+                animation: slideDown 0.3s;
+            `;
+            msg.textContent = text;
+            document.body.appendChild(msg);
+            setTimeout(() => msg.remove(), 2000);
+        }
+
+        // ==================== التهيئة ====================
+        window.onload = function() {
+            loadData();
+            
+            if (localStorage.getItem('adminDarkMode') === 'true') {
+                document.body.classList.add('dark-mode');
+                document.querySelector('.top-btn i').className = 'fas fa-sun';
+            }
+            
+            // تحميل النسخ الاحتياطية
+            let savedBackups = localStorage.getItem('backups');
+            if (savedBackups) {
+                backups = JSON.parse(savedBackups);
+            }
+            
+            // تحميل السجلات
+            let savedLogs = localStorage.getItem('adminLogs');
+            if (savedLogs) {
+                logs = JSON.parse(savedLogs);
+                renderLogsTable();
+            }
+            
+            // إضافة سجل دخول
+            addLog('admin', 'دخول', 'تم الدخول إلى لوحة التحكم');
         };
     </script>
 </body>
 </html>
-    
