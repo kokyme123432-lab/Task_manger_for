@@ -2093,6 +2093,13 @@
                             </div>
                         </div>
                         
+                        <!-- زر الشات الجديد -->
+                        <div style="margin: 20px 0;">
+                            <button class="profile-btn" style="background: linear-gradient(145deg, #667eea, #764ba2); color: white;" onclick="goToChat()">
+                                <i class="fas fa-comment-dots"></i> Chat
+                            </button>
+                        </div>
+
                         <div class="profile-actions">
                             <button class="profile-btn edit-btn" onclick="showEditProfileModal()"><i class="fas fa-edit"></i> تعديل الملف</button>
                             <button class="profile-btn logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> تسجيل خروج</button>
@@ -3953,6 +3960,11 @@
             document.getElementById('messageText').textContent = t;
             m.style.display = 'block';
             setTimeout(() => m.style.display = 'none', 2000);
+        }
+
+        // دالة الانتقال إلى صفحة الشات
+        function goToChat() {
+            window.location.href = 'mass.html';
         }
 
         window.onload = function () {
