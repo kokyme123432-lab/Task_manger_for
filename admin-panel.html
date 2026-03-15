@@ -1924,6 +1924,187 @@
             // إضافة سجل دخول
             addLog('admin', 'دخول', 'تم الدخول إلى لوحة التحكم');
         };
+        // ==================== الربط مع الموقع الرئيسي ====================
+// دالة لإرسال التحديثات للموقع الرئيسي
+function notifyMainSite(type, data) {
+    // حفظ البيانات في localStorage
+    switch(type) {
+        case 'missionTypes':
+            localStorage.setItem('missionTypes', JSON.stringify(data));
+            break;
+        case 'missions':
+            localStorage.setItem('missionMasterMissions', JSON.stringify(data));
+            break;
+        case 'codes':
+            localStorage.setItem('secretCodes', JSON.stringify(data));
+            break;
+        case 'settings':
+            localStorage.setItem('notificationSettings', JSON.stringify(data));
+            break;
+    }
+    
+    // إرسال إشارة للموقع الرئيسي (لو مفتوح في تاب تاني)
+    localStorage.setItem('adminAction', JSON.stringify({
+        type: type === 'missionTypes' ? 'updateMissionTypes' :
+              type === 'missions' ? 'updateMissions' :
+              type === 'codes' ? 'updateCodes' : 'updateSettings',
+        time: Date.now()
+    }));
+    
+    // محاولة تحديث الموقع الرئيسي مباشرة (لو في نفس التاب)
+    try {
+        if (window.opener && !window.opener.closed) {
+            window.opener.receiveAdminUpdate({ type: type, data: data });
+        }
+    } catch(e) {
+        console.log('لا يمكن الوصول للنافذة الرئيسية');
+    }
+}
+
+// تحديث دوال الحفظ لاستخدام notifyMainSite
+function saveMissionType() {
+    let name = document.getElementById('typeName').value.trim();
+    if (!name) {
+        alert('الرجاء إدخال اسم النوع');
+        return;
+    }
+
+    let typeData = {
+        id: editingTypeId || name.toLowerCase().replace(/\s+/g, '') + '_' + Date.now(),
+        name: name,
+        color: document.getElementById('selectedColor').value,
+        icon: document.getElementById('selectedIcon').value,
+        alerts: document.getElementById('typeAlerts').value === '1',
+        reminderDays: parseInt(document.getElementById('typeReminderDays').value),
+        defaultScore: parseInt(document.getElementById('typeDefaultScore').value),
+        status: document.getElementById('typeStatus').value === '1'
+    };
+
+    if (editingTypeId) {
+        let index = missionTypes.findIndex(t => t.id === editingTypeId);
+        if (index !== -1) {
+            missionTypes[index] = { ...missionTypes[index], ...typeData };
+        }
+    } else {
+        missionTypes.push(typeData);
+    }
+
+    // حفظ في localStorage وإرسال تحديث للموقع
+    localStorage.setItem('missionTypes', JSON.stringify(missionTypes));
+    notifyMainSite('missionTypes', missionTypes);
+    
+    closeMissionTypeModal();
+    renderMissionTypesTable();
+    updateUI();
+    addLog('admin', 'تعديل أنواع المهام', `تم ${editingTypeId ? 'تعديل' : 'إضافة'} نوع المهمة: ${name}`);
+    showMessage('✅ تم الحفظ والتحديث في الموقع الرئيسي');
+}
+
+// تعديل دالة حذف نوع مهمة
+function deleteMissionType(typeId) {
+    if (!confirm('هل أنت متأكد من حذف هذا النوع؟')) return;
+
+    missionTypes = missionTypes.filter(t => t.id !== typeId);
+    localStorage.setItem('missionTypes', JSON.stringify(missionTypes));
+    notifyMainSite('missionTypes', missionTypes);
+    
+    closeMissionTypeModal();
+    renderMissionTypesTable();
+    updateUI();
+    addLog('admin', 'حذف نوع مهمة', `تم حذف نوع المهمة: ${typeId}`);
+    showMessage('✅ تم الحذف والتحديث في الموقع الرئيسي');
+}
+
+// تعديل دالة حذف مهمة
+function deleteMission(missionId) {
+    if (!confirm('هل أنت متأكد من حذف هذه المهمة؟')) return;
+    
+    allMissions = allMissions.filter(m => m.id !== missionId);
+    
+    // تحديث missions في localStorage
+    let missionsObj = {};
+    missionTypes.forEach(type => {
+        missionsObj[type.id] = {};
+    });
+    
+    allMissions.forEach(mission => {
+        if (!missionsObj[mission.type]) {
+            missionsObj[mission.type] = {};
+        }
+        missionsObj[mission.type][mission.id] = mission;
+    });
+    
+    localStorage.setItem('missionMasterMissions', JSON.stringify(missionsObj));
+    notifyMainSite('missions', missionsObj);
+    
+    renderMissionsTable();
+    updateUI();
+    addLog('admin', 'حذف مهمة', `تم حذف المهمة: ${missionId}`);
+    showMessage('✅ تم الحذف والتحديث في الموقع الرئيسي');
+}
+
+// تعديل دالة حفظ كود سري
+function saveCode() {
+    let code = document.getElementById('codeValue').value.trim();
+    let message = document.getElementById('codeMessage').value.trim();
+    
+    if (!code || !message) {
+        alert('الرجاء إدخال الكود والرسالة');
+        return;
+    }
+
+    secretCodes.push({
+        code: code,
+        message: message,
+        icon: document.getElementById('codeIcon').value,
+        status: document.getElementById('codeStatus').value === '1'
+    });
+
+    localStorage.setItem('secretCodes', JSON.stringify(secretCodes));
+    notifyMainSite('codes', secretCodes);
+    
+    closeCodeModal();
+    renderCodesTable();
+    updateUI();
+    addLog('admin', 'إضافة كود سري', `تم إضافة الكود: ${code}`);
+    showMessage('✅ تم الحفظ والتحديث في الموقع الرئيسي');
+}
+
+// تعديل دالة حفظ الإعدادات
+function saveGeneralSettings() {
+    let settings = {
+        registration: document.getElementById('registrationToggle').classList.contains('active'),
+        autoAlerts: document.getElementById('autoAlertsToggle').classList.contains('active'),
+        defaultAlertTime: document.getElementById('defaultAlertTime').value,
+        reminderDays: document.getElementById('reminderDays').value
+    };
+    localStorage.setItem('generalSettings', JSON.stringify(settings));
+    notifyMainSite('settings', settings);
+    
+    showMessage('✅ تم حفظ الإعدادات والتحديث في الموقع الرئيسي');
+    addLog('admin', 'تعديل الإعدادات', 'تم تعديل الإعدادات العامة');
+}
+
+// دالة لعرض رسالة نجاح
+function showMessage(text) {
+    let msg = document.createElement('div');
+    msg.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #48dbfb;
+        color: #fff;
+        padding: 15px 30px;
+        border-radius: 50px;
+        z-index: 10000;
+        animation: slideDown 0.3s;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    `;
+    msg.textContent = text;
+    document.body.appendChild(msg);
+    setTimeout(() => msg.remove(), 2000);
+}
     </script>
 </body>
 </html>
