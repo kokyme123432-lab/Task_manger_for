@@ -4,27 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mission Master</title>
-    <!-- PWA Optimization -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Mission Master">
-<meta name="theme-color" content="#2a2a3a">
-<link rel="apple-touch-icon" href="https://cdn.jsdelivr.net/gh/snazzdev/snazzdev/icon-192.png">
-<link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/snazzdev/snazzdev/icon-192.png">
-    <!-- PWA Tags -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Mission Master">
-    <meta name="theme-color" content="#2a2a3a">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23333a5e'/%3E%3Cpath d='M30 40 L70 40 L60 70 L40 70 Z' fill='white'/%3E%3C/svg%3E">
-    
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * {
             margin: 0;
@@ -34,230 +15,130 @@
         }
 
         body {
-            background: linear-gradient(145deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(145deg, #667eea, #764ba2);
             color: #1e1e2f;
             min-height: 100vh;
-            transition: background 0.3s, color 0.3s;
+            transition: all 0.3s;
         }
 
         body.dark-mode {
             background: #0a0a0f;
-            color: #e0e0e0;
+            color: #fff;
         }
 
         body.dark-mode .app-container {
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.95);
         }
 
         body.dark-mode .main-content {
-            background: #121218;
+            background: #0f0f15;
+            color: #fff;
+        }
+
+        body.dark-mode .nav-bar {
+            background: #0a0a12;
+            border-left-color: #2a2a3a;
         }
 
         body.dark-mode .sub-mission-card {
             background: #1a1a24;
             border-color: #2a2a3a;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-        }
-
-        body.dark-mode .nav-bar {
-            background: #0f0f15;
-            border-left-color: #2a2a3a;
-        }
-
-        body.dark-mode .main-mission-item {
-            background: #1a1a24;
-        }
-
-        body.dark-mode .meta-tag {
-            background: #2a2a3a;
-            color: #b0b0b0;
-        }
-
-        body.dark-mode .card-footer {
-            border-top-color: #2a2a3a;
-        }
-
-        body.dark-mode .action-btn {
-            background: #2a2a3a;
-            color: #b0b0b0;
-        }
-
-        body.dark-mode .stat-card {
-            background: #1a1a24;
-        }
-
-        body.dark-mode .chart-card {
-            background: #1a1a24;
-        }
-
-        body.dark-mode .badge-card {
-            background: #1a1a24;
-        }
-
-        body.dark-mode .badge-card.unlocked {
-            background: #2a2a3a;
-            border-color: #ffd700;
-        }
-
-        body.dark-mode .level-progress {
-            background: #1a1a24;
-        }
-
-        body.dark-mode .search-box {
-            background: #1a1a24;
-        }
-
-        body.dark-mode .search-box input {
-            color: #e0e0e0;
-        }
-
-        body.dark-mode .filter-btn {
-            color: #b0b0b0;
-            border-color: #2a2a3a;
-        }
-
-        body.dark-mode .filter-btn.active {
-            background: #333a5e;
-            color: white;
-            border-color: #333a5e;
+            color: #fff;
         }
 
         body.dark-mode .add-mission-panel {
-            background: #1a1a24;
+            background: #1a1a24 !important;
+            color: #fff;
         }
 
         body.dark-mode .form-control {
             background: #2a2a3a;
+            color: #fff;
             border-color: #3a3a4a;
-            color: #e0e0e0;
         }
 
-        body.dark-mode .priority-option {
+        body.dark-mode .modal-content {
+            background: #1a1a24;
+            color: #fff;
+        }
+
+        body.dark-mode .settings-group {
+            background: #1a1a24;
+        }
+
+        body.dark-mode .alarm-panel {
+            background: #1a1a24;
+            border-color: #2a2a3a;
+            color: #fff;
+        }
+
+        body.dark-mode .notifications-panel {
+            background: #1a1a24;
+            border-color: #2a2a3a;
+        }
+
+        body.dark-mode .profile-card {
+            background: #1a1a24;
+            color: #fff;
+        }
+
+        body.dark-mode .info-row {
             background: #2a2a3a;
-            color: #b0b0b0;
         }
 
-        body.dark-mode .priority-option.active {
-            background: #333a5e;
-            color: white;
-        }
-
-        body.dark-mode .cancel-btn {
+        body.dark-mode .meta-tag {
             background: #2a2a3a;
-            color: #b0b0b0;
+            color: #fff;
+        }
+
+        body.dark-mode .subtask-item {
+            background: #2a2a3a;
+        }
+
+        body.dark-mode .action-btn {
+            background: #2a2a3a;
+            color: #fff;
         }
 
         body.dark-mode .progress-indicator {
             background: #1a1a24;
         }
 
-        body.focus-mode .app-container > *:not(.focus-mode) {
-            display: none !important;
+        body.dark-mode .category-header {
+            background: rgba(102, 126, 234, 0.2);
+            color: #fff;
         }
 
-        body.focus-mode .focus-mode {
-            display: flex !important;
+        body.dark-mode .main-missions-header {
+            background: rgba(102, 126, 234, 0.1);
+            color: #fff;
         }
 
-        .focus-mode {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: #0a0a0f;
-            z-index: 9999;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 50px;
+        body.dark-mode .settings-item {
+            color: #e0e0e0;
         }
 
-        .focus-timer {
+        body.dark-mode .deadline-badge {
+            background: #ff6b6b30;
+            color: #ff8a8a;
+        }
+
+        body.dark-mode .completed-card {
             background: #1a1a24;
-            border-radius: 60px;
-            padding: 40px 80px;
-            text-align: center;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
-            margin-bottom: 30px;
+            color: #fff;
         }
 
-        .focus-timer .timer-display {
-            font-size: 8rem;
-            font-weight: 800;
-            color: #667eea;
-            line-height: 1;
-            margin-bottom: 20px;
+        body.dark-mode .stat-value {
+            color: #48dbfb;
         }
 
-        .focus-timer .timer-label {
-            font-size: 2rem;
-            color: #b0b0b0;
-        }
-
-        .focus-controls {
-            display: flex;
-            gap: 20px;
-            margin-top: 30px;
-        }
-
-        .focus-btn {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            border: none;
-            background: #2a2a3a;
-            color: #667eea;
-            font-size: 2rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .focus-btn:hover {
-            transform: scale(1.1);
-            background: #667eea;
-            color: white;
-        }
-
-        .focus-task {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px 40px;
-            border-radius: 60px;
-            color: white;
-            font-size: 2rem;
-            font-weight: 600;
-            margin-top: 30px;
-            backdrop-filter: blur(10px);
-        }
-
-        .exit-focus {
-            position: absolute;
-            top: 30px;
-            left: 30px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.05);
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            backdrop-filter: blur(10px);
-        }
-
-        .exit-focus:hover {
-            background: white;
-            color: #667eea;
-            transform: rotate(90deg);
+        body.dark-mode .profile-name {
+            color: #fff;
         }
 
         .app-container {
             display: flex;
             min-height: 100vh;
-            position: relative;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
         }
@@ -265,343 +146,258 @@
         /* ========== الناف بار ========== */
         .nav-bar {
             width: 280px;
-            background: #ffffff;
-            backdrop-filter: blur(20px);
-            padding: 30px 20px;
-            display: flex;
-            flex-direction: column;
+            background: #fff;
+            padding: 80px 20px 30px;
             position: fixed;
             right: -280px;
             top: 0;
             bottom: 0;
             z-index: 1000;
-            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.15);
-            border-left: 1px solid rgba(255, 255, 255, 0.3);
+            transition: right 0.4s;
+            border-left: 1px solid #eee;
             overflow-y: auto;
-            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        body.dark-mode .nav-bar {
-            background: #0f0f15;
-            border-left-color: #2a2a3a;
         }
 
         .nav-bar.open {
             right: 0;
         }
 
-        .menu-button {
+        .top-bar {
             position: fixed;
             top: 20px;
-            left: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1001;
+        }
+
+        .top-btn {
             width: 50px;
-            height: 60px;
+            height: 50px;
             border-radius: 12px;
             background: linear-gradient(145deg, #667eea, #764ba2);
             border: none;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-            cursor: pointer;
-            z-index: 1001;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
+            color: #fff;
             font-size: 1.5rem;
-        }
-
-        .menu-button:hover {
-            transform: scale(1.1);
-        }
-
-        .close-button {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: rgba(102, 126, 234, 0.1);
-            border: none;
-            color: #667eea;
             cursor: pointer;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
             transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
         }
 
-        body.dark-mode .close-button {
-            background: #2a2a3a;
-            color: #b0b0b0;
-        }
-
-        .close-button:hover {
-            background: #667eea;
-            color: white;
-            transform: rotate(90deg);
+        .top-btn:hover {
+            transform: scale(1.1);
         }
 
         .nav-header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid;
-            border-image: linear-gradient(to left, #667eea, #764ba2) 1;
-            margin-top: 20px;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+            cursor: pointer;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 1.5rem;
-            font-weight: 800;
+            gap: 10px;
+            font-size: 1.3rem;
+            font-weight: 700;
             background: linear-gradient(145deg, #667eea, #764ba2);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .logo i {
-            font-size: 1.8rem;
-        }
-
-        .user-badge {
+        .user-avatar {
             width: 40px;
             height: 40px;
-            border-radius: 12px;
-            background: linear-gradient(145deg, #667eea20, #764ba220);
+            border-radius: 50%;
+            background: linear-gradient(145deg, #667eea, #764ba2);
             display: flex;
             align-items: center;
             justify-content: center;
+            color: #fff;
             cursor: pointer;
             transition: all 0.3s;
-            color: #667eea;
         }
 
-        body.dark-mode .user-badge {
-            background: #2a2a3a;
-            color: #b0b0b0;
-        }
-
-        .user-badge:hover {
+        .user-avatar:hover {
             transform: scale(1.1);
-            background: linear-gradient(145deg, #667eea, #764ba2);
-            color: white;
         }
 
-        .add-main-mission {
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 16px;
-            background: linear-gradient(145deg, #667eea10, #764ba210);
-            border: 2px dashed #667eea;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+        .user-name-small {
+            text-align: center;
             color: #667eea;
             font-weight: 600;
-            transition: all 0.3s;
+            margin-bottom: 20px;
         }
 
-        body.dark-mode .add-main-mission {
-            background: #1a1a24;
-            color: #b0b0b0;
-            border-color: #333a5e;
+        .mission-category {
+            margin-bottom: 15px;
         }
 
-        .add-main-mission:hover {
-            background: linear-gradient(145deg, #667eea20, #764ba220);
-            transform: scale(1.02);
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            color: #667eea;
+            border: 1px solid #667eea30;
         }
 
-        .main-missions {
-            flex: 1;
+        .category-header i {
+            transition: transform 0.3s;
+        }
+
+        .category-header.open i {
+            transform: rotate(180deg);
+        }
+
+        .category-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            padding-right: 15px;
+        }
+
+        .category-content.open {
+            max-height: 500px;
+            transition: max-height 0.5s ease-in;
+        }
+
+        .main-missions-section {
+            margin: 10px 0;
+            padding-right: 15px;
+            border-right: 2px solid #667eea30;
+        }
+
+        .main-missions-header {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 8px;
+            cursor: pointer;
+            color: #667eea;
+        }
+
+        .main-missions-header i {
+            transition: transform 0.3s;
+        }
+
+        .main-missions-header.open i {
+            transform: rotate(180deg);
+        }
+
+        .main-missions-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .main-missions-content.open {
+            max-height: 300px;
+            transition: max-height 0.5s ease-in;
         }
 
         .main-mission-item {
-            margin-bottom: 10px;
-            border-radius: 16px;
-            transition: all 0.3s;
-            background: linear-gradient(145deg, #f8f9fa, #e9ecef);
-            overflow: hidden;
-        }
-
-        body.dark-mode .main-mission-item {
-            background: #1a1a24;
-        }
-
-        .main-mission-header {
-            padding: 15px 20px;
             display: flex;
             align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 600;
-        }
-
-        .main-mission-header:hover {
-            background: rgba(102, 126, 234, 0.1);
-        }
-
-        body.dark-mode .main-mission-header:hover {
-            background: #2a2a3a;
-        }
-
-        .main-mission-header.active {
-            background: linear-gradient(145deg, #667eea, #764ba2);
-            color: white;
-        }
-
-        body.dark-mode .main-mission-header.active {
-            background: #333a5e;
-        }
-
-        .main-mission-icon {
-            width: 35px;
-            height: 35px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(145deg, #667eea20, #764ba220);
-            color: #667eea;
-        }
-
-        body.dark-mode .main-mission-icon {
-            background: #2a2a3a;
-            color: #b0b0b0;
-        }
-
-        .main-mission-header.active .main-mission-icon {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
+            gap: 8px;
+            padding: 8px;
+            background: rgba(102, 126, 234, 0.03);
+            border-radius: 8px;
+            margin: 5px 0;
         }
 
         .main-mission-title {
             flex: 1;
-            font-size: 1rem;
+            cursor: pointer;
+            font-size: 0.9rem;
         }
 
         .main-mission-count {
-            background: rgba(0, 0, 0, 0.1);
-            padding: 3px 8px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-        }
-
-        body.dark-mode .main-mission-count {
-            background: #2a2a3a;
-        }
-
-        .main-mission-header.active .main-mission-count {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .delete-main-mission {
-            opacity: 0;
-            transition: opacity 0.2s;
-            color: #ff6b6b;
-            cursor: pointer;
-            margin-right: 5px;
-        }
-
-        .main-mission-item:hover .delete-main-mission {
-            opacity: 1;
-        }
-
-        .sub-missions {
-            padding: 10px 20px 15px 45px;
-            background: rgba(0, 0, 0, 0.02);
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        body.dark-mode .sub-missions {
-            background: #0f0f15;
-            border-top-color: #2a2a3a;
-        }
-
-        .sub-mission-item {
-            padding: 8px 15px;
-            margin: 3px 0;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
-            color: #666;
-            position: relative;
-        }
-
-        body.dark-mode .sub-mission-item {
-            color: #b0b0b0;
-        }
-
-        .sub-mission-item i {
-            width: 16px;
-            font-size: 0.8rem;
-            color: #667eea;
-        }
-
-        .sub-mission-item.completed {
-            text-decoration: line-through;
-            opacity: 0.6;
-        }
-
-        .show-completed-btn {
-            padding: 12px 15px;
-            margin-top: 15px;
+            background: rgba(102, 126, 234, 0.1);
+            padding: 2px 6px;
             border-radius: 12px;
-            background: linear-gradient(145deg, #667eea10, #764ba210);
-            border: 1px solid #667eea;
+            font-size: 0.75rem;
+        }
+
+        .complete-main-mission {
+            color: #48dbfb;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            color: #667eea;
-            font-weight: 600;
+            opacity: 0.7;
+            font-size: 1.1rem;
             transition: all 0.3s;
         }
 
-        body.dark-mode .show-completed-btn {
-            background: #1a1a24;
-            color: #b0b0b0;
-            border-color: #333a5e;
+        .complete-main-mission:hover {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        .delete-main-mission {
+            color: #ff6b6b;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: all 0.3s;
+        }
+
+        .delete-main-mission:hover {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        .category-add-btn {
+            padding: 8px;
+            border: 1px dashed #667eea;
+            border-radius: 8px;
+            text-align: center;
+            color: #667eea;
+            cursor: pointer;
+            margin: 5px 0;
+            transition: all 0.3s;
+        }
+
+        .category-add-btn:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .show-completed-btn {
+            padding: 12px;
+            border: 1px solid #667eea;
+            border-radius: 12px;
+            text-align: center;
+            color: #667eea;
+            margin: 15px 0;
+            cursor: pointer;
+            transition: all 0.3s;
         }
 
         .show-completed-btn:hover {
             background: #667eea;
-            color: white;
+            color: #fff;
         }
 
         .settings-section {
             margin-top: auto;
             padding-top: 20px;
-            border-top: 2px solid;
-            border-image: linear-gradient(to left, #667eea, #764ba2) 1;
+            border-top: 2px solid #667eea;
         }
 
         .settings-item {
-            padding: 12px 15px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
+            padding: 10px;
             border-radius: 12px;
             cursor: pointer;
-            transition: all 0.3s;
             color: #666;
-            margin: 5px 0;
-        }
-
-        body.dark-mode .settings-item {
-            color: #b0b0b0;
+            transition: all 0.3s;
         }
 
         .settings-item:hover {
@@ -609,31 +405,20 @@
             transform: translateX(-5px);
         }
 
-        body.dark-mode .settings-item:hover {
-            background: #2a2a3a;
-        }
-
         .settings-item i {
             width: 25px;
             color: #667eea;
-            font-size: 1.1rem;
         }
 
         /* ========== المحتوى الرئيسي ========== */
         .main-content {
             flex: 1;
-            padding: 30px;
-            overflow-y: auto;
-            background: #ffffff;
-            backdrop-filter: blur(20px);
+            background: #fff;
             margin: 20px;
             border-radius: 30px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            overflow-y: auto;
             transition: all 0.4s;
-        }
-
-        body.dark-mode .main-content {
-            background: #121218;
         }
 
         .page {
@@ -646,41 +431,63 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .page-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 30px;
-            padding: 20px 30px;
             background: linear-gradient(145deg, #667eea, #764ba2);
+            color: #fff;
+            padding: 20px;
             border-radius: 20px;
-            color: white;
-        }
-
-        body.dark-mode .page-header {
-            background: #1a1a24;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .page-header h1 {
             font-size: 2rem;
-            font-weight: 700;
             display: flex;
             align-items: center;
             gap: 15px;
         }
 
+        .back-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
         /* ========== لوحة إضافة مهمة ========== */
         .add-mission-panel {
-            background: white;
+            background: #fff;
             border-radius: 25px;
             padding: 30px;
             max-width: 600px;
             margin: 0 auto 30px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1000;
+            opacity: 1;
+            backdrop-filter: none;
         }
 
         .add-mission-panel.hidden {
@@ -698,60 +505,61 @@
             color: #667eea;
         }
 
-        body.dark-mode .form-group label {
-            color: #b0b0b0;
-        }
-
         .form-control {
             width: 100%;
             padding: 12px 20px;
             border: 2px solid #f0f0f0;
             border-radius: 15px;
             font-size: 1rem;
-            transition: all 0.3s;
             background: #f8f9fa;
+            transition: all 0.3s;
         }
 
         .form-control:focus {
-            outline: none;
+            outline: 0;
             border-color: #667eea;
         }
 
-        .priority-selector {
+        .mission-type-selector {
             display: flex;
             gap: 10px;
+            margin-bottom: 20px;
         }
 
-        .priority-option {
+        .type-option {
             flex: 1;
-            padding: 10px;
+            padding: 12px;
             text-align: center;
+            border: 2px solid #667eea30;
             border-radius: 12px;
-            background: #f0f0f0;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s;
+            color: #667eea;
         }
 
-        .priority-option.high {
-            border: 2px solid #ff6b6b;
+        .type-option.active {
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            color: #fff;
+            border-color: transparent;
         }
-        .priority-option.medium {
-            border: 2px solid #feca57;
+
+        .deadline-input {
+            display: none;
+            margin-bottom: 20px;
         }
-        .priority-option.low {
-            border: 2px solid #48dbfb;
-        }
-        .priority-option.active {
-            background: #667eea;
-            color: white;
+
+        .deadline-input.show {
+            display: block;
         }
 
         .panel-buttons {
             display: flex;
             gap: 10px;
+            margin-top: 20px;
         }
 
-        .submit-btn, .cancel-btn {
+        .submit-btn,
+        .cancel-btn {
             flex: 1;
             padding: 15px;
             border: none;
@@ -764,11 +572,7 @@
 
         .submit-btn {
             background: linear-gradient(145deg, #667eea, #764ba2);
-            color: white;
-        }
-
-        body.dark-mode .submit-btn {
-            background: #333a5e;
+            color: #fff;
         }
 
         .cancel-btn {
@@ -776,7 +580,8 @@
             color: #666;
         }
 
-        .submit-btn:hover, .cancel-btn:hover {
+        .submit-btn:hover,
+        .cancel-btn:hover {
             transform: scale(1.02);
         }
 
@@ -785,142 +590,52 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-            margin-top: 20px;
         }
 
         .sub-mission-card {
-            background: white;
+            background: #fff;
             border-radius: 20px;
-            padding: 20px 25px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
+            padding: 20px;
             border: 1px solid #f0f0f0;
             transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .sub-mission-card.completed {
-            opacity: 0.5;
-            display: none;
         }
 
         .sub-mission-card:hover {
-            transform: translateX(-10px);
+            transform: translateX(-5px);
             box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
-            border-color: #667eea;
-        }
-
-        body.dark-mode .sub-mission-card:hover {
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            border-color: #333a5e;
-        }
-
-        .card-priority {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 4px;
-            height: 100%;
-            background: linear-gradient(180deg, #667eea, #764ba2);
-        }
-
-        .priority-high .card-priority {
-            background: linear-gradient(180deg, #ff6b6b, #ee5253);
-        }
-
-        .priority-medium .card-priority {
-            background: linear-gradient(180deg, #feca57, #ff9f43);
-        }
-
-        .priority-low .card-priority {
-            background: linear-gradient(180deg, #48dbfb, #0abde3);
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .card-icon {
-            width: 45px;
-            height: 45px;
-            border-radius: 12px;
-            background: linear-gradient(145deg, #667eea20, #764ba220);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #667eea;
-            font-size: 1.3rem;
-        }
-
-        body.dark-mode .card-icon {
-            background: #2a2a3a;
-            color: #b0b0b0;
         }
 
         .card-title {
-            flex: 1;
             font-size: 1.2rem;
             font-weight: 700;
-            color: #333;
+            margin-bottom: 10px;
         }
 
-        body.dark-mode .card-title {
-            color: #e0e0e0;
-        }
-
-        .card-meta {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-
-        .meta-tag {
+        .deadline-badge {
+            background: #ff6b6b20;
+            color: #ff6b6b;
             padding: 5px 12px;
             border-radius: 30px;
             font-size: 0.9rem;
-            background: #f0f0f0;
-            color: #666;
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
+            margin-bottom: 10px;
         }
 
-        body.dark-mode .meta-tag {
-            background: #2a2a3a;
-            color: #b0b0b0;
-        }
-
-        .meta-tag i {
-            color: #667eea;
-        }
-
-        /* ========== نظام النقاط الفرعية ========== */
         .subtasks-section {
-            margin: 15px 0;
-            padding: 15px;
             background: #f8f9fa;
             border-radius: 12px;
-        }
-
-        body.dark-mode .subtasks-section {
-            background: #0f0f15;
+            padding: 15px;
+            margin: 15px 0;
         }
 
         .subtasks-title {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            margin-bottom: 10px;
-            font-weight: 600;
             color: #667eea;
-        }
-
-        body.dark-mode .subtasks-title {
-            color: #b0b0b0;
+            font-weight: 600;
+            margin-bottom: 10px;
         }
 
         .subtask-item {
@@ -928,13 +643,9 @@
             align-items: center;
             gap: 10px;
             padding: 8px;
-            margin: 5px 0;
-            background: white;
+            background: #fff;
             border-radius: 8px;
-        }
-
-        body.dark-mode .subtask-item {
-            background: #1a1a24;
+            margin: 5px 0;
         }
 
         .subtask-checkbox {
@@ -972,48 +683,42 @@
 
         .add-subtask-input input {
             flex: 1;
-            padding: 8px 12px;
+            padding: 8px;
             border: 2px solid #f0f0f0;
             border-radius: 8px;
-            background: white;
-        }
-
-        body.dark-mode .add-subtask-input input {
-            background: #1a1a24;
-            border-color: #2a2a3a;
-            color: #e0e0e0;
         }
 
         .add-subtask-btn {
             padding: 8px 15px;
             background: #667eea;
-            color: white;
+            color: #fff;
             border: none;
             border-radius: 8px;
             cursor: pointer;
         }
 
-        body.dark-mode .add-subtask-btn {
-            background: #333a5e;
+        .card-meta {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
         }
 
-        .subtask-score {
-            font-size: 0.8rem;
-            color: #48dbfb;
-            margin-top: 5px;
-            text-align: left;
+        .meta-tag {
+            background: #f0f0f0;
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .card-footer {
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
             padding-top: 15px;
             border-top: 1px solid #f0f0f0;
-        }
-
-        body.dark-mode .card-footer {
-            border-top-color: #2a2a3a;
         }
 
         .card-actions {
@@ -1024,22 +729,16 @@
         .action-btn {
             width: 40px;
             height: 40px;
-            border-radius: 12px;
             border: none;
+            border-radius: 12px;
             background: #f0f0f0;
-            color: #666;
             cursor: pointer;
             transition: all 0.2s;
         }
 
-        body.dark-mode .action-btn {
-            background: #2a2a3a;
-            color: #b0b0b0;
-        }
-
         .action-btn:hover {
             background: #667eea;
-            color: white;
+            color: #fff;
             transform: scale(1.1);
         }
 
@@ -1048,57 +747,570 @@
             color: #48dbfb;
             padding: 5px 10px;
             border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
         }
 
-        /* زر الإضافة + تحت الشمال فقط */
-        .floating-add-btn {
+        /* ========== الأزرار السفلية ========== */
+        .bottom-buttons {
             position: fixed;
             bottom: 30px;
             left: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .floating-add-btn,
+        .alarm-button {
             width: 60px;
             height: 60px;
             border-radius: 50%;
-            background: linear-gradient(145deg, #667eea, #764ba2);
             border: none;
-            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.5);
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            color: #fff;
+            font-size: 2rem;
             cursor: pointer;
-            z-index: 100;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.5);
             transition: all 0.3s;
+        }
+
+        .floating-add-btn:hover,
+        .alarm-button:hover {
+            transform: scale(1.1);
+        }
+
+        /* ========== نافذة المنبه العائمة ========== */
+        .alarm-panel {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            max-width: 90%;
+            background: #fff;
+            border-radius: 20px;
+            display: none;
+            z-index: 2000;
+            border: 2px solid #667eea;
+            resize: both;
+            overflow: auto;
+            min-width: 300px;
+            min-height: 200px;
+            max-width: 800px;
+            max-height: 600px;
+            cursor: move;
+        }
+
+        .alarm-panel.show {
+            display: block;
+        }
+
+        .alarm-header {
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            color: #fff;
+            padding: 15px;
+            border-radius: 18px 18px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+        }
+
+        .alarm-header h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .close-alarm {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: #fff;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .alarm-content {
+            padding: 20px;
+        }
+
+        .timer-display {
+            font-size: 4rem;
+            text-align: center;
+            color: #667eea;
+            margin: 20px 0;
+            font-family: monospace;
+        }
+
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .timer-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .timer-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .timer-btn.stop {
+            background: #ff6b6b;
+        }
+
+        .timer-mode-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .mode-btn {
+            padding: 8px 20px;
+            border: 2px solid #667eea;
+            background: transparent;
+            border-radius: 30px;
+            color: #667eea;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .mode-btn.active {
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            color: #fff;
+        }
+
+        .timer-input {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .timer-input input {
+            width: 80px;
+            padding: 10px;
+            border: 2px solid #f0f0f0;
+            border-radius: 10px;
+        }
+
+        /* ========== النوافذ المنبثقة ========== */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #fff;
+            border-radius: 30px;
+            padding: 40px;
+            width: 90%;
+            max-width: 500px;
+            animation: modalPop 0.3s;
+        }
+
+        @keyframes modalPop {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .modal-header i {
+            font-size: 3rem;
+            color: #667eea;
+        }
+
+        .modal-input,
+        .modal-select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #f0f0f0;
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+
+        .avatar-selector {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .avatar-option {
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: rgba(102, 126, 234, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            font-size: 1.5rem;
+            color: #667eea;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .avatar-option:hover {
+            transform: scale(1.1);
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            color: #fff;
+        }
+
+        .avatar-option.selected {
+            border-color: #667eea;
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            color: #fff;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal-btn:hover {
+            transform: scale(1.02);
+        }
+
+        .modal-btn.primary {
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            color: #fff;
+        }
+
+        .modal-btn.secondary {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        /* ========== نافذة الإشعارات ========== */
+        .notifications-panel {
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            width: 350px;
+            background: #fff;
+            border-radius: 20px;
+            display: none;
+            z-index: 2000;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .notifications-panel.show {
+            display: block;
+        }
+
+        .notifications-header {
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            color: #fff;
+            padding: 15px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .notifications-list {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .notification-item {
+            padding: 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .notification-item:hover {
+            background: #f8f9fa;
+        }
+
+        .notification-text {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notification-text i {
+            color: #48dbfb;
+        }
+
+        .notification-time {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        /* ========== صفحة الحساب ========== */
+        .profile-page {
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .profile-card {
+            background: #fff;
+            border-radius: 30px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 3rem;
+            color: #fff;
+            border: 4px solid #fff;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .profile-name {
             font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #333;
         }
 
-        body.dark-mode .floating-add-btn {
-            background: #333a5e;
+        .profile-bio {
+            color: #666;
+            margin-bottom: 30px;
         }
 
-        .floating-add-btn:hover {
-            transform: scale(1.1) rotate(90deg);
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+            padding: 20px 0;
+            border-top: 2px solid #f0f0f0;
+            border-bottom: 2px solid #f0f0f0;
         }
 
-        /* صفحة المهام المكتملة */
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        .profile-info {
+            text-align: right;
+            margin: 20px 0;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin: 8px 0;
+        }
+
+        .info-row i {
+            width: 25px;
+            color: #667eea;
+            font-size: 1.2rem;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .profile-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .profile-btn:hover {
+            transform: scale(1.02);
+        }
+
+        .edit-btn {
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            color: #fff;
+        }
+
+        .logout-btn {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        /* ========== صفحة الإعدادات ========== */
+        .settings-page {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .settings-group {
+            background: #fff;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .settings-group h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .code-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .code-button {
+            padding: 20px 40px;
+            font-size: 1.8rem;
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            color: #fff;
+            border: none;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: fit-content;
+            margin: 0 auto;
+        }
+
+        .code-button:hover {
+            transform: scale(1.05);
+        }
+
+        .code-input-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .code-input {
+            width: 150px;
+            height: 150px;
+            font-size: 3rem;
+            text-align: center;
+            border: 4px solid #667eea;
+            border-radius: 20px;
+            margin: 0 auto;
+        }
+
+        .code-input:focus {
+            outline: 0;
+            border-color: #764ba2;
+        }
+
+        /* ========== رسالة الكود السري ========== */
+        .secret-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            color: #fff;
+            padding: 30px 50px;
+            border-radius: 60px;
+            font-size: 1.8rem;
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border: 3px solid #fff;
+            animation: messagePop 0.5s;
+        }
+
+        @keyframes messagePop {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -30%);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        /* ========== صفحة المهام المكتملة ========== */
         .completed-missions-page {
             padding: 20px;
         }
 
         .completed-card {
-            background: white;
+            background: #fff;
             border-radius: 15px;
-            padding: 15px 20px;
+            padding: 15px;
             margin-bottom: 10px;
-            opacity: 0.8;
             display: flex;
             align-items: center;
             gap: 15px;
-        }
-
-        body.dark-mode .completed-card {
-            background: #1a1a24;
+            opacity: 0.8;
         }
 
         .completed-card i {
@@ -1110,507 +1322,19 @@
             text-decoration: line-through;
         }
 
-        /* ========== صفحة الإحصائيات الجديدة ========== */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            text-align: center;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s;
-        }
-
-        body.dark-mode .stat-card {
-            background: #1a1a24;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.2);
-        }
-
-        body.dark-mode .stat-card:hover {
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .stat-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(145deg, #667eea20, #764ba220);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            color: #667eea;
-            margin: 0 auto 15px;
-        }
-
-        body.dark-mode .stat-icon {
-            background: #2a2a3a;
-            color: #b0b0b0;
-        }
-
-        .stat-value {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: #667eea;
-        }
-
-        body.dark-mode .stat-value {
-            color: #b0b0b0;
-        }
-
-        .stat-label {
-            color: #888;
-            font-size: 1rem;
-            margin-top: 5px;
-        }
-
-        body.dark-mode .stat-label {
-            color: #888;
-        }
-
-        /* ========== نظام الأيام ========== */
-        .days-container {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-
-        .day-card {
-            flex: 1;
-            min-width: 100px;
-            background: white;
-            border-radius: 15px;
-            padding: 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 2px solid transparent;
-        }
-
-        body.dark-mode .day-card {
-            background: #1a1a24;
-        }
-
-        .day-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .day-card.active {
-            border-color: #667eea;
-            background: #667eea10;
-        }
-
-        body.dark-mode .day-card.active {
-            background: #333a5e30;
-            border-color: #333a5e;
-        }
-
-        .day-name {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #667eea;
-            margin-bottom: 5px;
-        }
-
-        body.dark-mode .day-name {
-            color: #b0b0b0;
-        }
-
-        .day-date {
-            font-size: 0.8rem;
-            color: #888;
-            margin-bottom: 10px;
-        }
-
-        .day-stats {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            font-size: 0.9rem;
-        }
-
-        .day-completed {
-            color: #48dbfb;
-        }
-
-        .day-pending {
-            color: #ff6b6b;
-        }
-
-        /* ========== تفاصيل اليوم ========== */
-        .day-details {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            margin-top: 20px;
-        }
-
-        body.dark-mode .day-details {
-            background: #1a1a24;
-        }
-
-        .day-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f0f0f0;
-        }
-
-        body.dark-mode .day-header {
-            border-bottom-color: #2a2a3a;
-        }
-
-        .day-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #667eea;
-        }
-
-        body.dark-mode .day-title {
-            color: #b0b0b0;
-        }
-
-        .day-navigation {
-            display: flex;
-            gap: 10px;
-        }
-
-        .nav-day-btn {
-            padding: 8px 20px;
-            border: none;
-            border-radius: 10px;
-            background: #f0f0f0;
-            color: #666;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        body.dark-mode .nav-day-btn {
-            background: #2a2a3a;
-            color: #b0b0b0;
-        }
-
-        .nav-day-btn:hover {
-            background: #667eea;
-            color: white;
-        }
-
-        .day-tasks-section {
-            margin-bottom: 20px;
-        }
-
-        .day-tasks-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .completed-tasks-title {
-            color: #48dbfb;
-        }
-
-        .pending-tasks-title {
-            color: #ff6b6b;
-        }
-
-        .day-task-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 12px 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            margin-bottom: 5px;
-        }
-
-        body.dark-mode .day-task-item {
-            background: #0f0f15;
-        }
-
-        .day-task-item.completed {
-            background: #48dbfb10;
-        }
-
-        .day-task-item.pending {
-            background: #ff6b6b10;
-        }
-
-        .day-task-icon {
-            width: 30px;
-            height: 30px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #667eea20;
-            color: #667eea;
-        }
-
-        .day-task-title {
-            flex: 1;
-            font-weight: 500;
-        }
-
-        .day-task-status {
-            font-size: 0.9rem;
-            padding: 3px 10px;
-            border-radius: 15px;
-        }
-
-        .status-completed {
-            background: #48dbfb;
-            color: white;
-        }
-
-        .status-pending {
-            background: #ff6b6b;
-            color: white;
-        }
-
-        .day-score {
-            text-align: center;
-            padding: 15px;
-            background: linear-gradient(145deg, #667eea10, #764ba210);
-            border-radius: 15px;
-            margin-top: 15px;
-        }
-
-        .day-score-value {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #48dbfb;
-        }
-
-        /* ========== صفحة الإنجازات ========== */
-        .badges-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .badge-card {
-            background: white;
-            border-radius: 20px;
-            padding: 25px 20px;
-            text-align: center;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        body.dark-mode .badge-card {
-            background: #1a1a24;
-        }
-
-        .badge-card.locked {
-            opacity: 0.5;
-            filter: grayscale(1);
-        }
-
-        .badge-card.unlocked {
-            background: linear-gradient(145deg, #fff9e6, #fff3d6);
-            border: 2px solid gold;
-        }
-
-        body.dark-mode .badge-card.unlocked {
-            background: #2a2a3a;
-            border-color: gold;
-        }
-
-        .badge-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(145deg, #667eea20, #764ba220);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
-            color: #667eea;
-            margin: 0 auto 15px;
-        }
-
-        body.dark-mode .badge-icon {
-            background: #2a2a3a;
-            color: #b0b0b0;
-        }
-
-        .badge-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-
-        .badge-desc {
-            font-size: 0.9rem;
-            color: #888;
-            margin-bottom: 10px;
-        }
-
-        .badge-progress {
-            font-size: 0.8rem;
-            color: #667eea;
-            font-weight: 600;
-        }
-
-        .level-progress {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 30px;
-        }
-
-        body.dark-mode .level-progress {
-            background: #1a1a24;
-        }
-
-        .level-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-
-        .level-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #667eea;
-        }
-
-        body.dark-mode .level-title {
-            color: #b0b0b0;
-        }
-
-        .level-xp {
-            color: #888;
-        }
-
-        .xp-bar {
-            width: 100%;
-            height: 20px;
-            background: #f0f0f0;
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 15px 0;
-        }
-
-        body.dark-mode .xp-bar {
-            background: #2a2a3a;
-        }
-
-        .xp-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            border-radius: 10px;
-            transition: width 0.5s;
-        }
-
-        body.dark-mode .xp-fill {
-            background: #333a5e;
-        }
-
-        /* نظام البحث والفلترة */
-        .search-box {
-            background: white;
-            border-radius: 60px;
-            padding: 5px 20px;
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-
-        body.dark-mode .search-box {
-            background: #1a1a24;
-        }
-
-        .search-box i {
-            color: #667eea;
-            font-size: 1.2rem;
-            margin-left: 10px;
-        }
-
-        .search-box input {
-            flex: 1;
-            padding: 15px 0;
-            border: none;
-            background: transparent;
-            font-size: 1rem;
-        }
-
-        .search-box input:focus {
-            outline: none;
-        }
-
-        .filter-buttons {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            padding: 8px 20px;
-            border-radius: 30px;
-            border: 2px solid #667eea20;
-            background: transparent;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 600;
-            color: #666;
-        }
-
-        .filter-btn:hover {
-            border-color: #667eea;
-            background: #667eea10;
-        }
-
-        .filter-btn.active {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-
-        .filter-btn i {
-            margin-left: 5px;
-        }
-
-        /* مؤشر التقدم */
+        /* ========== مؤشر التقدم ========== */
         .progress-indicator {
             position: fixed;
             bottom: 30px;
             right: 30px;
-            background: white;
+            background: #fff;
             border-radius: 50px;
             padding: 10px 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
             display: flex;
             align-items: center;
             gap: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
             z-index: 100;
-        }
-
-        body.dark-mode .progress-indicator {
-            background: #1a1a24;
         }
 
         .progress-circle {
@@ -1621,421 +1345,425 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: #fff;
             font-weight: 700;
         }
 
-        body.dark-mode .progress-circle {
-            background: #333a5e;
-        }
-
-        /* رسالة نجاح */
+        /* ========== رسالة نجاح ========== */
         .success-message {
             position: fixed;
             top: 20px;
             right: 50%;
             transform: translateX(50%);
             background: #48dbfb;
-            color: white;
+            color: #fff;
             padding: 15px 30px;
             border-radius: 50px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-            z-index: 2000;
+            z-index: 3000;
             animation: slideDown 0.3s;
         }
 
-        body.dark-mode .success-message {
-            background: #333a5e;
-        }
-
         @keyframes slideDown {
-            from { top: -100px; }
-            to { top: 20px; }
+            from {
+                top: -100px;
+            }
+            to {
+                top: 20px;
+            }
         }
 
-        .back-btn {
-            width: 45px;
-            height: 45px;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        body.dark-mode .back-btn {
-            background: #2a2a3a;
-        }
-
-        .back-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.1);
-        }
-
-        /* تثبيت التطبيق */
-        .install-prompt {
+        /* ========== الرسالة التحفيزية ========== */
+        .welcome-message {
             position: fixed;
-            bottom: 100px;
-            left: 30px;
-            background: white;
-            border-radius: 60px;
-            padding: 15px 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            z-index: 1000;
-            animation: slideUp 0.5s;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 50;
+            pointer-events: none;
+            width: 100%;
         }
 
-        body.dark-mode .install-prompt {
-            background: #1a1a24;
-        }
-
-        @keyframes slideUp {
-            from { bottom: -100px; }
-            to { bottom: 100px; }
-        }
-
-        .install-btn {
+        .welcome-title {
+            font-size: 3rem;
+            font-weight: 800;
             background: linear-gradient(145deg, #667eea, #764ba2);
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        body.dark-mode .install-btn {
-            background: #333a5e;
-        }
-
-        .install-btn:hover {
-            transform: scale(1.05);
-        }
-
-        .close-install {
-            background: none;
-            border: none;
-            color: #888;
-            cursor: pointer;
-            font-size: 1.2rem;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
     </style>
 </head>
 <body>
-    <!-- PWA Install Prompt -->
-    <div id="installPrompt" class="install-prompt" style="display: none;">
-        <i class="fas fa-download" style="color: #667eea; font-size: 1.5rem;"></i>
-        <span style="flex: 1;">تثبيت التطبيق على جهازك</span>
-        <button class="install-btn" id="installButton">تثبيت</button>
-        <button class="close-install" onclick="document.getElementById('installPrompt').style.display='none'">
-            <i class="fas fa-times"></i>
-        </button>
-    </div>
-
-    <!-- وضع التركيز -->
-    <div class="focus-mode" id="focusMode">
-        <button class="exit-focus" onclick="exitFocusMode()">
-            <i class="fas fa-times"></i>
-        </button>
-        <div class="focus-timer">
-            <div class="timer-display" id="focusTimer">25:00</div>
-            <div class="timer-label">وقت التركيز</div>
-            <div class="focus-controls">
-                <button class="focus-btn" onclick="startFocusTimer()">
-                    <i class="fas fa-play"></i>
-                </button>
-                <button class="focus-btn" onclick="pauseFocusTimer()">
-                    <i class="fas fa-pause"></i>
-                </button>
-                <button class="focus-btn" onclick="resetFocusTimer()">
-                    <i class="fas fa-redo-alt"></i>
-                </button>
+    <!-- نافذة المنبه -->
+    <div class="alarm-panel" id="alarmPanel">
+        <div class="alarm-header" id="alarmHeader">
+            <h3><i class="fas fa-clock"></i> المنبه</h3>
+            <button class="close-alarm" onclick="closeAlarm()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="alarm-content">
+            <div class="timer-display" id="timerDisplay">25:00</div>
+            <div class="timer-mode-selector">
+                <button class="mode-btn active" onclick="setTimerMode('countdown', this)">عد تنازلي</button>
+                <button class="mode-btn" onclick="setTimerMode('countup', this)">عد تصاعدي</button>
+            </div>
+            <div class="timer-controls">
+                <button class="timer-btn" onclick="startTimer()"><i class="fas fa-play"></i></button>
+                <button class="timer-btn stop" onclick="pauseTimer()"><i class="fas fa-pause"></i></button>
+                <button class="timer-btn" onclick="resetTimer()"><i class="fas fa-redo-alt"></i></button>
+            </div>
+            <div class="timer-input">
+                <input type="number" id="timerMinutes" value="25" min="1" max="180">
+                <span>دقيقة</span>
+                <button onclick="setCustomTime()">ضبط</button>
             </div>
         </div>
-        <div class="focus-task" id="focusTask">
-            ركز على مهمتك الحالية
+    </div>
+
+    <!-- نافذة تسجيل الدخول -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <i class="fas fa-user-astronaut"></i>
+                <h2>مرحباً بك في Mission Master</h2>
+            </div>
+            <input type="text" id="userName" class="modal-input" placeholder="الاسم" autocomplete="off">
+            <select id="userGrade" class="modal-select">
+                <option value="">اختر السنة الدراسية</option>
+                <option value="1 اعدادي">1 إعدادي</option>
+                <option value="2 اعدادي">2 إعدادي</option>
+                <option value="3 اعدادي">3 إعدادي</option>
+                <option value="1 ثانوي">1 ثانوي</option>
+                <option value="2 ثانوي">2 ثانوي</option>
+                <option value="3 ثانوي">3 ثانوي</option>
+                <option value="جامعة">جامعة</option>
+                <option value="خريج">خريج</option>
+            </select>
+            <input type="number" id="userAge" class="modal-input" placeholder="العمر" min="10" max="100">
+            <div>
+                <label style="color: #667eea; font-weight: 600;">اختر صورتك الرمزية:</label>
+                <div class="avatar-selector" id="avatarSelector">
+                    <div class="avatar-option selected" data-avatar="🧑"><i class="fas fa-user"></i></div>
+                    <div class="avatar-option" data-avatar="👨‍🎓"><i class="fas fa-graduation-cap"></i></div>
+                    <div class="avatar-option" data-avatar="👩‍🔬"><i class="fas fa-flask"></i></div>
+                    <div class="avatar-option" data-avatar="👨‍💻"><i class="fas fa-laptop-code"></i></div>
+                    <div class="avatar-option" data-avatar="👩‍🏫"><i class="fas fa-chalkboard-teacher"></i></div>
+                    <div class="avatar-option" data-avatar="👨‍🔧"><i class="fas fa-tools"></i></div>
+                    <div class="avatar-option" data-avatar="👩‍🎨"><i class="fas fa-paint-brush"></i></div>
+                    <div class="avatar-option" data-avatar="👨‍🚒"><i class="fas fa-fire-extinguisher"></i></div>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn primary" onclick="saveUserProfile()">تسجيل الدخول</button>
+                <button class="modal-btn secondary" onclick="closeAuthModal()">دخول كزائر</button>
+            </div>
         </div>
+    </div>
+
+    <!-- نافذة تعديل الملف الشخصي -->
+    <div class="modal" id="editProfileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <i class="fas fa-user-edit"></i>
+                <h2>تعديل الملف الشخصي</h2>
+            </div>
+            <input type="text" id="editName" class="modal-input" placeholder="الاسم">
+            <select id="editGrade" class="modal-select">
+                <option value="">اختر السنة الدراسية</option>
+                <option value="1 اعدادي">1 إعدادي</option>
+                <option value="2 اعدادي">2 إعدادي</option>
+                <option value="3 اعدادي">3 إعدادي</option>
+                <option value="1 ثانوي">1 ثانوي</option>
+                <option value="2 ثانوي">2 ثانوي</option>
+                <option value="3 ثانوي">3 ثانوي</option>
+                <option value="جامعة">جامعة</option>
+                <option value="خريج">خريج</option>
+            </select>
+            <input type="number" id="editAge" class="modal-input" placeholder="العمر" min="10" max="100">
+            <div>
+                <label style="color: #667eea; font-weight: 600;">اختر صورتك الرمزية:</label>
+                <div class="avatar-selector" id="editAvatarSelector">
+                    <div class="avatar-option selected" data-avatar="🧑"><i class="fas fa-user"></i></div>
+                    <div class="avatar-option" data-avatar="👨‍🎓"><i class="fas fa-graduation-cap"></i></div>
+                    <div class="avatar-option" data-avatar="👩‍🔬"><i class="fas fa-flask"></i></div>
+                    <div class="avatar-option" data-avatar="👨‍💻"><i class="fas fa-laptop-code"></i></div>
+                    <div class="avatar-option" data-avatar="👩‍🏫"><i class="fas fa-chalkboard-teacher"></i></div>
+                    <div class="avatar-option" data-avatar="👨‍🔧"><i class="fas fa-tools"></i></div>
+                    <div class="avatar-option" data-avatar="👩‍🎨"><i class="fas fa-paint-brush"></i></div>
+                    <div class="avatar-option" data-avatar="👨‍🚒"><i class="fas fa-fire-extinguisher"></i></div>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn primary" onclick="saveProfileChanges()">حفظ التغييرات</button>
+                <button class="modal-btn secondary" onclick="closeEditProfileModal()">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة الإشعارات -->
+    <div class="notifications-panel" id="notificationsPanel">
+        <div class="notifications-header">
+            <span>الإشعارات</span>
+            <i class="fas fa-bell"></i>
+        </div>
+        <div class="notifications-list" id="notificationsList"></div>
     </div>
 
     <div class="app-container">
-        <!-- زر فتح الناف بار -->
-        <button class="menu-button" onclick="openNav()">
-            <i class="fas fa-bars"></i>
-        </button>
+        <!-- الأزرار العلوية -->
+        <div class="top-bar">
+            <button class="top-btn" onclick="toggleDarkMode()"><i class="fas fa-moon"></i></button>
+            <button class="top-btn" id="notificationsButton" onclick="toggleNotifications()"><i class="fas fa-bell"></i></button>
+            <button class="top-btn" onclick="toggleNav()"><i class="fas fa-bars"></i></button>
+        </div>
 
-        <!-- ========== الناف بار ========== -->
+        <!-- الناف بار -->
         <div class="nav-bar" id="navBar">
-            <button class="close-button" onclick="closeNav()">
-                <i class="fas fa-times"></i>
-            </button>
+            <div class="nav-header" onclick="showProfilePage()">
+                <div class="logo"><i class="fas fa-rocket"></i><span>Mission Master</span></div>
+                <div class="user-avatar" id="userAvatar"><i class="fas fa-user"></i></div>
+            </div>
+            <div class="user-name-small" id="userNameDisplay">زائر</div>
 
-            <div class="nav-header">
-                <div class="logo">
-                    <i class="fas fa-rocket"></i>
-                    <span>Mission Master</span>
+            <!-- التصنيف اليومي -->
+            <div class="mission-category">
+                <div class="category-header" onclick="toggleCategory('daily')">
+                    <span><i class="fas fa-sun"></i> اليومية</span>
+                    <i class="fas fa-chevron-down"></i>
                 </div>
-                <div class="user-badge" onclick="toggleDarkMode()">
-                    <i class="fas fa-moon"></i>
+                <div class="category-content" id="dailyCategory">
+                    <div class="main-missions-section">
+                        <div class="main-missions-header" onclick="toggleMainMissions('daily')">
+                            <span><i class="fas fa-folder"></i> مهام رئيسية</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="main-missions-content" id="dailyMainMissions"></div>
+                    </div>
+                    <div class="category-add-btn" onclick="showAddMainMissionForm('daily')">
+                        <i class="fas fa-plus"></i> إضافة مهمة رئيسية
+                    </div>
                 </div>
             </div>
 
-            <!-- زر إضافة مهمة رئيسية -->
-            <div class="add-main-mission" onclick="showAddMainMissionForm()">
-                <i class="fas fa-plus"></i>
-                <span>إضافة مهمة رئيسية جديدة</span>
+            <!-- التصنيف الأسبوعي -->
+            <div class="mission-category">
+                <div class="category-header" onclick="toggleCategory('weekly')">
+                    <span><i class="fas fa-calendar-week"></i> الأسبوعية</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="category-content" id="weeklyCategory">
+                    <div class="main-missions-section">
+                        <div class="main-missions-header" onclick="toggleMainMissions('weekly')">
+                            <span><i class="fas fa-folder"></i> مهام رئيسية</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="main-missions-content" id="weeklyMainMissions"></div>
+                    </div>
+                    <div class="category-add-btn" onclick="showAddMainMissionForm('weekly')">
+                        <i class="fas fa-plus"></i> إضافة مهمة رئيسية
+                    </div>
+                </div>
             </div>
 
-            <div class="main-missions" id="mainMissionsList">
-                <!-- المهام الرئيسية تتحط هنا -->
+            <!-- التصنيف الشهري -->
+            <div class="mission-category">
+                <div class="category-header" onclick="toggleCategory('monthly')">
+                    <span><i class="fas fa-calendar-alt"></i> الشهرية</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="category-content" id="monthlyCategory">
+                    <div class="main-missions-section">
+                        <div class="main-missions-header" onclick="toggleMainMissions('monthly')">
+                            <span><i class="fas fa-folder"></i> مهام رئيسية</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="main-missions-content" id="monthlyMainMissions"></div>
+                    </div>
+                    <div class="category-add-btn" onclick="showAddMainMissionForm('monthly')">
+                        <i class="fas fa-plus"></i> إضافة مهمة رئيسية
+                    </div>
+                </div>
             </div>
 
-            <!-- زر عرض المهام المكتملة -->
-            <div class="show-completed-btn" onclick="showCompletedMissions()">
-                <i class="fas fa-check-circle"></i>
-                <span>عرض المهام المكتملة</span>
+            <!-- زر المهام المكتملة -->
+            <div class="show-completed-btn" onclick="showCompletedMissionsPage()">
+                <i class="fas fa-check-circle"></i> المهام المكتملة
             </div>
 
-            <!-- قسم الإعدادات -->
+            <!-- الإعدادات -->
             <div class="settings-section">
-                <div class="settings-item" onclick="showStats()">
-                    <i class="fas fa-chart-line"></i>
-                    <span>الإحصائيات</span>
-                </div>
-                <div class="settings-item" onclick="showBadges()">
-                    <i class="fas fa-medal"></i>
-                    <span>الإنجازات</span>
-                </div>
-                <div class="settings-item" onclick="enterFocusMode()">
-                    <i class="fas fa-eye"></i>
-                    <span>وضع التركيز</span>
-                </div>
-                <div class="settings-item" onclick="exportData()">
-                    <i class="fas fa-file-export"></i>
-                    <span>تصدير البيانات</span>
+                <div class="settings-item" onclick="showSettingsPage()">
+                    <i class="fas fa-cog"></i> الإعدادات
                 </div>
             </div>
         </div>
 
-        <!-- ========== المحتوى الرئيسي ========== -->
+        <!-- المحتوى الرئيسي -->
         <div class="main-content" id="mainContent">
-            <!-- صفحة المهام الرئيسية -->
-            <div id="missionsPage" class="page active">
+            <!-- الرسالة التحفيزية -->
+            <div class="welcome-message" id="welcomeMessage">
+                <div class="welcome-title">✨ أنت قادر على النجاح ✨</div>
+            </div>
+
+            <!-- الصفحة الرئيسية -->
+            <div id="homePage" class="page active">
                 <div class="page-header">
-                    <h1>
-                        <i class="fas fa-tasks"></i>
-                        <span id="currentMainTitle">المهام</span>
-                    </h1>
+                    <h1 id="currentMainTitle">وَقُل رَّبِّ زِدْنِي عِلْمًا</h1>
                 </div>
 
-                <!-- نظام البحث والفلترة -->
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="ابحث عن مهمة..." onkeyup="filterTasks()">
-                </div>
-
-                <div class="filter-buttons">
-                    <button class="filter-btn active" onclick="filterBy('all', this)"><i class="fas fa-list"></i> الكل</button>
-                    <button class="filter-btn" onclick="filterBy('high', this)"><i class="fas fa-flag"></i> عالية</button>
-                    <button class="filter-btn" onclick="filterBy('medium', this)"><i class="fas fa-flag"></i> متوسطة</button>
-                    <button class="filter-btn" onclick="filterBy('low', this)"><i class="fas fa-flag"></i> منخفضة</button>
+                <!-- لوحة إضافة مهمة رئيسية -->
+                <div id="addMainMissionPanel" class="add-mission-panel hidden">
+                    <h3 style="margin-bottom: 20px; color: #667eea;">إضافة مهمة رئيسية جديدة</h3>
+                    
+                    <div class="form-group">
+                        <label>عنوان المهمة الرئيسية</label>
+                        <input type="text" id="mainMissionTitle" class="form-control" placeholder="أدخل عنوان المهمة الرئيسية">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>نوع المهمة</label>
+                        <div class="mission-type-selector">
+                            <div class="type-option active" onclick="selectMissionType('daily', this)">يومية</div>
+                            <div class="type-option" onclick="selectMissionType('weekly', this)">أسبوعية</div>
+                            <div class="type-option" onclick="selectMissionType('monthly', this)">شهرية</div>
+                        </div>
+                    </div>
+                    
+                    <div id="deadlineInput" class="deadline-input">
+                        <div class="form-group">
+                            <label id="deadlineLabel">عدد الأيام حتى الموعد النهائي</label>
+                            <input type="number" id="deadlineDays" class="form-control" min="1" max="90" value="7">
+                        </div>
+                    </div>
+                    
+                    <div class="panel-buttons">
+                        <button class="submit-btn" onclick="saveMainMission()"><i class="fas fa-save"></i> حفظ</button>
+                        <button class="cancel-btn" onclick="cancelAddMainMission()"><i class="fas fa-times"></i> إلغاء</button>
+                    </div>
                 </div>
 
                 <!-- لوحة إضافة مهمة فرعية -->
                 <div id="addSubMissionPanel" class="add-mission-panel hidden">
-                    <h3 style="margin-bottom: 20px; color: #667eea;" id="panelTitle">إضافة مهمة جديدة</h3>
+                    <h3 style="margin-bottom: 20px; color: #667eea;" id="subPanelTitle">إضافة مهمة جديدة</h3>
+                    
                     <div class="form-group">
                         <label>عنوان المهمة</label>
                         <input type="text" id="taskTitle" class="form-control" placeholder="أدخل عنوان المهمة">
                     </div>
-                    <div class="form-group">
-                        <label>الوصف</label>
-                        <textarea id="taskDescription" class="form-control" placeholder="أدخل وصف المهمة" rows="2"></textarea>
-                    </div>
+                    
                     <div class="form-group">
                         <label>المدة المتوقعة</label>
                         <input type="text" id="taskTime" class="form-control" placeholder="مثال: 2 ساعات">
                     </div>
-                    <div class="form-group">
-                        <label>الأولوية</label>
-                        <div class="priority-selector">
-                            <div class="priority-option high" onclick="setPriority('high', this)">عالية</div>
-                            <div class="priority-option medium active" onclick="setPriority('medium', this)">متوسطة</div>
-                            <div class="priority-option low" onclick="setPriority('low', this)">منخفضة</div>
-                        </div>
-                    </div>
                     
-                    <!-- نظام النقاط الفرعية -->
                     <div class="form-group">
-                        <label>نقاط المهمة (Subtasks)</label>
-                        <div id="subtasksContainer">
-                            <!-- النقاط الفرعية تتحط هنا بالجافاسكريبت -->
-                        </div>
+                        <label>نقاط المهمة</label>
+                        <div id="subtasksContainer"></div>
                         <div class="add-subtask-input">
                             <input type="text" id="newSubtaskInput" placeholder="أضف نقطة جديدة...">
                             <button class="add-subtask-btn" onclick="addSubtaskField()">+</button>
                         </div>
                     </div>
-
-                    <div class="panel-buttons">
-                        <button class="submit-btn" id="submitBtn" onclick="saveSubMission()">
-                            <i class="fas fa-save"></i>
-                            <span id="submitBtnText">حفظ</span>
-                        </button>
-                        <button class="cancel-btn" onclick="cancelAddMission()">
-                            <i class="fas fa-times"></i>
-                            إلغاء
-                        </button>
-                    </div>
-                </div>
-
-                <div class="sub-missions-grid" id="subMissionsGrid">
-                    <!-- المهام الفرعية تتحط هنا -->
-                </div>
-            </div>
-
-            <!-- صفحة الإحصائيات الجديدة -->
-            <div id="statsPage" class="page">
-                <div class="page-header">
-                    <h1>
-                        <i class="fas fa-chart-line"></i>
-                        <span>الإحصائيات</span>
-                    </h1>
-                    <button class="back-btn" onclick="backToMissions()">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-trophy"></i>
-                        </div>
-                        <div class="stat-value" id="statScore">0</div>
-                        <div class="stat-label">🏆 Score</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-check-circle"></i>
-                        </div>
-                        <div class="stat-value" id="statCompletedToday">0</div>
-                        <div class="stat-label">مهام مكتملة اليوم</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <div class="stat-value" id="statPending">0</div>
-                        <div class="stat-label">قيد التنفيذ</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-fire"></i>
-                        </div>
-                        <div class="stat-value" id="statStreak">0</div>
-                        <div class="stat-label">أيام متتالية</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <div class="stat-value" id="statLevel">1</div>
-                        <div class="stat-label">المستوى</div>
-                    </div>
-                </div>
-
-                <!-- نظام الأيام -->
-                <div class="days-container" id="daysContainer">
-                    <!-- الأيام تتحط هنا بالجافاسكريبت -->
-                </div>
-
-                <!-- تفاصيل اليوم المختار -->
-                <div class="day-details" id="dayDetails">
-                    <div class="day-header">
-                        <span class="day-title" id="selectedDayTitle">السبت</span>
-                        <div class="day-navigation">
-                            <button class="nav-day-btn" onclick="navigateDay('prev')">← أمس</button>
-                            <button class="nav-day-btn" onclick="navigateDay('next')">غداً →</button>
-                        </div>
-                    </div>
                     
-                    <div class="day-tasks-section">
-                        <div class="day-tasks-title completed-tasks-title">
-                            <i class="fas fa-check-circle"></i>
-                            <span>المهام المكتملة</span>
-                        </div>
-                        <div id="completedTasksDay"></div>
+                    <div class="panel-buttons">
+                        <button class="submit-btn" id="submitBtn" onclick="saveSubMission()"><i class="fas fa-save"></i> <span id="submitBtnText">حفظ</span></button>
+                        <button class="cancel-btn" onclick="cancelAddMission()"><i class="fas fa-times"></i> إلغاء</button>
                     </div>
+                </div>
 
-                    <div class="day-tasks-section">
-                        <div class="day-tasks-title pending-tasks-title">
-                            <i class="fas fa-clock"></i>
-                            <span>المهام المتبقية</span>
+                <!-- شبكة المهام الفرعية -->
+                <div class="sub-missions-grid" id="subMissionsGrid"></div>
+            </div>
+
+            <!-- صفحة الملف الشخصي -->
+            <div id="profilePage" class="page">
+                <div class="page-header">
+                    <h1><i class="fas fa-user-circle"></i> الملف الشخصي</h1>
+                    <button class="back-btn" onclick="backToHome()"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="profile-page">
+                    <div class="profile-card">
+                        <div class="profile-avatar" id="profileAvatar">🧑</div>
+                        <div class="profile-name" id="profileName">زائر</div>
+                        <div class="profile-bio" id="profileBio">عضو في Mission Master</div>
+                        
+                        <div class="profile-stats">
+                            <div>
+                                <div class="stat-value" id="statTasks">0</div>
+                                <div class="stat-label">مهام مكتملة</div>
+                            </div>
+                            <div>
+                                <div class="stat-value" id="statScore">0</div>
+                                <div class="stat-label">🏆 نقاط</div>
+                            </div>
+                            <div>
+                                <div class="stat-value" id="statStreak">0</div>
+                                <div class="stat-label">أيام متتالية</div>
+                            </div>
                         </div>
-                        <div id="pendingTasksDay"></div>
-                    </div>
-
-                    <div class="day-score">
-                        <div>إجمالي Score اليوم</div>
-                        <div class="day-score-value" id="dayScore">0</div>
+                        
+                        <div class="profile-info">
+                            <div class="info-row">
+                                <i class="fas fa-graduation-cap"></i>
+                                <span id="infoGrade">لم يحدد</span>
+                            </div>
+                            <div class="info-row">
+                                <i class="fas fa-birthday-cake"></i>
+                                <span id="infoAge">-- سنة</span>
+                            </div>
+                            <div class="info-row">
+                                <i class="fas fa-calendar-check"></i>
+                                <span id="infoJoined">منذ اليوم</span>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-actions">
+                            <button class="profile-btn edit-btn" onclick="showEditProfileModal()"><i class="fas fa-edit"></i> تعديل الملف</button>
+                            <button class="profile-btn logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> تسجيل خروج</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- صفحة الإنجازات -->
-            <div id="badgesPage" class="page">
+            <!-- صفحة الإعدادات -->
+            <div id="settingsPage" class="page">
                 <div class="page-header">
-                    <h1>
-                        <i class="fas fa-medal"></i>
-                        <span>الإنجازات</span>
-                    </h1>
-                    <button class="back-btn" onclick="backToMissions()">
-                        <i class="fas fa-times"></i>
-                    </button>
+                    <h1><i class="fas fa-cog"></i> الإعدادات</h1>
+                    <button class="back-btn" onclick="backToHome()"><i class="fas fa-times"></i></button>
                 </div>
-
-                <div class="level-progress">
-                    <div class="level-header">
-                        <span class="level-title">المستوى <span id="currentLevel">1</span></span>
-                        <span class="level-xp"><span id="currentXP">0</span>/<span id="nextLevelXP">100</span> XP</span>
+                <div class="settings-page">
+                    <div class="settings-group">
+                        <h2><i class="fas fa-key"></i> الأكواد السرية</h2>
+                        <div class="code-section">
+                            <button class="code-button" onclick="toggleCodeInput()"><i class="fas fa-key"></i> فك الرمز</button>
+                            <div id="codeInputContainer" style="display: none;" class="code-input-container">
+                                <div style="margin-bottom: 10px; color: #667eea;">أدخل الرمز المكون من 6 أحرف</div>
+                                <input type="text" id="codeInput" class="code-input" maxlength="6" placeholder="******">
+                                <div style="display: flex; gap: 10px; justify-content: center;">
+                                    <button onclick="decodeCode()" class="modal-btn primary">تأكيد</button>
+                                    <button onclick="hideCodeInput()" class="modal-btn secondary">إلغاء</button>
+                                </div>
+                                <div id="codeResult" style="margin-top: 20px; width: 100%;"></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="xp-bar">
-                        <div class="xp-fill" id="xpBar" style="width: 0%"></div>
-                    </div>
-                </div>
-
-                <div class="badges-grid" id="badgesGrid">
-                    <!-- الشارات تتحط هنا -->
                 </div>
             </div>
 
             <!-- صفحة المهام المكتملة -->
             <div id="completedPage" class="page">
                 <div class="page-header">
-                    <h1>
-                        <i class="fas fa-check-circle"></i>
-                        <span>المهام المكتملة</span>
-                    </h1>
-                    <button class="back-btn" onclick="backToMissions()">
-                        <i class="fas fa-times"></i>
-                    </button>
+                    <h1><i class="fas fa-check-circle"></i> المهام المكتملة</h1>
+                    <button class="back-btn" onclick="backToHome()"><i class="fas fa-times"></i></button>
                 </div>
-
-                <div class="completed-missions-page" id="completedTasksList">
-                    <!-- المهام المكتملة تتحط هنا -->
-                </div>
+                <div id="completedTasksList" class="completed-missions-page"></div>
             </div>
         </div>
 
-        <!-- زر الإضافة + تحت الشمال فقط -->
-        <button class="floating-add-btn" onclick="showAddSubMissionForm()">
-            <i class="fas fa-plus"></i>
-        </button>
+        <!-- الأزرار السفلية -->
+        <div class="bottom-buttons">
+            <button class="floating-add-btn" onclick="showAddSubMissionForm()"><i class="fas fa-plus"></i></button>
+            <button class="alarm-button" onclick="toggleAlarm()"><i class="fas fa-clock"></i></button>
+        </div>
 
         <!-- مؤشر التقدم -->
         <div class="progress-indicator">
@@ -2046,547 +1774,684 @@
 
     <!-- رسالة نجاح -->
     <div id="successMessage" style="display: none;" class="success-message">
-        <i class="fas fa-check-circle"></i>
-        <span id="messageText">تمت الإضافة بنجاح</span>
+        <i class="fas fa-check-circle"></i> <span id="messageText">تمت الإضافة بنجاح</span>
     </div>
 
     <script>
-        // ============ PWA Service Worker Registration ============
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').then(registration => {
-                    console.log('ServiceWorker registered');
-                    
-                    // Check if app is installable
-                    window.addEventListener('beforeinstallprompt', (e) => {
-                        e.preventDefault();
-                        window.deferredPrompt = e;
-                        document.getElementById('installPrompt').style.display = 'flex';
-                    });
-                });
-            });
-        }
+        // بيانات المستخدم
+        let userData = {
+            name: 'زائر',
+            grade: '',
+            age: '',
+            avatar: '🧑',
+            email: '',
+            joinedDate: new Date().toISOString(),
+            stats: {
+                completedTasks: 0,
+                score: 0,
+                streak: 0
+            }
+        };
 
-        // Install PWA
-        document.getElementById('installButton').addEventListener('click', async () => {
-            const promptEvent = window.deferredPrompt;
-            if (!promptEvent) return;
-            
-            promptEvent.prompt();
-            const result = await promptEvent.userChoice;
-            window.deferredPrompt = null;
-            document.getElementById('installPrompt').style.display = 'none';
-        });
+        // المهام
+        let missions = {
+            daily: {},
+            weekly: {},
+            monthly: {}
+        };
 
-        // ============ قاعدة البيانات ============
-        let missions = {};
+        // الحالة الحالية
+        let currentCategory = 'daily';
         let currentMainMission = null;
-        let currentMainTitle = "المهام";
-        let nextTaskId = 1;
-        let currentPriority = "medium";
         
-        // ============ نظام النقاط والمستويات ==========
-        let userScore = 0;
-        let userXP = 0;
-        let userLevel = 1;
-        let streak = 0;
-        let lastActiveDate = null;
+        // متغيرات المؤقت
+        let timerSeconds = 1500;
+        let timerRunning = false;
+        let timerMode = 'countdown';
+        let timerInterval = null;
         
-        // ============ بيانات الأيام ==========
-        let selectedDay = new Date().getDay(); // 0 = الأحد, 1 = الاثنين, ... 6 = السبت
-        let dailyData = {};
+        // الإشعارات والمهام المكتملة
+        let notifications = [];
+        let completedTasks = [];
         
-        const daysOfWeek = [
-            "الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"
-        ];
-        
-        const badges = [
-            { id: 1, name: "البداية", icon: "fa-star", desc: "أكمل أول مهمة", xpRequired: 10, unlocked: false },
-            { id: 2, name: "المثابرة", icon: "fa-fire", desc: "أكمل 10 مهام", xpRequired: 50, unlocked: false },
-            { id: 3, name: "المحترف", icon: "fa-crown", desc: "أكمل 50 مهمة", xpRequired: 200, unlocked: false },
-            { id: 4, name: "الأسطورة", icon: "fa-dragon", desc: "أكمل 100 مهمة", xpRequired: 500, unlocked: false }
-        ];
-
-        // ============ نظام التعديل ==========
+        // حقول النقاط الفرعية
+        let subtaskFields = [];
         let editingTaskId = null;
         let editingMissionId = null;
+        let nextTaskId = 1;
+        
+        // الأكواد السرية
+        let secretCodes = [];
 
-        // ============ وضع التركيز ==========
-        let focusTimer = null;
-        let focusTimeLeft = 25 * 60;
-        let focusRunning = false;
+        // تحميل الأكواد السرية من localStorage
+        function loadSecretCodes() {
+            let saved = localStorage.getItem('secretCodes');
+            if (saved) {
+                secretCodes = JSON.parse(saved);
+            } else {
+                // الأكواد الافتراضية
+                secretCodes = [
+                    { code: '#0080#', message: 'عمك بكر بيمسي عليك يلا ذاكر', icon: 'fa-book' },
+                    { code: '#9912#', message: 'اللهم صل وسلم على سيدنا ومولانا رسول الله', icon: 'fa-mosque' },
+                    { code: '#12345#', message: 'ذاكر يا دوك عين شمس تنتظرك', icon: 'fa-graduation-cap' },
+                    { code: '*000#', message: 'ذاكري عشان العيد ميبقاش فيه كحكين 👀', icon: 'fa-star' }
+                ];
+                localStorage.setItem('secretCodes', JSON.stringify(secretCodes));
+            }
+        }
 
-        function enterFocusMode() {
-            document.body.classList.add('focus-mode');
-            document.getElementById('focusMode').style.display = 'flex';
-            
-            if (currentMainMission && missions[currentMainMission]) {
-                const activeTask = missions[currentMainMission].tasks.find(t => !t.completed);
-                if (activeTask) {
-                    document.getElementById('focusTask').textContent = activeTask.title;
+        // حفظ جميع المستخدمين
+        function saveUserToList() {
+            if (userData.name !== 'زائر') {
+                let allUsers = localStorage.getItem('allUsers');
+                allUsers = allUsers ? JSON.parse(allUsers) : [];
+                
+                if (!allUsers.find(u => u.email === userData.email)) {
+                    allUsers.push({
+                        id: Date.now(),
+                        name: userData.name,
+                        email: userData.email || 'user' + Date.now() + '@example.com',
+                        grade: userData.grade,
+                        tasks: userData.stats.completedTasks,
+                        score: userData.stats.score,
+                        status: 'online',
+                        lastSeen: 'الآن'
+                    });
+                    localStorage.setItem('allUsers', JSON.stringify(allUsers));
                 }
             }
-            closeNav();
         }
 
-        function exitFocusMode() {
-            document.body.classList.remove('focus-mode');
-            document.getElementById('focusMode').style.display = 'none';
-            pauseFocusTimer();
-            resetFocusTimer();
+        // دالة الصوت
+        function playSound() {
+            try {
+                let a = new (window.AudioContext || window.webkitAudioContext)();
+                let o = a.createOscillator();
+                let g = a.createGain();
+                o.type = 'sine';
+                o.frequency.value = 880;
+                g.gain.value = 0.1;
+                o.connect(g);
+                g.connect(a.destination);
+                o.start();
+                o.stop(a.currentTime + 0.2);
+                setTimeout(() => {
+                    let o2 = a.createOscillator();
+                    let g2 = a.createGain();
+                    o2.type = 'sine';
+                    o2.frequency.value = 440;
+                    g2.gain.value = 0.1;
+                    o2.connect(g2);
+                    g2.connect(a.destination);
+                    o2.start();
+                    o2.stop(a.currentTime + 0.2);
+                }, 200);
+            } catch (e) { }
         }
 
-        function startFocusTimer() {
-            if (focusRunning) return;
-            focusRunning = true;
-            focusTimer = setInterval(() => {
-                if (focusTimeLeft > 0) {
-                    focusTimeLeft--;
-                    updateFocusDisplay();
-                } else {
-                    pauseFocusTimer();
-                    showMessage("🎉 وقت التركيز انتهى");
-                    addXP(5);
-                }
-            }, 1000);
+        function playAlarm(d) {
+            let s = Date.now();
+            let i = setInterval(() => {
+                playSound();
+                if (Date.now() - s >= d) clearInterval(i);
+            }, 200);
         }
 
-        function pauseFocusTimer() {
-            clearInterval(focusTimer);
-            focusRunning = false;
+        // نافذة التسجيل
+        function showAuthModal() {
+            document.getElementById('authModal').classList.add('show');
         }
 
-        function resetFocusTimer() {
-            pauseFocusTimer();
-            focusTimeLeft = 25 * 60;
-            updateFocusDisplay();
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.remove('show');
         }
 
-        function updateFocusDisplay() {
-            const minutes = Math.floor(focusTimeLeft / 60);
-            const seconds = focusTimeLeft % 60;
-            document.getElementById('focusTimer').textContent = 
-                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        }
-
-        // ============ نظام Score ==========
-        function calculateTaskScore(subtasks) {
-            const count = subtasks ? subtasks.length : 0;
-            if (count < 3) return 20;
-            if (count <= 5) return 30;
-            return 35 + ((count - 5) * 5);
-        }
-
-        function addScore(amount) {
-            userScore += amount;
-            addXP(amount);
-            saveToStorage();
-            updateStatsPage();
-        }
-
-        // ============ نظام XP والمستويات ==========
-        function addXP(amount) {
-            userXP += amount;
-            const newLevel = Math.floor(userXP / 100) + 1;
-            if (newLevel > userLevel) {
-                userLevel = newLevel;
-                showMessage(`🥳 وصلت للمستوى ${userLevel}`);
-            }
-            updateBadges();
-            saveToStorage();
-        }
-
-        function updateBadges() {
-            badges.forEach(badge => {
-                if (!badge.unlocked && userXP >= badge.xpRequired) {
-                    badge.unlocked = true;
-                    showMessage(`🏆 فتحت شارة: ${badge.name}`);
-                }
+        // اختيار الصورة الرمزية
+        document.querySelectorAll('#avatarSelector .avatar-option').forEach(o => {
+            o.addEventListener('click', function () {
+                document.querySelectorAll('#avatarSelector .avatar-option').forEach(x => x.classList.remove('selected'));
+                this.classList.add('selected');
             });
-            renderBadges();
-        }
+        });
 
-        function renderBadges() {
-            const grid = document.getElementById('badgesGrid');
-            grid.innerHTML = badges.map(badge => `
-                <div class="badge-card ${badge.unlocked ? 'unlocked' : 'locked'}">
-                    <div class="badge-icon">
-                        <i class="fas ${badge.icon}"></i>
-                    </div>
-                    <div class="badge-title">${badge.name}</div>
-                    <div class="badge-desc">${badge.desc}</div>
-                    <div class="badge-progress">${badge.unlocked ? '✅ مفتوحة' : `${badge.xpRequired} XP`}</div>
-                </div>
-            `).join('');
-        }
-
-        // ============ نظام الأيام ==========
-        function initDailyData() {
-            const today = new Date().toDateString();
-            if (!dailyData[today]) {
-                dailyData[today] = {
-                    date: today,
-                    completed: [],
-                    pending: [],
-                    score: 0
-                };
-            }
-        }
-
-        function updateDailyData(task, completed) {
-            const today = new Date().toDateString();
-            initDailyData();
-            
-            if (completed) {
-                if (!dailyData[today].completed.includes(task.id)) {
-                    dailyData[today].completed.push(task.id);
-                    dailyData[today].score += task.score || 0;
-                }
-                // شيل من pending لو كان موجود
-                dailyData[today].pending = dailyData[today].pending.filter(id => id !== task.id);
-            } else {
-                if (!dailyData[today].pending.includes(task.id)) {
-                    dailyData[today].pending.push(task.id);
-                }
-                // شيل من completed لو كان موجود
-                dailyData[today].completed = dailyData[today].completed.filter(id => id !== task.id);
-            }
-            
-            saveToStorage();
-        }
-
-        function renderDays() {
-            const container = document.getElementById('daysContainer');
-            const today = new Date();
-            
-            let html = '';
-            for (let i = 0; i < 7; i++) {
-                const date = new Date(today);
-                date.setDate(today.getDate() - today.getDay() + i + 1); // نبدأ من السبت
-                
-                const dayIndex = date.getDay();
-                const dayName = daysOfWeek[dayIndex];
-                const dateStr = date.toDateString();
-                const dayData = dailyData[dateStr] || { completed: [], pending: [], score: 0 };
-                
-                html += `
-                    <div class="day-card ${selectedDay === dayIndex ? 'active' : ''}" onclick="selectDay(${dayIndex})">
-                        <div class="day-name">${dayName}</div>
-                        <div class="day-date">${date.getDate()}/${date.getMonth() + 1}</div>
-                        <div class="day-stats">
-                            <span class="day-completed">✅ ${dayData.completed.length}</span>
-                            <span class="day-pending">⏳ ${dayData.pending.length}</span>
-                        </div>
-                    </div>
-                `;
-            }
-            
-            container.innerHTML = html;
-        }
-
-        function selectDay(dayIndex) {
-            selectedDay = dayIndex;
-            renderDays();
-            renderDayDetails(dayIndex);
-        }
-
-        function renderDayDetails(dayIndex) {
-            const today = new Date();
-            const date = new Date(today);
-            date.setDate(today.getDate() - today.getDay() + dayIndex + 1);
-            
-            const dateStr = date.toDateString();
-            const dayData = dailyData[dateStr] || { completed: [], pending: [], score: 0 };
-            
-            document.getElementById('selectedDayTitle').textContent = daysOfWeek[dayIndex];
-            
-            // عرض المهام المكتملة
-            const completedDiv = document.getElementById('completedTasksDay');
-            const completedTasks = [];
-            for (let mission in missions) {
-                missions[mission].tasks.forEach(task => {
-                    if (dayData.completed.includes(task.id)) {
-                        completedTasks.push({...task, missionTitle: missions[mission].title});
-                    }
-                });
-            }
-            
-            if (completedTasks.length === 0) {
-                completedDiv.innerHTML = '<p style="color: #888; text-align: center;">لا توجد مهام مكتملة</p>';
-            } else {
-                completedDiv.innerHTML = completedTasks.map(task => `
-                    <div class="day-task-item completed">
-                        <div class="day-task-icon"><i class="fas fa-check"></i></div>
-                        <div class="day-task-title">${task.title}</div>
-                        <span class="day-task-status status-completed">مكتملة</span>
-                    </div>
-                `).join('');
-            }
-            
-            // عرض المهام المتبقية
-            const pendingDiv = document.getElementById('pendingTasksDay');
-            const pendingTasks = [];
-            for (let mission in missions) {
-                missions[mission].tasks.forEach(task => {
-                    if (dayData.pending.includes(task.id)) {
-                        pendingTasks.push({...task, missionTitle: missions[mission].title});
-                    }
-                });
-            }
-            
-            if (pendingTasks.length === 0) {
-                pendingDiv.innerHTML = '<p style="color: #888; text-align: center;">لا توجد مهام متبقية</p>';
-            } else {
-                pendingDiv.innerHTML = pendingTasks.map(task => `
-                    <div class="day-task-item pending">
-                        <div class="day-task-icon"><i class="fas fa-clock"></i></div>
-                        <div class="day-task-title">${task.title}</div>
-                        <span class="day-task-status status-pending">متبقية</span>
-                    </div>
-                `).join('');
-            }
-            
-            document.getElementById('dayScore').textContent = dayData.score;
-        }
-
-        function navigateDay(direction) {
-            if (direction === 'prev') {
-                selectedDay = (selectedDay - 1 + 7) % 7;
-            } else {
-                selectedDay = (selectedDay + 1) % 7;
-            }
-            renderDays();
-            renderDayDetails(selectedDay);
-        }
-
-        // ============ نظام النقاط الفرعية ==========
-        let subtaskFields = [];
-
-        function addSubtaskField(value = '') {
-            const container = document.getElementById('subtasksContainer');
-            const index = subtaskFields.length;
-            subtaskFields.push(value);
-            
-            const fieldHtml = `
-                <div class="subtask-item" id="subtask-${index}">
-                    <input type="checkbox" class="subtask-checkbox" disabled>
-                    <input type="text" class="form-control" value="${value}" placeholder="نقطة ${index + 1}" style="flex: 1;" onchange="updateSubtaskValue(${index}, this.value)">
-                    <i class="fas fa-trash subtask-delete" onclick="removeSubtaskField(${index})"></i>
-                </div>
-            `;
-            
-            container.insertAdjacentHTML('beforeend', fieldHtml);
-        }
-
-        function updateSubtaskValue(index, value) {
-            subtaskFields[index] = value;
-        }
-
-        function removeSubtaskField(index) {
-            subtaskFields.splice(index, 1);
-            renderSubtaskFields();
-        }
-
-        function renderSubtaskFields() {
-            const container = document.getElementById('subtasksContainer');
-            container.innerHTML = '';
-            subtaskFields.forEach((value, index) => {
-                const fieldHtml = `
-                    <div class="subtask-item" id="subtask-${index}">
-                        <input type="checkbox" class="subtask-checkbox" disabled>
-                        <input type="text" class="form-control" value="${value}" placeholder="نقطة ${index + 1}" style="flex: 1;" onchange="updateSubtaskValue(${index}, this.value)">
-                        <i class="fas fa-trash subtask-delete" onclick="removeSubtaskField(${index})"></i>
-                    </div>
-                `;
-                container.insertAdjacentHTML('beforeend', fieldHtml);
+        document.querySelectorAll('#editAvatarSelector .avatar-option').forEach(o => {
+            o.addEventListener('click', function () {
+                document.querySelectorAll('#editAvatarSelector .avatar-option').forEach(x => x.classList.remove('selected'));
+                this.classList.add('selected');
             });
-        }
+        });
 
-        // ============ البحث والفلترة ==========
-        let currentFilter = 'all';
-        let searchTerm = '';
+        // حفظ الملف الشخصي
+        function saveUserProfile() {
+            let n = document.getElementById('userName').value.trim();
+            let g = document.getElementById('userGrade').value;
+            let a = document.getElementById('userAge').value;
+            let av = document.querySelector('#avatarSelector .avatar-option.selected').dataset.avatar;
 
-        function filterBy(filter, element) {
-            currentFilter = filter;
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            element.classList.add('active');
-            filterTasks();
-        }
-
-        function filterTasks() {
-            searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            if (!currentMainMission || !missions[currentMainMission]) return;
-            
-            const cards = document.querySelectorAll('.sub-mission-card');
-            cards.forEach(card => {
-                const title = card.querySelector('.card-title').textContent.toLowerCase();
-                const priority = card.classList.contains('priority-high') ? 'high' : 
-                               card.classList.contains('priority-medium') ? 'medium' : 'low';
-                
-                let showBySearch = title.includes(searchTerm);
-                let showByFilter = currentFilter === 'all' || currentFilter === priority;
-                
-                card.style.display = showBySearch && showByFilter ? 'block' : 'none';
-            });
-        }
-
-        // ============ وظائف الناف بار ==========
-        function openNav() {
-            document.getElementById('navBar').classList.add('open');
-        }
-
-        function closeNav() {
-            document.getElementById('navBar').classList.remove('open');
-        }
-
-        // ============ عرض المهام الرئيسية ==========
-        function renderMainMissions() {
-            const list = document.getElementById('mainMissionsList');
-            
-            if (Object.keys(missions).length === 0) {
-                list.innerHTML = '<div style="text-align: center; padding: 30px; color: #888;">لا توجد مهام رئيسية<br>اضغط على "إضافة مهمة رئيسية جديدة" للبدء</div>';
+            if (!n) {
+                showMessage('❌ الرجاء إدخال الاسم');
                 return;
             }
+
+            userData = {
+                ...userData,
+                name: n,
+                grade: g || 'لم يحدد',
+                age: a || '--',
+                avatar: av,
+                email: 'user' + Date.now() + '@example.com'
+            };
+
+            updateUI();
+            saveUserToList();
+            closeAuthModal();
+            showMessage(`✨ مرحباً ${n}!`);
+        }
+
+        // تحديث الواجهة
+        function updateUI() {
+            document.getElementById('userNameDisplay').textContent = userData.name;
+            document.getElementById('userAvatar').innerHTML = userData.avatar;
+            document.getElementById('profileAvatar').textContent = userData.avatar;
+            document.getElementById('profileName').textContent = userData.name;
+            document.getElementById('profileBio').textContent = userData.grade ? `طالب في ${userData.grade}` : 'عضو في Mission Master';
+            document.getElementById('infoGrade').textContent = userData.grade || 'لم يحدد';
+            document.getElementById('infoAge').textContent = userData.age + ' سنة';
+            document.getElementById('infoJoined').textContent = new Date(userData.joinedDate).toLocaleDateString('ar-EG');
+
+            document.getElementById('statTasks').textContent = userData.stats.completedTasks;
+            document.getElementById('statScore').textContent = userData.stats.score;
+            document.getElementById('statStreak').textContent = userData.stats.streak;
+        }
+
+        // التنقل
+        function toggleNav() {
+            document.getElementById('navBar').classList.toggle('open');
+        }
+
+        function toggleCategory(c) {
+            let el = document.getElementById(c + 'Category');
+            let h = el.previousElementSibling;
+            el.classList.toggle('open');
+            h.classList.toggle('open');
+        }
+
+        function toggleMainMissions(c) {
+            let el = document.getElementById(c + 'MainMissions');
+            let h = el.previousElementSibling;
+            el.classList.toggle('open');
+            h.classList.toggle('open');
+        }
+
+        function showProfilePage() {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('profilePage').classList.add('active');
+            document.getElementById('welcomeMessage').style.display = 'none';
+            toggleNav();
+        }
+
+        function showSettingsPage() {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('settingsPage').classList.add('active');
+            document.getElementById('welcomeMessage').style.display = 'none';
+            toggleNav();
+        }
+
+        function showCompletedMissionsPage() {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('completedPage').classList.add('active');
+            document.getElementById('welcomeMessage').style.display = 'none';
+            renderCompletedTasks();
+            toggleNav();
+        }
+
+        function backToHome() {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('homePage').classList.add('active');
+            if (!currentMainMission) {
+                document.getElementById('welcomeMessage').style.display = 'block';
+            }
+        }
+
+        // تعديل الملف الشخصي
+        function showEditProfileModal() {
+            document.getElementById('editName').value = userData.name;
+            document.getElementById('editGrade').value = userData.grade || '';
+            document.getElementById('editAge').value = userData.age || '';
             
-            list.innerHTML = '';
-            
-            Object.values(missions).forEach(mission => {
-                const taskCount = mission.tasks.length;
-                const completedCount = mission.tasks.filter(t => t.completed).length;
-                
-                list.innerHTML += `
-                    <div class="main-mission-item">
-                        <div class="main-mission-header ${mission.id === currentMainMission ? 'active' : ''}" onclick="selectMainMission('${mission.id}')">
-                            <div class="main-mission-icon">
-                                <i class="fas ${mission.icon}"></i>
-                            </div>
-                            <span class="main-mission-title">${mission.title}</span>
-                            <span class="main-mission-count">${completedCount}/${taskCount}</span>
-                            <i class="fas fa-trash delete-main-mission" onclick="deleteMainMission('${mission.id}', event)"></i>
-                        </div>
-                        <div class="sub-missions">
-                            ${mission.tasks.slice(0, 3).map(task => `
-                                <div class="sub-mission-item ${task.completed ? 'completed' : ''}">
-                                    <i class="fas fa-circle"></i>
-                                    <span>${task.title}</span>
-                                </div>
-                            `).join('')}
-                            ${mission.tasks.length > 3 ? '<div style="color: #888; font-size: 0.8rem; padding-right: 25px;">...</div>' : ''}
-                        </div>
-                    </div>
-                `;
+            document.querySelectorAll('#editAvatarSelector .avatar-option').forEach(opt => {
+                opt.classList.remove('selected');
+                if (opt.dataset.avatar === userData.avatar) {
+                    opt.classList.add('selected');
+                }
             });
-        }
-
-        // ============ اختيار مهمة رئيسية ==========
-        function selectMainMission(missionId) {
-            currentMainMission = missionId;
-            currentMainTitle = missions[missionId].title;
-            document.getElementById('currentMainTitle').textContent = currentMainTitle;
             
-            renderMainMissions();
-            renderSubMissions(missionId);
-            showMissionsPage();
-            closeNav();
+            document.getElementById('editProfileModal').classList.add('show');
         }
 
-        // ============ إضافة مهمة رئيسية جديدة ==========
-        function showAddMainMissionForm() {
-            const title = prompt("أدخل اسم المهمة الرئيسية الجديدة:");
-            if (title) {
-                const icon = prompt("أدخل اسم الأيقونة (مثال: fa-briefcase, fa-calendar, fa-bullseye):", "fa-folder");
-                const newId = 'mission' + Date.now();
-                
-                missions[newId] = {
-                    id: newId,
-                    title: title,
-                    icon: icon || "fa-folder",
-                    tasks: []
+        function closeEditProfileModal() {
+            document.getElementById('editProfileModal').classList.remove('show');
+        }
+
+        function saveProfileChanges() {
+            let n = document.getElementById('editName').value.trim();
+            let g = document.getElementById('editGrade').value;
+            let a = document.getElementById('editAge').value;
+            let av = document.querySelector('#editAvatarSelector .avatar-option.selected').dataset.avatar;
+
+            if (!n) {
+                showMessage('❌ الرجاء إدخال الاسم');
+                return;
+            }
+
+            userData = {
+                ...userData,
+                name: n,
+                grade: g || 'لم يحدد',
+                age: a || '--',
+                avatar: av
+            };
+
+            updateUI();
+            saveUserToList();
+            closeEditProfileModal();
+            showMessage('✅ تم تحديث الملف الشخصي');
+        }
+
+        function logout() {
+            if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
+                userData = {
+                    name: 'زائر',
+                    grade: '',
+                    age: '',
+                    avatar: '🧑',
+                    email: '',
+                    joinedDate: new Date().toISOString(),
+                    stats: userData.stats
+                };
+                updateUI();
+                backToHome();
+                showMessage('👋 تم تسجيل الخروج');
+            }
+        }
+
+        // اختيار نوع المهمة
+        function selectMissionType(type, el) {
+            currentMissionType = type;
+            document.querySelectorAll('.type-option').forEach(opt => opt.classList.remove('active'));
+            el.classList.add('active');
+            
+            let deadlineInput = document.getElementById('deadlineInput');
+            let deadlineLabel = document.getElementById('deadlineLabel');
+            
+            if (type === 'daily') {
+                deadlineInput.classList.remove('show');
+            } else if (type === 'weekly') {
+                deadlineInput.classList.add('show');
+                deadlineLabel.textContent = 'عدد الأيام حتى الموعد (1-30 يوم)';
+                document.getElementById('deadlineDays').max = 30;
+                document.getElementById('deadlineDays').value = 7;
+            } else if (type === 'monthly') {
+                deadlineInput.classList.add('show');
+                deadlineLabel.textContent = 'عدد الأيام حتى الموعد (1-90 يوم)';
+                document.getElementById('deadlineDays').max = 90;
+                document.getElementById('deadlineDays').value = 30;
+            }
+        }
+
+        // إضافة مهمة رئيسية
+        let currentMissionType = 'daily';
+
+        function showAddMainMissionForm(category) {
+            currentMissionType = category;
+            document.getElementById('mainMissionTitle').value = '';
+            
+            document.querySelectorAll('.type-option').forEach(opt => opt.classList.remove('active'));
+            if (category === 'daily') {
+                document.querySelector('.type-option:nth-child(1)').classList.add('active');
+                document.getElementById('deadlineInput').classList.remove('show');
+            } else if (category === 'weekly') {
+                document.querySelector('.type-option:nth-child(2)').classList.add('active');
+                document.getElementById('deadlineInput').classList.add('show');
+                document.getElementById('deadlineLabel').textContent = 'عدد الأيام حتى الموعد (1-30 يوم)';
+                document.getElementById('deadlineDays').max = 30;
+                document.getElementById('deadlineDays').value = 7;
+            } else if (category === 'monthly') {
+                document.querySelector('.type-option:nth-child(3)').classList.add('active');
+                document.getElementById('deadlineInput').classList.add('show');
+                document.getElementById('deadlineLabel').textContent = 'عدد الأيام حتى الموعد (1-90 يوم)';
+                document.getElementById('deadlineDays').max = 90;
+                document.getElementById('deadlineDays').value = 30;
+            }
+            
+            document.getElementById('addMainMissionPanel').classList.remove('hidden');
+        }
+
+        function cancelAddMainMission() {
+            document.getElementById('addMainMissionPanel').classList.add('hidden');
+        }
+
+        function saveMainMission() {
+            let title = document.getElementById('mainMissionTitle').value.trim();
+            if (!title) {
+                showMessage('❌ الرجاء إدخال عنوان المهمة');
+                return;
+            }
+
+            let missionId = 'm' + Date.now();
+            let deadline = null;
+            
+            if (currentMissionType !== 'daily') {
+                let days = parseInt(document.getElementById('deadlineDays').value) || 7;
+                let deadlineDate = new Date();
+                deadlineDate.setDate(deadlineDate.getDate() + days);
+                deadline = {
+                    days: days,
+                    date: deadlineDate.toISOString(),
+                    message: `موعد المهمة "${title}" بعد ${days} أيام`
                 };
                 
-                if (!currentMainMission) {
-                    currentMainMission = newId;
-                    currentMainTitle = title;
-                    document.getElementById('currentMainTitle').textContent = title;
-                }
-                
-                renderMainMissions();
-                if (currentMainMission) {
-                    renderSubMissions(currentMainMission);
-                }
-                showMessage("تمت إضافة المهمة الرئيسية بنجاح");
-                saveToStorage();
+                setTimeout(() => {
+                    addNotification(`⏰ ${deadline.message}`);
+                    playSound();
+                }, 5000);
+            }
+
+            if (!missions[currentMissionType]) missions[currentMissionType] = {};
+            
+            missions[currentMissionType][missionId] = {
+                id: missionId,
+                title: title,
+                type: currentMissionType,
+                deadline: deadline,
+                tasks: [],
+                createdAt: new Date().toISOString()
+            };
+
+            renderMainMissions(currentMissionType);
+            document.getElementById('addMainMissionPanel').classList.add('hidden');
+            showMessage('✅ تمت إضافة المهمة الرئيسية بنجاح');
+            
+            if (!currentMainMission) {
+                currentMainMission = missionId;
+                currentCategory = currentMissionType;
+                document.getElementById('currentMainTitle').textContent = title;
+                document.getElementById('welcomeMessage').style.display = 'none';
+                renderSubMissions(missionId, currentMissionType);
             }
         }
 
-        // ============ حذف مهمة رئيسية ==========
-        function deleteMainMission(missionId, event) {
-            event.stopPropagation();
-            if (confirm("هل أنت متأكد من حذف هذه المهمة الرئيسية وجميع مهامها الفرعية؟")) {
-                delete missions[missionId];
-                
-                if (currentMainMission === missionId) {
-                    const firstMission = Object.keys(missions)[0];
-                    if (firstMission) {
-                        selectMainMission(firstMission);
-                    } else {
-                        currentMainMission = null;
-                        currentMainTitle = "المهام";
-                        document.getElementById('currentMainTitle').textContent = "المهام";
-                        document.getElementById('subMissionsGrid').innerHTML = '<div style="text-align: center; padding: 50px; color: #888;"><i class="fas fa-inbox" style="font-size: 4rem; margin-bottom: 20px;"></i><h3>لا توجد مهام</h3><p>أضف مهمة رئيسية أولاً</p></div>';
-                    }
-                }
-                
-                renderMainMissions();
-                updateGlobalProgress();
-                showMessage("تم الحذف بنجاح");
-                saveToStorage();
-            }
-        }
-
-        // ============ إظهار لوحة إضافة مهمة فرعية ==========
+        // إضافة مهمة فرعية
         function showAddSubMissionForm() {
             if (!currentMainMission) {
-                alert("الرجاء اختيار مهمة رئيسية أولاً");
+                showMessage('❌ الرجاء اختيار مهمة رئيسية أولاً');
                 return;
             }
-            
-            // تصفير الحقول
+
             document.getElementById('taskTitle').value = '';
-            document.getElementById('taskDescription').value = '';
             document.getElementById('taskTime').value = '';
             subtaskFields = [];
             document.getElementById('subtasksContainer').innerHTML = '';
             editingTaskId = null;
-            document.getElementById('panelTitle').textContent = 'إضافة مهمة جديدة';
+            document.getElementById('subPanelTitle').textContent = 'إضافة مهمة جديدة';
             document.getElementById('submitBtnText').textContent = 'حفظ';
-            
             document.getElementById('addSubMissionPanel').classList.remove('hidden');
         }
 
-        // ============ إظهار لوحة تعديل مهمة ==========
-        function showEditSubMissionForm(taskId) {
-            for (let missionId in missions) {
-                const task = missions[missionId].tasks.find(t => t.id === taskId);
+        function cancelAddMission() {
+            document.getElementById('addSubMissionPanel').classList.add('hidden');
+            document.getElementById('taskTitle').value = '';
+            document.getElementById('taskTime').value = '';
+            subtaskFields = [];
+            document.getElementById('subtasksContainer').innerHTML = '';
+            editingTaskId = null;
+        }
+
+        // إدارة النقاط الفرعية
+        function addSubtaskField(value = '') {
+            let c = document.getElementById('subtasksContainer');
+            let i = subtaskFields.length;
+            subtaskFields.push(value);
+            let h = `<div class="subtask-item" id="subtask-${i}">
+                <input type="checkbox" class="subtask-checkbox" disabled>
+                <input type="text" class="form-control" value="${value}" placeholder="نقطة ${i + 1}" style="flex:1;" onchange="updateSubtaskValue(${i}, this.value)">
+                <i class="fas fa-trash subtask-delete" onclick="removeSubtaskField(${i})"></i>
+            </div>`;
+            c.insertAdjacentHTML('beforeend', h);
+        }
+
+        function updateSubtaskValue(i, v) {
+            subtaskFields[i] = v;
+        }
+
+        function removeSubtaskField(i) {
+            subtaskFields.splice(i, 1);
+            renderSubtaskFields();
+        }
+
+        function renderSubtaskFields() {
+            let c = document.getElementById('subtasksContainer');
+            c.innerHTML = '';
+            subtaskFields.forEach((v, i) => {
+                c.innerHTML += `<div class="subtask-item" id="subtask-${i}">
+                    <input type="checkbox" class="subtask-checkbox" disabled>
+                    <input type="text" class="form-control" value="${v}" placeholder="نقطة ${i + 1}" style="flex:1;" onchange="updateSubtaskValue(${i}, this.value)">
+                    <i class="fas fa-trash subtask-delete" onclick="removeSubtaskField(${i})"></i>
+                </div>`;
+            });
+        }
+
+        function calculateTaskScore(s) {
+            let c = s.length;
+            if (c < 3) return 20;
+            if (c <= 5) return 30;
+            return 35 + ((c - 5) * 5);
+        }
+
+        function saveSubMission() {
+            if (!currentMainMission && !editingMissionId) {
+                showMessage('❌ الرجاء اختيار مهمة رئيسية أولاً');
+                return;
+            }
+
+            let t = document.getElementById('taskTitle').value.trim();
+            let tm = document.getElementById('taskTime').value.trim();
+
+            if (!t) {
+                showMessage('❌ الرجاء إدخال عنوان المهمة');
+                return;
+            }
+
+            let subs = subtaskFields.filter(v => v.trim() !== '').map((v, i) => ({
+                id: i + 1,
+                text: v,
+                completed: false
+            }));
+
+            let sc = calculateTaskScore(subs);
+
+            if (editingTaskId) {
+                let mid = editingMissionId || currentMainMission;
+                let task = missions[currentCategory][mid].tasks.find(x => x.id === editingTaskId);
                 if (task) {
-                    document.getElementById('taskTitle').value = task.title || '';
-                    document.getElementById('taskDescription').value = task.description || '';
-                    document.getElementById('taskTime').value = task.time || '';
-                    
-                    // تعيين الأولوية
-                    currentPriority = task.priority || 'medium';
-                    document.querySelectorAll('.priority-option').forEach(opt => opt.classList.remove('active'));
-                    if (task.priority === 'high') document.querySelector('.priority-option.high').classList.add('active');
-                    else if (task.priority === 'medium') document.querySelector('.priority-option.medium').classList.add('active');
-                    else if (task.priority === 'low') document.querySelector('.priority-option.low').classList.add('active');
-                    
-                    // تعيين النقاط الفرعية
-                    subtaskFields = task.subtasks ? task.subtasks.map(s => s.text) : [];
+                    task.title = t;
+                    task.time = tm || "1 ساعة";
+                    task.subtasks = subs;
+                    task.score = sc;
+                }
+                showMessage("✅ تم تحديث المهمة");
+            } else {
+                if (!missions[currentCategory][currentMainMission].tasks) {
+                    missions[currentCategory][currentMainMission].tasks = [];
+                }
+                missions[currentCategory][currentMainMission].tasks.push({
+                    id: nextTaskId++,
+                    title: t,
+                    time: tm || "1 ساعة",
+                    completed: false,
+                    subtasks: subs,
+                    score: sc
+                });
+                showMessage("✅ تمت إضافة المهمة");
+            }
+
+            document.getElementById('addSubMissionPanel').classList.add('hidden');
+            document.getElementById('taskTitle').value = '';
+            document.getElementById('taskTime').value = '';
+            subtaskFields = [];
+            document.getElementById('subtasksContainer').innerHTML = '';
+            editingTaskId = null;
+
+            renderMainMissions(currentCategory);
+            renderSubMissions(currentMainMission, currentCategory);
+            updateProgress();
+        }
+
+        // عرض المهام الرئيسية
+        function renderMainMissions(c) {
+            let con = document.getElementById(c + 'MainMissions');
+            if (!con) return;
+            con.innerHTML = '';
+
+            if (!missions[c] || Object.keys(missions[c]).length === 0) {
+                con.innerHTML = '<div style="text-align:center; padding:15px; color:#888;">لا توجد مهام رئيسية</div>';
+                return;
+            }
+
+            Object.values(missions[c]).forEach(m => {
+                let tc = m.tasks ? m.tasks.length : 0;
+                let cc = m.tasks ? m.tasks.filter(t => t.completed).length : 0;
+                let deadlineHtml = m.deadline ? `<span class="deadline-badge"><i class="fas fa-hourglass-half"></i> ${m.deadline.days} يوم</span>` : '';
+
+                con.innerHTML += `<div class="main-mission-item">
+                    <span class="main-mission-title" onclick="selectMainMission('${m.id}','${c}')">${m.title}</span>
+                    ${deadlineHtml}
+                    <span class="main-mission-count">${cc}/${tc}</span>
+                    <i class="fas fa-check-circle complete-main-mission" onclick="completeMainMission('${m.id}','${c}', event)"></i>
+                    <i class="fas fa-trash delete-main-mission" onclick="deleteMainMission('${m.id}','${c}', event)"></i>
+                </div>`;
+            });
+        }
+
+        function selectMainMission(id, c) {
+            currentMainMission = id;
+            currentCategory = c;
+            document.getElementById('currentMainTitle').textContent = missions[c][id].title;
+            document.getElementById('welcomeMessage').style.display = 'none';
+            renderSubMissions(id, c);
+            backToHome();
+        }
+
+        // عرض المهام الفرعية
+        function renderSubMissions(id, c) {
+            let g = document.getElementById('subMissionsGrid');
+            let m = missions[c][id];
+
+            if (!m || !m.tasks || m.tasks.length === 0) {
+                g.innerHTML = '<div style="text-align:center; padding:50px;"><i class="fas fa-inbox" style="font-size:4rem; color:#888;"></i><h3>لا توجد مهام</h3><p>اضغط على زر + للإضافة</p></div>';
+                return;
+            }
+
+            let at = m.tasks.filter(t => !t.completed);
+            if (at.length === 0) {
+                g.innerHTML = '<div style="text-align:center; padding:50px;"><i class="fas fa-check-circle" style="font-size:4rem; color:#48dbfb;"></i><h3>تهانينا! 🎉</h3><p>كل المهام مكتملة</p></div>';
+                return;
+            }
+
+            g.innerHTML = at.map(t => {
+                let subs = t.subtasks || [];
+                let cs = subs.filter(s => s.completed).length;
+                let ts = subs.length;
+                let deadlineMsg = m.deadline ? `<div class="deadline-badge"><i class="fas fa-clock"></i> موعد التسليم بعد ${m.deadline.days} يوم</div>` : '';
+
+                return `<div class="sub-mission-card">
+                    <div class="card-title">${t.title}</div>
+                    ${deadlineMsg}
+                    ${subs.length ? `<div class="subtasks-section">
+                        <div class="subtasks-title">
+                            <span>النقاط (${cs}/${ts})</span>
+                            <span class="task-score-badge">🏆 ${t.score}</span>
+                        </div>
+                        ${subs.map((s, i) => `<div class="subtask-item">
+                            <input type="checkbox" class="subtask-checkbox" ${s.completed ? 'checked' : ''} onchange="toggleSubtask('${id}','${c}',${t.id},${i})">
+                            <span class="subtask-text ${s.completed ? 'completed' : ''}">${s.text}</span>
+                            <i class="fas fa-trash subtask-delete" onclick="deleteSubtask('${id}','${c}',${t.id},${i})"></i>
+                        </div>`).join('')}
+                    </div>` : ''}
+                    <div class="card-meta">
+                        <span class="meta-tag"><i class="fas fa-clock"></i> ${t.time}</span>
+                        <span class="meta-tag"><i class="fas fa-list"></i> ${subs.length} نقاط</span>
+                    </div>
+                    <div class="card-footer">
+                        <div class="task-score-badge">🏆 ${t.score}</div>
+                        <div class="card-actions">
+                            <button class="action-btn" onclick="toggleTaskStatus('${id}','${c}',${t.id})"><i class="fas fa-check"></i></button>
+                            <button class="action-btn" onclick="showEditSubMissionForm(${t.id})"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn" onclick="deleteSubMission('${id}','${c}',${t.id}, event)"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        // إكمال المهام
+        function toggleTaskStatus(id, c, tid) {
+            let t = missions[c][id].tasks.find(x => x.id === tid);
+            if (t && !t.completed) {
+                t.completed = true;
+                completedTasks.push({ ...t, missionTitle: missions[c][id].title });
+                if (t.subtasks) t.subtasks.forEach(s => s.completed = true);
+                userData.stats.completedTasks++;
+                userData.stats.score += t.score;
+                addNotification(`✅ أتممت المهمة: ${t.title}`);
+                playSound();
+                updateUI();
+                renderMainMissions(c);
+                renderSubMissions(id, c);
+                updateProgress();
+            }
+        }
+
+        function toggleSubtask(id, c, tid, i) {
+            let t = missions[c][id].tasks.find(x => x.id === tid);
+            if (t && t.subtasks) {
+                t.subtasks[i].completed = !t.subtasks[i].completed;
+                addNotification(`✅ أتممت نقطة: ${t.subtasks[i].text}`);
+                playSound();
+
+                if (t.subtasks.every(s => s.completed) && !t.completed) {
+                    t.completed = true;
+                    userData.stats.completedTasks++;
+                    userData.stats.score += t.score;
+                    completedTasks.push({ ...t, missionTitle: missions[c][id].title });
+                    updateUI();
+                    renderMainMissions(c);
+                }
+                renderSubMissions(id, c);
+                updateProgress();
+            }
+        }
+
+        function deleteSubtask(id, c, tid, i) {
+            let t = missions[c][id].tasks.find(x => x.id === tid);
+            if (t && t.subtasks) {
+                t.subtasks.splice(i, 1);
+                t.score = calculateTaskScore(t.subtasks);
+                renderSubMissions(id, c);
+            }
+        }
+
+        function showEditSubMissionForm(tid) {
+            for (let mid in missions[currentCategory]) {
+                let t = missions[currentCategory][mid].tasks.find(x => x.id === tid);
+                if (t) {
+                    document.getElementById('taskTitle').value = t.title || '';
+                    document.getElementById('taskTime').value = t.time || '';
+                    subtaskFields = t.subtasks ? t.subtasks.map(s => s.text) : [];
                     renderSubtaskFields();
-                    
-                    editingTaskId = task.id;
-                    editingMissionId = missionId;
-                    document.getElementById('panelTitle').textContent = 'تعديل المهمة';
+                    editingTaskId = t.id;
+                    editingMissionId = mid;
+                    document.getElementById('subPanelTitle').textContent = 'تعديل المهمة';
                     document.getElementById('submitBtnText').textContent = 'تحديث';
                     document.getElementById('addSubMissionPanel').classList.remove('hidden');
                     break;
@@ -2594,538 +2459,303 @@
             }
         }
 
-        // ============ إلغاء إضافة مهمة ==========
-        function cancelAddMission() {
-            document.getElementById('addSubMissionPanel').classList.add('hidden');
-            document.getElementById('taskTitle').value = '';
-            document.getElementById('taskDescription').value = '';
-            document.getElementById('taskTime').value = '';
-            subtaskFields = [];
-            document.getElementById('subtasksContainer').innerHTML = '';
-            editingTaskId = null;
-        }
-
-        // ============ حفظ أو تحديث مهمة فرعية ==========
-        function saveSubMission() {
-            if (!currentMainMission && !editingMissionId) {
-                alert("الرجاء اختيار مهمة رئيسية أولاً");
-                return;
-            }
-            
-            const title = document.getElementById('taskTitle').value;
-            const description = document.getElementById('taskDescription').value;
-            const time = document.getElementById('taskTime').value;
-            
-            if (!title) {
-                alert("الرجاء إدخال عنوان المهمة");
-                return;
-            }
-            
-            // تجهيز النقاط الفرعية
-            const subtasks = subtaskFields
-                .filter(text => text.trim() !== '')
-                .map((text, index) => ({
-                    id: index + 1,
-                    text: text,
-                    completed: false
-                }));
-            
-            const score = calculateTaskScore(subtasks);
-            
-            if (editingTaskId) {
-                // تحديث مهمة موجودة
-                const missionId = editingMissionId || currentMainMission;
-                const task = missions[missionId].tasks.find(t => t.id === editingTaskId);
-                if (task) {
-                    task.title = title;
-                    task.description = description;
-                    task.time = time || "1 ساعة";
-                    task.priority = currentPriority;
-                    task.subtasks = subtasks;
-                    task.score = score;
-                }
-                showMessage("تم تحديث المهمة بنجاح");
-            } else {
-                // إضافة مهمة جديدة
-                const newTask = {
-                    id: nextTaskId++,
-                    title: title,
-                    description: description,
-                    priority: currentPriority,
-                    completed: false,
-                    time: time || "1 ساعة",
-                    subtasks: subtasks,
-                    score: score
-                };
-                
-                missions[currentMainMission].tasks.push(newTask);
-                showMessage("تمت إضافة المهمة بنجاح");
-            }
-            
-            document.getElementById('addSubMissionPanel').classList.add('hidden');
-            document.getElementById('taskTitle').value = '';
-            document.getElementById('taskDescription').value = '';
-            document.getElementById('taskTime').value = '';
-            subtaskFields = [];
-            document.getElementById('subtasksContainer').innerHTML = '';
-            editingTaskId = null;
-            
-            renderMainMissions();
-            if (currentMainMission) {
-                renderSubMissions(currentMainMission);
-            }
-            updateGlobalProgress();
-            updateStatsPage();
-            saveToStorage();
-        }
-
-        // ============ تحديد الأولوية ==========
-        function setPriority(priority, element) {
-            currentPriority = priority;
-            document.querySelectorAll('.priority-option').forEach(opt => opt.classList.remove('active'));
-            element.classList.add('active');
-        }
-
-        // ============ عرض المهام الفرعية ==========
-        function renderSubMissions(missionId) {
-            const grid = document.getElementById('subMissionsGrid');
-            const mission = missions[missionId];
-            
-            if (!mission || mission.tasks.length === 0) {
-                grid.innerHTML = '<div style="text-align: center; padding: 50px; color: #888;"><i class="fas fa-inbox" style="font-size: 4rem; margin-bottom: 20px;"></i><h3>لا توجد مهام</h3><p>اضغط على زر + للإضافة</p></div>';
-                return;
-            }
-            
-            const activeTasks = mission.tasks.filter(t => !t.completed);
-            
-            if (activeTasks.length === 0) {
-                grid.innerHTML = '<div style="text-align: center; padding: 50px; color: #888;"><i class="fas fa-check-circle" style="font-size: 4rem; margin-bottom: 20px; color: #48dbfb;"></i><h3>تهانينا! 🎉</h3><p>كل المهام مكتملة</p></div>';
-                return;
-            }
-            
-            grid.innerHTML = activeTasks.map(task => {
-                const priorityClass = task.priority === 'high' ? 'priority-high' : task.priority === 'medium' ? 'priority-medium' : 'priority-low';
-                
-                // حساب النقاط المكتملة
-                const subtasks = task.subtasks || [];
-                const completedSubtasks = subtasks.filter(s => s.completed).length;
-                const totalSubtasks = subtasks.length;
-                const allSubtasksCompleted = totalSubtasks > 0 && completedSubtasks === totalSubtasks;
-                
-                return `
-                    <div class="sub-mission-card ${priorityClass}" id="task-${task.id}" style="${allSubtasksCompleted ? 'opacity: 0.7;' : ''}">
-                        <div class="card-priority"></div>
-                        <div class="card-header">
-                            <div class="card-icon">
-                                <i class="fas ${mission.icon}"></i>
-                            </div>
-                            <div class="card-title">${task.title}</div>
-                        </div>
-                        ${task.description ? `<div style="margin-bottom: 10px; color: #666; font-size: 0.95rem;">${task.description}</div>` : ''}
-                        
-                        <!-- النقاط الفرعية -->
-                        ${subtasks.length > 0 ? `
-                            <div class="subtasks-section">
-                                <div class="subtasks-title">
-                                    <span>نقاط المهمة (${completedSubtasks}/${totalSubtasks})</span>
-                                    <span class="task-score-badge">🏆 ${task.score || 0}</span>
-                                </div>
-                                ${subtasks.map((subtask, index) => `
-                                    <div class="subtask-item">
-                                        <input type="checkbox" class="subtask-checkbox" ${subtask.completed ? 'checked' : ''} onchange="toggleSubtask(${task.id}, ${index})">
-                                        <span class="subtask-text ${subtask.completed ? 'completed' : ''}">${subtask.text}</span>
-                                        <i class="fas fa-trash subtask-delete" onclick="deleteSubtask(${task.id}, ${index})"></i>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        ` : ''}
-                        
-                        <div class="card-meta">
-                            <span class="meta-tag"><i class="fas fa-flag"></i> ${task.priority === 'high' ? 'عالية' : task.priority === 'medium' ? 'متوسطة' : 'منخفضة'}</span>
-                            <span class="meta-tag"><i class="fas fa-clock"></i> ${task.time}</span>
-                            <span class="meta-tag"><i class="fas fa-list"></i> ${subtasks.length} نقاط</span>
-                        </div>
-                        
-                        <div class="card-footer">
-                            <div class="task-score-badge">🏆 ${task.score || 0}</div>
-                            <div class="card-actions">
-                                <button class="action-btn" onclick="toggleTaskStatus(${task.id})">
-                                    <i class="fas fa-check"></i>
-                                </button>
-                                <button class="action-btn" onclick="showEditSubMissionForm(${task.id})">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="action-btn" onclick="deleteSubMission('${missionId}', ${task.id}, event)">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-            
-            filterTasks();
-        }
-
-        // ============ إدارة النقاط الفرعية ==========
-        function toggleSubtask(taskId, subtaskIndex) {
-            for (let mission in missions) {
-                const task = missions[mission].tasks.find(t => t.id === taskId);
-                if (task && task.subtasks) {
-                    task.subtasks[subtaskIndex].completed = !task.subtasks[subtaskIndex].completed;
-                    
-                    // التحقق إذا كانت كل النقاط مكتملة
-                    const allCompleted = task.subtasks.every(s => s.completed);
-                    if (allCompleted && !task.completed) {
-                        // إكمال المهمة تلقائياً
-                        task.completed = true;
-                        addScore(task.score || 0);
-                        updateDailyData(task, true);
-                        updateStreak();
-                        showMessage(`✅ مهمة مكتملة! +${task.score || 0} Score`);
-                    }
-                    
-                    saveToStorage();
-                    renderSubMissions(currentMainMission);
-                    updateGlobalProgress();
-                    updateStatsPage();
-                    break;
-                }
-            }
-        }
-
-        function deleteSubtask(taskId, subtaskIndex) {
-            if (confirm("هل أنت متأكد من حذف هذه النقطة؟")) {
-                for (let mission in missions) {
-                    const task = missions[mission].tasks.find(t => t.id === taskId);
-                    if (task && task.subtasks) {
-                        task.subtasks.splice(subtaskIndex, 1);
-                        // تحديث الـ Score
-                        task.score = calculateTaskScore(task.subtasks);
-                        saveToStorage();
-                        renderSubMissions(currentMainMission);
-                        break;
-                    }
-                }
-            }
-        }
-
-        // ============ إكمال مهمة ==========
-        function toggleTaskStatus(taskId) {
-            for (let mission in missions) {
-                const task = missions[mission].tasks.find(t => t.id === taskId);
-                if (task && !task.completed) {
-                    task.completed = true;
-                    
-                    // إكمال كل النقاط الفرعية تلقائياً
-                    if (task.subtasks) {
-                        task.subtasks.forEach(s => s.completed = true);
-                    }
-                    
-                    addScore(task.score || 0);
-                    updateDailyData(task, true);
-                    updateStreak();
-                    showMessage(`✅ مهمة مكتملة! +${task.score || 0} Score`);
-                    break;
-                }
-            }
-            
-            renderMainMissions();
-            if (currentMainMission) {
-                renderSubMissions(currentMainMission);
-            }
-            updateGlobalProgress();
-            updateStatsPage();
-            saveToStorage();
-        }
-
-        // ============ تحديث Streak ==========
-        function updateStreak() {
-            const today = new Date().toDateString();
-            if (lastActiveDate !== today) {
-                const yesterday = new Date();
-                yesterday.setDate(yesterday.getDate() - 1);
-                
-                if (lastActiveDate === yesterday.toDateString()) {
-                    streak++;
-                } else {
-                    streak = 1;
-                }
-                lastActiveDate = today;
-            }
-        }
-
-        // ============ حذف مهمة فرعية ==========
-        function deleteSubMission(missionId, taskId, event) {
-            event.stopPropagation();
+        function deleteSubMission(id, c, tid, e) {
+            e.stopPropagation();
             if (confirm("هل أنت متأكد من حذف هذه المهمة؟")) {
-                missions[missionId].tasks = missions[missionId].tasks.filter(t => t.id !== taskId);
-                renderMainMissions();
-                renderSubMissions(missionId);
-                updateGlobalProgress();
-                showMessage("تم الحذف بنجاح");
-                saveToStorage();
+                missions[c][id].tasks = missions[c][id].tasks.filter(t => t.id !== tid);
+                renderMainMissions(c);
+                renderSubMissions(id, c);
+                updateProgress();
+                showMessage('✅ تم الحذف');
             }
         }
 
-        // ============ عرض المهام المكتملة ==========
-        function showCompletedMissions() {
-            const completedDiv = document.getElementById('completedTasksList');
-            let allCompleted = [];
-            
-            for (let mission in missions) {
-                const completed = missions[mission].tasks.filter(t => t.completed);
-                completed.forEach(task => {
-                    allCompleted.push({
-                        ...task,
-                        missionTitle: missions[mission].title
-                    });
-                });
-            }
-            
-            if (allCompleted.length === 0) {
-                completedDiv.innerHTML = '<div style="text-align: center; padding: 50px; color: #888;">لا توجد مهام مكتملة بعد</div>';
+        function completeMainMission(id, c, e) {
+            e.stopPropagation();
+            let m = missions[c][id];
+            if (!m) return;
+
+            let cnt = 0;
+            let scr = 0;
+
+            m.tasks.forEach(t => {
+                if (!t.completed) {
+                    t.completed = true;
+                    cnt++;
+                    scr += t.score || 20;
+                    if (t.subtasks) t.subtasks.forEach(s => s.completed = true);
+                    completedTasks.push({ ...t, missionTitle: m.title });
+                }
+            });
+
+            if (cnt > 0) {
+                userData.stats.completedTasks += cnt;
+                userData.stats.score += scr;
+                addNotification(`🎉 تم إكمال "${m.title}" بالكامل! +${scr} نقطة`);
+                playAlarm(1000);
+                updateUI();
+                renderMainMissions(c);
+                if (currentMainMission === id) renderSubMissions(id, c);
+                updateProgress();
             } else {
-                completedDiv.innerHTML = allCompleted.map(task => `
-                    <div class="completed-card">
-                        <i class="fas fa-check-circle"></i>
-                        <span class="task-title">${task.title}</span>
-                        <span style="color: #667eea;">${task.missionTitle}</span>
-                        <span style="color: #888; font-size: 0.9rem;">${task.time}</span>
-                        <span style="color: #48dbfb;">🏆 ${task.score || 0}</span>
-                    </div>
-                `).join('');
+                showMessage("✨ كل المهام مكتملة بالفعل!");
             }
-            
-            document.getElementById('missionsPage').classList.remove('active');
-            document.getElementById('statsPage').classList.remove('active');
-            document.getElementById('badgesPage').classList.remove('active');
-            document.getElementById('completedPage').classList.add('active');
-            closeNav();
         }
 
-        // ============ تحديث التقدم العام ==========
-        function updateGlobalProgress() {
-            let total = 0;
-            let completed = 0;
-            
-            for (let mission in missions) {
-                missions[mission].tasks.forEach(task => {
-                    total++;
-                    if (task.completed) completed++;
-                });
+        function deleteMainMission(id, c, e) {
+            e.stopPropagation();
+            if (confirm("هل أنت متأكد من حذف هذه المهمة الرئيسية وجميع مهامها الفرعية؟")) {
+                delete missions[c][id];
+
+                if (currentMainMission === id) {
+                    let f = Object.keys(missions[c])[0];
+                    if (f) {
+                        selectMainMission(f, c);
+                    } else {
+                        currentMainMission = null;
+                        document.getElementById('currentMainTitle').textContent = 'وَقُل رَّبِّ زِدْنِي عِلْمًا';
+                        document.getElementById('welcomeMessage').style.display = 'block';
+                    }
+                }
+
+                renderMainMissions(c);
+                showMessage('✅ تم الحذف');
             }
-            
-            const percent = total ? Math.round((completed / total) * 100) : 0;
-            document.getElementById('progressCircle').textContent = percent + '%';
         }
 
-        // ============ تحديث صفحة الإحصائيات ==========
-        function updateStatsPage() {
-            let total = 0;
-            let completed = 0;
-            let completedToday = 0;
-            
-            const today = new Date().toDateString();
-            initDailyData();
-            
-            for (let mission in missions) {
-                missions[mission].tasks.forEach(task => {
-                    total++;
-                    if (task.completed) completed++;
-                });
+        // الإشعارات
+        function addNotification(t) {
+            let n = {
+                id: Date.now(),
+                text: t,
+                time: new Date().toLocaleTimeString('ar-EG'),
+                date: new Date().toDateString()
+            };
+            notifications.unshift(n);
+            notifications = notifications.filter(n => n.date === new Date().toDateString());
+            document.getElementById('notificationsButton').classList.toggle('has-notifications', notifications.length > 0);
+            renderNotifications();
+        }
+
+        function renderNotifications() {
+            let l = document.getElementById('notificationsList');
+            if (notifications.length === 0) {
+                l.innerHTML = '<div style="text-align:center; padding:20px;">لا توجد إشعارات جديدة</div>';
+            } else {
+                l.innerHTML = notifications.map(n => `<div class="notification-item">
+                    <div class="notification-text"><i class="fas fa-check-circle"></i> ${n.text}</div>
+                    <div class="notification-time">${n.time}</div>
+                </div>`).join('');
             }
-            
-            completedToday = dailyData[today]?.completed.length || 0;
-            
-            document.getElementById('statScore').textContent = userScore;
-            document.getElementById('statCompletedToday').textContent = completedToday;
-            document.getElementById('statPending').textContent = total - completed;
-            document.getElementById('statStreak').textContent = streak;
-            document.getElementById('statLevel').textContent = userLevel;
-            document.getElementById('currentLevel').textContent = userLevel;
-            document.getElementById('currentXP').textContent = userXP;
-            document.getElementById('nextLevelXP').textContent = (userLevel * 100);
-            document.getElementById('xpBar').style.width = (userXP % 100) + '%';
-            
-            renderDays();
-            renderDayDetails(selectedDay);
         }
 
-        // ============ التنقل بين الصفحات ==========
-        function showMissionsPage() {
-            document.getElementById('missionsPage').classList.add('active');
-            document.getElementById('statsPage').classList.remove('active');
-            document.getElementById('badgesPage').classList.remove('active');
-            document.getElementById('completedPage').classList.remove('active');
+        function toggleNotifications() {
+            let p = document.getElementById('notificationsPanel');
+            p.classList.toggle('show');
+            if (p.classList.contains('show')) renderNotifications();
         }
 
-        function showStats() {
-            document.getElementById('missionsPage').classList.remove('active');
-            document.getElementById('statsPage').classList.add('active');
-            document.getElementById('badgesPage').classList.remove('active');
-            document.getElementById('completedPage').classList.remove('active');
-            updateStatsPage();
-            closeNav();
+        // المهام المكتملة
+        function renderCompletedTasks() {
+            let list = document.getElementById('completedTasksList');
+            if (completedTasks.length === 0) {
+                list.innerHTML = '<div style="text-align:center; padding:50px;">لا توجد مهام مكتملة بعد</div>';
+            } else {
+                list.innerHTML = completedTasks.map(t => `<div class="completed-card">
+                    <i class="fas fa-check-circle"></i>
+                    <span class="task-title">${t.title}</span>
+                    <span style="color:#667eea;">${t.missionTitle}</span>
+                    <span style="color:#48dbfb;">🏆 ${t.score || 0}</span>
+                </div>`).join('');
+            }
         }
 
-        function showBadges() {
-            document.getElementById('missionsPage').classList.remove('active');
-            document.getElementById('statsPage').classList.remove('active');
-            document.getElementById('badgesPage').classList.add('active');
-            document.getElementById('completedPage').classList.remove('active');
-            renderBadges();
-            closeNav();
+        // وظائف المنبه
+        function toggleAlarm() {
+            document.getElementById('alarmPanel').classList.toggle('show');
         }
 
-        function backToMissions() {
-            showMissionsPage();
+        function closeAlarm() {
+            document.getElementById('alarmPanel').classList.remove('show');
         }
 
-        // ============ إظهار رسالة نجاح ==========
-        function showMessage(text) {
-            const msg = document.getElementById('successMessage');
-            document.getElementById('messageText').textContent = text;
-            msg.style.display = 'block';
-            
-            setTimeout(() => {
-                msg.style.display = 'none';
-            }, 2000);
+        function setTimerMode(m, el) {
+            timerMode = m;
+            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+            resetTimer();
         }
 
-        // ============ الوضع الليلي ==========
+        function startTimer() {
+            if (timerRunning) return;
+            timerRunning = true;
+
+            timerInterval = setInterval(() => {
+                if (timerMode === 'countdown') {
+                    if (timerSeconds > 0) {
+                        timerSeconds--;
+                    } else {
+                        pauseTimer();
+                        playAlarm(3000);
+                        let msg = (userData.name !== 'زائر' ? userData.name + '، ' : '') + '⏰ انتهى الوقت!';
+                        showMessage(msg);
+                        addNotification(msg);
+                    }
+                } else {
+                    timerSeconds++;
+                }
+                updateTimerDisplay();
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            clearInterval(timerInterval);
+            timerRunning = false;
+        }
+
+        function resetTimer() {
+            pauseTimer();
+            timerSeconds = timerMode === 'countdown' ? 1500 : 0;
+            updateTimerDisplay();
+        }
+
+        function setCustomTime() {
+            let minutes = parseInt(document.getElementById('timerMinutes').value) || 25;
+            timerSeconds = minutes * 60;
+            updateTimerDisplay();
+        }
+
+        function updateTimerDisplay() {
+            let m = Math.floor(timerSeconds / 60);
+            let s = timerSeconds % 60;
+            document.getElementById('timerDisplay').textContent = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+
+        // جعل المنبة قابل للسحب
+        let alarmPanel = document.getElementById('alarmPanel');
+        let alarmHeader = document.getElementById('alarmHeader');
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        alarmHeader.onmousedown = function (e) {
+            isDragging = true;
+            let rect = alarmPanel.getBoundingClientRect();
+            offsetX = e.clientX - rect.left;
+            offsetY = e.clientY - rect.top;
+            alarmPanel.style.transition = 'none';
+        };
+
+        document.onmousemove = function (e) {
+            if (isDragging) {
+                let left = e.clientX - offsetX;
+                let top = e.clientY - offsetY;
+                left = Math.max(0, Math.min(left, window.innerWidth - alarmPanel.offsetWidth));
+                top = Math.max(0, Math.min(top, window.innerHeight - alarmPanel.offsetHeight));
+                alarmPanel.style.left = left + 'px';
+                alarmPanel.style.top = top + 'px';
+                alarmPanel.style.transform = 'none';
+            }
+        };
+
+        document.onmouseup = function () {
+            isDragging = false;
+            alarmPanel.style.transition = '';
+        };
+
+        // الأكواد السرية
+        function toggleCodeInput() {
+            let c = document.getElementById('codeInputContainer');
+            c.style.display = c.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        function hideCodeInput() {
+            document.getElementById('codeInputContainer').style.display = 'none';
+            document.getElementById('codeResult').style.display = 'none';
+        }
+
+        function decodeCode() {
+            let code = document.getElementById('codeInput').value.trim();
+            let r = document.getElementById('codeResult');
+
+            let found = secretCodes.find(c => c.code === code);
+            if (found) {
+                r.innerHTML = `<div style="background:linear-gradient(145deg,#667eea,#764ba2); color:#fff; padding:20px; border-radius:12px; text-align:center;">
+                    <i class="fas ${found.icon}" style="font-size:2rem; margin-bottom:10px;"></i>
+                    <div>${found.message}</div>
+                </div>`;
+                r.style.display = 'block';
+                document.getElementById('codeInput').value = '';
+                playSound();
+            } else {
+                r.innerHTML = `<div style="background:#ff6b6b; color:#fff; padding:20px; border-radius:12px; text-align:center;">
+                    <i class="fas fa-times-circle" style="font-size:2rem; margin-bottom:10px;"></i>
+                    <div>⚠️ رمز غير صحيح</div>
+                </div>`;
+                r.style.display = 'block';
+            }
+        }
+
+        // الوضع الليلي
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
-            const isDark = document.body.classList.contains('dark-mode');
-            document.querySelector('.user-badge i').className = isDark ? 'fas fa-sun' : 'fas fa-moon';
-            localStorage.setItem('darkMode', isDark);
+            let d = document.body.classList.contains('dark-mode');
+            document.querySelector('.top-btn i').className = d ? 'fas fa-sun' : 'fas fa-moon';
+            localStorage.setItem('darkMode', d);
         }
 
-        // ============ تصدير البيانات ==========
-        function exportData() {
-            const data = {
-                missions: missions,
-                userScore: userScore,
-                userXP: userXP,
-                userLevel: userLevel,
-                streak: streak,
-                dailyData: dailyData,
-                date: new Date().toISOString()
-            };
-            
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `missions-backup-${new Date().toISOString().split('T')[0]}.json`;
-            a.click();
-            
-            showMessage("تم تصدير البيانات بنجاح");
-        }
-
-        // ============ حفظ في localStorage ==========
-        function saveToStorage() {
-            localStorage.setItem('missions', JSON.stringify(missions));
-            localStorage.setItem('userScore', userScore);
-            localStorage.setItem('userXP', userXP);
-            localStorage.setItem('userLevel', userLevel);
-            localStorage.setItem('streak', streak);
-            localStorage.setItem('lastActiveDate', lastActiveDate);
-            localStorage.setItem('dailyData', JSON.stringify(dailyData));
-        }
-
-        // ============ تحميل من localStorage ==========
-        function loadFromStorage() {
-            const savedMissions = localStorage.getItem('missions');
-            if (savedMissions) {
-                try {
-                    missions = JSON.parse(savedMissions);
-                } catch(e) {}
+        // التقدم
+        function updateProgress() {
+            let t = 0, c = 0;
+            for (let cat in missions) {
+                for (let mid in missions[cat]) {
+                    if (missions[cat][mid].tasks) {
+                        missions[cat][mid].tasks.forEach(task => {
+                            t++;
+                            if (task.completed) c++;
+                        });
+                    }
+                }
             }
-            
-            userScore = parseInt(localStorage.getItem('userScore')) || 0;
-            userXP = parseInt(localStorage.getItem('userXP')) || 0;
-            userLevel = parseInt(localStorage.getItem('userLevel')) || 1;
-            streak = parseInt(localStorage.getItem('streak')) || 0;
-            lastActiveDate = localStorage.getItem('lastActiveDate') || null;
-            
-            const savedDailyData = localStorage.getItem('dailyData');
-            if (savedDailyData) {
-                try {
-                    dailyData = JSON.parse(savedDailyData);
-                } catch(e) {}
-            }
-            
-            const darkMode = localStorage.getItem('darkMode') === 'true';
-            if (darkMode) {
+            let p = t ? Math.round((c / t) * 100) : 0;
+            document.getElementById('progressCircle').textContent = p + '%';
+        }
+
+        // رسالة نجاح
+        function showMessage(t) {
+            let m = document.getElementById('successMessage');
+            document.getElementById('messageText').textContent = t;
+            m.style.display = 'block';
+            setTimeout(() => m.style.display = 'none', 2000);
+        }
+
+        // التهيئة
+        window.onload = function () {
+            loadSecretCodes();
+            setTimeout(showAuthModal, 1000);
+
+            if (localStorage.getItem('darkMode') === 'true') {
                 document.body.classList.add('dark-mode');
-                document.querySelector('.user-badge i').className = 'fas fa-sun';
+                document.querySelector('.top-btn i').className = 'fas fa-sun';
             }
-        }
 
-        // ============ تهيئة الصفحة ==========
-        window.onload = function() {
-            loadFromStorage();
-            
-            if (Object.keys(missions).length === 0) {
-                missions = {};
-            }
-            
-            // تعيين أعلى ID
-            for (let mission in missions) {
-                missions[mission].tasks.forEach(task => {
-                    if (task.id >= nextTaskId) nextTaskId = task.id + 1;
-                });
-            }
-            
-            renderMainMissions();
-            
-            if (currentMainMission && missions[currentMainMission]) {
-                renderSubMissions(currentMainMission);
-            } else {
-                document.getElementById('subMissionsGrid').innerHTML = '<div style="text-align: center; padding: 50px; color: #888;"><i class="fas fa-plus-circle" style="font-size: 4rem; margin-bottom: 20px; color: #667eea;"></i><h3>مرحباً بك!</h3><p>ابدأ بإضافة مهمة رئيسية من القائمة</p></div>';
-            }
-            
-            updateGlobalProgress();
-            updateBadges();
-            updateStatsPage();
+            updateUI();
+            updateProgress();
+
+            // إغلاق النوافذ عند الضغط خارجها
+            document.addEventListener('click', function (e) {
+                let navBar = document.getElementById('navBar');
+                let menuBtn = document.querySelector('.top-btn:last-child');
+                if (!navBar.contains(e.target) && !menuBtn.contains(e.target) && navBar.classList.contains('open')) {
+                    navBar.classList.remove('open');
+                }
+
+                let notPanel = document.getElementById('notificationsPanel');
+                let notBtn = document.getElementById('notificationsButton');
+                if (!notPanel.contains(e.target) && !notBtn.contains(e.target) && notPanel.classList.contains('show')) {
+                    notPanel.classList.remove('show');
+                }
+            });
         };
-        
-        // PWA Installation
-        let deferredPrompt;
-        
-        window.addEventListener('beforeinstallprompt', (e) => {
-          e.preventDefault();
-          deferredPrompt = e;
-          
-          // إظهار زر التثبيت بعد 3 ثواني
-          setTimeout(() => {
-            const installPrompt = document.getElementById('installPrompt');
-            if (installPrompt && !window.matchMedia('(display-mode: standalone)').matches) {
-              installPrompt.style.display = 'flex';
-            }
-          }, 3000);
-        });
-        
-        // تثبيت التطبيق
-        window.installApp = function() {
-          if (!deferredPrompt) return;
-          
-          deferredPrompt.prompt();
-          deferredPrompt.userChoice.then((choiceResult) => {
-            if (choiceResult.outcome === 'accepted') {
-              console.log('User accepted the install prompt');
-            }
-            deferredPrompt = null;
-            document.getElementById('installPrompt').style.display = 'none';
-          });
-        };
-        
-        // التحقق إذا كان التطبيق مثبت بالفعل
-        window.addEventListener('appinstalled', (evt) => {
-          console.log('App was installed');
-          document.getElementById('installPrompt').style.display = 'none';
-        });
     </script>
 </body>
 </html>
