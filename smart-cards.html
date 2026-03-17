@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>البطاقات الذكية - Mission Master</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            color: #1e1e2f;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        body.dark-mode {
+            background: #0a0a0f;
+            color: #fff;
+        }
+
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 40px;
+            padding: 30px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+        }
+
+        /* رأس الصفحة */
+        .header {
+            background: linear-gradient(145deg, #ff6b6b, #f368e0);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 30px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(255,107,107,0.3);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 0;
+        }
+
+        .header h1 i {
+            font-size: 2.2rem;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .header-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.1);
+        }
+
+        /* شريط الأدوات */
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .toolbar h2 {
+            color: white;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .add-deck-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .add-deck-btn:hover {
+            background: white;
+            color: #ff6b6b;
+        }
+
+        /* شبكة التصنيفات - مربعات 2 في السطر */
+        .decks-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .deck-card {
+            background: white;
+            border-radius: 25px;
+            padding: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            position: relative;
+            border: 2px solid transparent;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .deck-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+        }
+
+        body.dark-mode .deck-card {
+            background: #1a1a24;
+            color: white;
+        }
+
+        .deck-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .deck-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .deck-badge {
+            background: rgba(255,107,107,0.15);
+            color: #ff6b6b;
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .deck-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .deck-stats {
+            display: flex;
+            gap: 15px;
+            color: #888;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+
+        body.dark-mode .deck-stats {
+            color: #aaa;
+        }
+
+        .deck-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 10px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        body.dark-mode .deck-footer {
+            border-top-color: #2a2a3a;
+        }
+
+        .cards-btn {
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+        }
+
+        .cards-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+        }
+
+        .delete-deck {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: none;
+            background: #ff6b6b20;
+            color: #ff6b6b;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .delete-deck:hover {
+            background: #ff6b6b;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* ===== شاشة الكاردس ===== */
+        .cards-screen {
+            display: none;
+        }
+
+        .cards-screen.show {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .back-btn:hover {
+            background: white;
+            color: #ff6b6b;
+        }
+
+        .deck-info-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 25px;
+            margin-bottom: 25px;
+            backdrop-filter: blur(5px);
+        }
+
+        .deck-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .current-deck-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .current-deck-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .card-actions-bar {
+            display: flex;
+            gap: 15px;
+        }
+
+        .action-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .action-btn.primary {
+            background: linear-gradient(145deg, #ff6b6b, #f368e0);
+            color: white;
+        }
+
+        .action-btn.secondary {
+            background: white;
+            color: #ff6b6b;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* شبكة البطاقات في شاشة الكاردس - بشكل أكبر */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .card-item {
+            background: white;
+            border-radius: 30px;
+            padding: 30px 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            transition: all 0.3s;
+            position: relative;
+            border: 3px solid transparent;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(255,107,107,0.25);
+            border-color: #ff6b6b;
+        }
+
+        body.dark-mode .card-item {
+            background: #1a1a24;
+            color: white;
+        }
+
+        .card-question {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            flex: 1;
+            color: #333;
+        }
+
+        body.dark-mode .card-question {
+            color: white;
+        }
+
+        .card-answer {
+            font-size: 1.2rem;
+            color: #ff6b6b;
+            padding: 20px;
+            background: #ff6b6b10;
+            border-radius: 20px;
+            margin: 15px 0;
+            display: none;
+            border: 2px dashed #ff6b6b;
+            font-weight: 600;
+        }
+
+        .card-item.show-answer .card-answer {
+            display: block;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        body.dark-mode .card-footer {
+            border-top-color: #2a2a3a;
+        }
+
+        .card-level {
+            background: #48dbfb20;
+            color: #48dbfb;
+            padding: 6px 15px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .review-card-btn {
+            background: linear-gradient(145deg, #ff6b6b, #f368e0);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .review-card-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(255,107,107,0.4);
+        }
+
+        .delete-card-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: none;
+            background: #ff6b6b20;
+            color: #ff6b6b;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .delete-card-btn:hover {
+            background: #ff6b6b;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 40px;
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.3);
+            animation: modalPop 0.4s;
+            position: relative;
+        }
+
+        @keyframes modalPop {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        body.dark-mode .modal-content {
+            background: #1a1a24;
+            color: white;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f0f0f0;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            background: #ff6b6b;
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .modal-header i {
+            font-size: 3rem;
+            color: #ff6b6b;
+            margin-bottom: 10px;
+        }
+
+        .modal-header h2 {
+            font-size: 1.8rem;
+            color: #333;
+        }
+
+        body.dark-mode .modal-header h2 {
+            color: white;
+        }
+
+        /* مودال المراجعة */
+        .review-progress {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            color: #ff6b6b;
+            font-weight: 600;
+        }
+
+        .review-card-container {
+            background: white;
+            border-radius: 30px;
+            padding: 50px 40px;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 3px solid #ff6b6b;
+            margin: 20px 0;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #333;
+            position: relative;
+        }
+
+        body.dark-mode .review-card-container {
+            background: #1a1a24;
+            color: white;
+        }
+
+        .review-question {
+            width: 100%;
+        }
+
+        .review-answer {
+            width: 100%;
+            display: none;
+            color: #ff6b6b;
+        }
+
+        .review-card-container.show-answer .review-question {
+            display: none;
+        }
+
+        .review-card-container.show-answer .review-answer {
+            display: block;
+        }
+
+        .show-answer-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .show-answer-btn:hover {
+            transform: translateX(-50%) scale(1.05);
+        }
+
+        .grade-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0 15px;
+        }
+
+        .grade-btn {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: none;
+            font-size: 2.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .grade-btn:hover {
+            transform: scale(1.15);
+        }
+
+        .grade-btn.hard {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .grade-btn.medium {
+            background: #ffd93e;
+            color: #333;
+        }
+
+        .grade-btn.easy {
+            background: #48dbfb;
+            color: white;
+        }
+
+        .grade-labels {
+            display: flex;
+            justify-content: center;
+            gap: 45px;
+            font-size: 1rem;
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        body.dark-mode .grade-labels {
+            color: #aaa;
+        }
+
+        /* باقي الفورم */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #ff6b6b;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #f0f0f0;
+            border-radius: 15px;
+            font-size: 1rem;
+            background: #f8f9fa;
+        }
+
+        body.dark-mode .form-control {
+            background: #2a2a3a;
+            color: white;
+            border-color: #3a3a4a;
+        }
+
+        .color-options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .color-option {
+            aspect-ratio: 1;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+
+        .color-option.selected {
+            border-color: #333;
+            transform: scale(1.05);
+        }
+
+        .icon-options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .icon-option {
+            aspect-ratio: 1;
+            border-radius: 15px;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .icon-option:hover {
+            background: #ff6b6b;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .icon-option.selected {
+            background: #ff6b6b;
+            color: white;
+            border-color: #333;
+        }
+
+        body.dark-mode .icon-option {
+            background: #2a2a3a;
+            color: #aaa;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal-btn.primary {
+            background: linear-gradient(145deg, #ff6b6b, #f368e0);
+            color: white;
+        }
+
+        .modal-btn.secondary {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        .modal-btn:hover {
+            transform: scale(1.02);
+        }
+
+        /* رسالة النجاح */
+        .success-message {
+            position: fixed;
+            top: 20px;
+            right: 50%;
+            transform: translateX(50%);
+            background: #48dbfb;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            z-index: 20000;
+            animation: slideDown 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+        }
+
+        @keyframes slideDown {
+            from { top: -100px; opacity: 0; }
+            to { top: 20px; opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .app-container { padding: 15px; }
+            .header { flex-direction: column; gap: 15px; text-align: center; }
+            .decks-grid { grid-template-columns: 1fr; }
+            .cards-grid { grid-template-columns: 1fr; }
+            .deck-info-bar { flex-direction: column; gap: 15px; text-align: center; }
+            .card-actions-bar { width: 100%; }
+            .action-btn { flex: 1; justify-content: center; }
+            .grade-buttons { gap: 10px; }
+            .grade-btn { width: 60px; height: 60px; font-size: 2rem; }
+            .grade-labels { gap: 20px; font-size: 0.9rem; }
+            .show-answer-btn { padding: 10px 20px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- رأس الصفحة -->
+        <div class="header">
+            <h1>
+                <i class="fas fa-layer-group"></i>
+                البطاقات الذكية
+            </h1>
+            <div class="header-buttons">
+                <button class="header-btn" onclick="toggleDarkMode()">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="header-btn" onclick="goToHome()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- ===== شاشة التصنيفات ===== -->
+        <div id="decksScreen">
+            <div class="toolbar">
+                <h2>
+                    <i class="fas fa-folder"></i>
+                    التصنيفات
+                </h2>
+                <button class="add-deck-btn" onclick="showAddDeckModal()">
+                    <i class="fas fa-plus"></i>
+                    تصنيف جديد
+                </button>
+            </div>
+            <div class="decks-grid" id="decksGrid"></div>
+        </div>
+
+        <!-- ===== شاشة الكاردس ===== -->
+        <div id="cardsScreen" class="cards-screen">
+            <button class="back-btn" onclick="showDecksScreen()">
+                <i class="fas fa-arrow-right"></i>
+                رجوع للتصنيفات
+            </button>
+            
+            <div class="deck-info-bar" id="deckInfoBar">
+                <div class="deck-info">
+                    <div class="current-deck-icon" id="currentDeckIcon"></div>
+                    <div class="current-deck-name" id="currentDeckName"></div>
+                </div>
+                <div class="card-actions-bar">
+                    <button class="action-btn secondary" onclick="showAddCardModal()">
+                        <i class="fas fa-plus"></i>
+                        إضافة بطاقة
+                    </button>
+                </div>
+            </div>
+
+            <div class="cards-grid" id="cardsGrid"></div>
+        </div>
+    </div>
+
+    <!-- مودال إضافة تصنيف -->
+    <div class="modal" id="addDeckModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeAddDeckModal()"><i class="fas fa-times"></i></button>
+            <div class="modal-header">
+                <i class="fas fa-folder-plus"></i>
+                <h2>إضافة تصنيف جديد</h2>
+            </div>
+            <div class="form-group">
+                <label>اسم التصنيف</label>
+                <input type="text" id="deckName" class="form-control" placeholder="مثال: برمجة">
+            </div>
+            <div class="form-group">
+                <label>اللون</label>
+                <div class="color-options" id="colorOptions"></div>
+            </div>
+            <div class="form-group">
+                <label>الأيقونة</label>
+                <div class="icon-options" id="iconOptions"></div>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn primary" onclick="saveNewDeck()">حفظ</button>
+                <button class="modal-btn secondary" onclick="closeAddDeckModal()">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- مودال إضافة بطاقة -->
+    <div class="modal" id="addCardModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeAddCardModal()"><i class="fas fa-times"></i></button>
+            <div class="modal-header">
+                <i class="fas fa-layer-group"></i>
+                <h2>إضافة بطاقة جديدة</h2>
+            </div>
+            <div class="form-group">
+                <label>السؤال</label>
+                <textarea id="cardFront" class="form-control" rows="3" placeholder="اكتب السؤال هنا..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>الإجابة</label>
+                <textarea id="cardBack" class="form-control" rows="3" placeholder="اكتب الإجابة هنا..."></textarea>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn primary" onclick="saveNewCard()">حفظ</button>
+                <button class="modal-btn secondary" onclick="closeAddCardModal()">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- مودال المراجعة -->
+    <div class="modal" id="reviewModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeReviewModal()"><i class="fas fa-times"></i></button>
+            <div class="modal-header">
+                <i class="fas fa-brain"></i>
+                <h2>مراجعة البطاقة</h2>
+            </div>
+            
+            <div class="review-progress" id="reviewProgress">البطاقة 1 من 5</div>
+            
+            <div class="review-card-container" id="reviewCard">
+                <div class="review-question" id="reviewQuestion"></div>
+                <div class="review-answer" id="reviewAnswer"></div>
+                <button class="show-answer-btn" id="showAnswerBtn" onclick="showAnswer()">
+                    <i class="fas fa-eye"></i>
+                    عرض الإجابة
+                </button>
+            </div>
+            
+            <div class="grade-buttons" id="gradeButtons" style="display: none;">
+                <button class="grade-btn hard" onclick="gradeCard(1)">😓</button>
+                <button class="grade-btn medium" onclick="gradeCard(3)">😐</button>
+                <button class="grade-btn easy" onclick="gradeCard(5)">😊</button>
+            </div>
+            
+            <div class="grade-labels" id="gradeLabels" style="display: none;">
+                <span>نسيت</span>
+                <span>تذكرت بصعوبة</span>
+                <span>سهل</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- رسالة النجاح -->
+    <div id="successMessage" style="display: none;" class="success-message">
+        <i class="fas fa-check-circle"></i>
+        <span id="messageText">تمت الإضافة بنجاح</span>
+    </div>
+
+    <script>
+        // ==================== البيانات ====================
+        let smartCards = {
+            cards: [],
+            decks: [
+                { id: 'programming', name: 'برمجة', icon: 'fa-code', color: '#1dd1a1' },
+                { id: 'math', name: 'رياضيات', icon: 'fa-calculator', color: '#ff6b6b' },
+                { id: 'language', name: 'لغة', icon: 'fa-language', color: '#ffd93e' },
+                { id: 'islamic', name: 'إسلامية', icon: 'fa-mosque', color: '#f368e0' }
+            ],
+            
+            addDeck(name, icon, color) {
+                let id = 'deck-' + Date.now();
+                this.decks.push({ id, name, icon, color });
+                this.saveDecks();
+            },
+            
+            deleteDeck(deckId) {
+                this.decks = this.decks.filter(d => d.id !== deckId);
+                this.cards = this.cards.filter(c => c.deck !== deckId);
+                this.saveDecks();
+                this.saveCards();
+            },
+            
+            addCard(front, back, deck) {
+                let card = {
+                    id: Date.now(),
+                    front, back, deck,
+                    level: 0, interval: 1, ease: 2.5,
+                    nextReview: new Date().toISOString()
+                };
+                this.cards.push(card);
+                this.saveCards();
+            },
+            
+            deleteCard(cardId) {
+                this.cards = this.cards.filter(c => c.id !== cardId);
+                this.saveCards();
+            },
+            
+            reviewCard(cardId, grade) {
+                let card = this.cards.find(c => c.id === cardId);
+                if (!card) return;
+                
+                if (grade >= 3) {
+                    if (card.level === 0) card.interval = 1;
+                    else if (card.level === 1) card.interval = 3;
+                    else card.interval = Math.round(card.interval * card.ease);
+                    card.level++;
+                    card.ease = Math.min(2.5, card.ease + 0.1);
+                } else {
+                    card.level = 0;
+                    card.interval = 1;
+                    card.ease = Math.max(1.3, card.ease - 0.2);
+                }
+                
+                let nextDate = new Date();
+                nextDate.setDate(nextDate.getDate() + card.interval);
+                card.nextReview = nextDate.toISOString();
+                this.saveCards();
+            },
+            
+            getCardsByDeck(deckId) {
+                return this.cards.filter(c => c.deck === deckId);
+            },
+            
+            getDueCards(deckId) {
+                let now = new Date();
+                return this.cards.filter(c => c.deck === deckId && new Date(c.nextReview) <= now);
+            },
+            
+            saveDecks() {
+                localStorage.setItem('smartDecks', JSON.stringify(this.decks));
+            },
+            
+            saveCards() {
+                localStorage.setItem('smartCards', JSON.stringify(this.cards));
+            },
+            
+            loadData() {
+                let savedDecks = localStorage.getItem('smartDecks');
+                if (savedDecks) this.decks = JSON.parse(savedDecks);
+                let savedCards = localStorage.getItem('smartCards');
+                if (savedCards) this.cards = JSON.parse(savedCards);
+            }
+        };
+
+        smartCards.loadData();
+
+        // ==================== المتغيرات ====================
+        let currentDeckId = null;
+        let selectedColor = '#1dd1a1';
+        let selectedIcon = 'fa-code';
+        let currentReviewCards = [];
+        let currentReviewIndex = 0;
+        
+        const colors = ['#1dd1a1', '#ff6b6b', '#ffd93e', '#f368e0', '#54a0ff', '#5f27cd', '#00d2d3', '#ff9f43'];
+        const icons = ['fa-code', 'fa-calculator', 'fa-language', 'fa-mosque', 'fa-flask', 'fa-book', 'fa-paint-brush', 'fa-music'];
+
+        // ==================== دوال الشاشات ====================
+        function showDecksScreen() {
+            document.getElementById('decksScreen').style.display = 'block';
+            document.getElementById('cardsScreen').classList.remove('show');
+            renderDecks();
+        }
+
+        function showCardsScreen(deckId) {
+            currentDeckId = deckId;
+            let deck = smartCards.decks.find(d => d.id === deckId);
+            
+            document.getElementById('currentDeckIcon').style.background = deck.color;
+            document.getElementById('currentDeckIcon').innerHTML = `<i class="fas ${deck.icon}"></i>`;
+            document.getElementById('currentDeckName').textContent = deck.name;
+            
+            document.getElementById('decksScreen').style.display = 'none';
+            document.getElementById('cardsScreen').classList.add('show');
+            renderCards();
+        }
+
+        // ==================== دوال التصنيفات ====================
+        function renderDecks() {
+            let html = '';
+            smartCards.decks.forEach(deck => {
+                let cards = smartCards.getCardsByDeck(deck.id);
+                let total = cards.length;
+                let due = cards.filter(c => new Date(c.nextReview) <= new Date()).length;
+                
+                html += `
+                    <div class="deck-card" style="border-color: ${deck.color};">
+                        <div class="deck-header">
+                            <div class="deck-icon" style="background: ${deck.color};"><i class="fas ${deck.icon}"></i></div>
+                            <span class="deck-badge">${due} مستحق</span>
+                        </div>
+                        <div class="deck-name">${deck.name}</div>
+                        <div class="deck-stats">
+                            <span><i class="fas fa-layer-group"></i> ${total}</span>
+                            <span><i class="fas fa-brain"></i> ${total ? Math.round((total-due)/total*100) : 0}%</span>
+                        </div>
+                        <div class="deck-footer">
+                            <button class="cards-btn" onclick="showCardsScreen('${deck.id}')"><i class="fas fa-cards"></i> كاردس</button>
+                            <button class="delete-deck" onclick="deleteDeck('${deck.id}')"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('decksGrid').innerHTML = html;
+        }
+
+        function deleteDeck(deckId) {
+            if (confirm('حذف التصنيف وجميع بطاقاته؟')) {
+                smartCards.deleteDeck(deckId);
+                renderDecks();
+                showMessage('✅ تم الحذف');
+            }
+        }
+
+        // ==================== دوال البطاقات ====================
+        function renderCards() {
+            if (!currentDeckId) return;
+            let cards = smartCards.getCardsByDeck(currentDeckId);
+            let html = '';
+            
+            cards.forEach(card => {
+                let isDue = new Date(card.nextReview) <= new Date();
+                
+                html += `
+                    <div class="card-item" id="card-${card.id}">
+                        <div class="card-question">${card.front}</div>
+                        <div class="card-answer">${card.back}</div>
+                        <div class="card-footer">
+                            <span class="card-level">
+                                <i class="fas fa-star"></i> المستوى ${card.level}
+                                ${isDue ? '<span style="color:#ff6b6b; margin-right:8px;">(مستحق)</span>' : ''}
+                            </span>
+                            <div class="card-actions">
+                                <button class="review-card-btn" onclick="reviewSingleCard('${card.id}')">
+                                    <i class="fas fa-play"></i>
+                                    مراجعة
+                                </button>
+                                <button class="delete-card-btn" onclick="deleteCard(${card.id})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            if (cards.length === 0) {
+                html = '<div style="grid-column:1/-1; text-align:center; padding:60px; color:white; background:rgba(255,255,255,0.1); border-radius:30px;"><i class="fas fa-layer-group" style="font-size:4rem; margin-bottom:20px;"></i><h3 style="font-size:1.8rem;">لا توجد بطاقات</h3><p style="font-size:1.2rem;">أضف بطاقتك الأولى الآن</p></div>';
+            }
+            
+            document.getElementById('cardsGrid').innerHTML = html;
+        }
+
+        function deleteCard(cardId) {
+            if (confirm('حذف البطاقة؟')) {
+                smartCards.deleteCard(cardId);
+                renderCards();
+                showMessage('✅ تم الحذف');
+            }
+        }
+
+        // ==================== دوال الإضافة ====================
+        function showAddDeckModal() {
+            let colorHtml = colors.map(c => `<div class="color-option" style="background:${c};" onclick="selectColor('${c}', this)"></div>`).join('');
+            let iconHtml = icons.map(i => `<div class="icon-option" onclick="selectIcon('${i}', this)"><i class="fas ${i}"></i></div>`).join('');
+            
+            document.getElementById('colorOptions').innerHTML = colorHtml;
+            document.getElementById('iconOptions').innerHTML = iconHtml;
+            
+            document.querySelector('.color-option')?.classList.add('selected');
+            document.querySelector('.icon-option')?.classList.add('selected');
+            
+            document.getElementById('addDeckModal').classList.add('show');
+        }
+
+        function selectColor(color, el) {
+            document.querySelectorAll('.color-option').forEach(e => e.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedColor = color;
+        }
+
+        function selectIcon(icon, el) {
+            document.querySelectorAll('.icon-option').forEach(e => e.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedIcon = icon;
+        }
+
+        function closeAddDeckModal() {
+            document.getElementById('addDeckModal').classList.remove('show');
+        }
+
+        function saveNewDeck() {
+            let name = document.getElementById('deckName').value.trim();
+            if (!name) return showMessage('❌ اكتب اسم التصنيف', 'error');
+            
+            smartCards.addDeck(name, selectedIcon, selectedColor);
+            closeAddDeckModal();
+            renderDecks();
+            showMessage('✅ تمت الإضافة');
+        }
+
+        function showAddCardModal() {
+            document.getElementById('addCardModal').classList.add('show');
+        }
+
+        function closeAddCardModal() {
+            document.getElementById('addCardModal').classList.remove('show');
+            document.getElementById('cardFront').value = '';
+            document.getElementById('cardBack').value = '';
+        }
+
+        function saveNewCard() {
+            let front = document.getElementById('cardFront').value.trim();
+            let back = document.getElementById('cardBack').value.trim();
+            
+            if (!front || !back) return showMessage('❌ اكتب السؤال والإجابة', 'error');
+            
+            smartCards.addCard(front, back, currentDeckId);
+            closeAddCardModal();
+            renderCards();
+            showMessage('✅ تمت الإضافة');
+        }
+
+        // ==================== دوال المراجعة ====================
+        function reviewSingleCard(cardId) {
+            let card = smartCards.cards.find(c => c.id == cardId);
+            if (!card) return;
+            
+            currentReviewCards = [card];
+            currentReviewIndex = 0;
+            
+            document.getElementById('reviewModal').classList.add('show');
+            showCurrentReviewCard();
+        }
+
+        function startReview() {
+            currentReviewCards = smartCards.getDueCards(currentDeckId);
+            
+            if (currentReviewCards.length === 0) {
+                showMessage('🎉 مبروك! لا توجد بطاقات للمراجعة اليوم');
+                return;
+            }
+            
+            currentReviewIndex = 0;
+            
+            document.getElementById('reviewModal').classList.add('show');
+            showCurrentReviewCard();
+        }
+
+        function showCurrentReviewCard() {
+            let card = currentReviewCards[currentReviewIndex];
+            document.getElementById('reviewProgress').textContent = `البطاقة ${currentReviewIndex + 1} من ${currentReviewCards.length}`;
+            document.getElementById('reviewQuestion').textContent = card.front;
+            document.getElementById('reviewAnswer').textContent = card.back;
+            
+            document.getElementById('reviewCard').classList.remove('show-answer');
+            document.getElementById('gradeButtons').style.display = 'none';
+            document.getElementById('gradeLabels').style.display = 'none';
+            document.getElementById('showAnswerBtn').style.display = 'flex';
+        }
+
+        function showAnswer() {
+            document.getElementById('reviewCard').classList.add('show-answer');
+            document.getElementById('gradeButtons').style.display = 'flex';
+            document.getElementById('gradeLabels').style.display = 'flex';
+            document.getElementById('showAnswerBtn').style.display = 'none';
+        }
+
+        function gradeCard(grade) {
+            smartCards.reviewCard(currentReviewCards[currentReviewIndex].id, grade);
+            currentReviewIndex++;
+            
+            if (currentReviewIndex < currentReviewCards.length) {
+                showCurrentReviewCard();
+            } else {
+                showMessage('🎉 انتهت المراجعة! أحسنت');
+                closeReviewModal();
+                renderCards();
+            }
+        }
+
+        function closeReviewModal() {
+            document.getElementById('reviewModal').classList.remove('show');
+        }
+
+        // ==================== دوال أخرى ====================
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            let btn = document.querySelector('.header-btn i');
+            btn.className = document.body.classList.contains('dark-mode') ? 'fas fa-sun' : 'fas fa-moon';
+        }
+
+        function goToHome() {
+            window.location.href = 'index.html';
+        }
+
+        function showMessage(text, type = 'success') {
+            let msg = document.getElementById('successMessage');
+            msg.innerHTML = `<i class="fas fa-${type==='success' ? 'check-circle' : 'times-circle'}"></i> <span>${text}</span>`;
+            msg.style.display = 'flex';
+            setTimeout(() => msg.style.display = 'none', 2000);
+        }
+
+        // بدء التشغيل
+        window.onload = () => {
+            showDecksScreen();
+        };
+    </script>
+</body>
+</html>
