@@ -1961,7 +1961,15 @@
             <div class="show-completed-btn" onclick="showNotificationStats()">
                 <i class="fas fa-chart-bar"></i> إحصائيات التنبيهات
             </div>
-
+            
+<!-- قسم SMART CARDS - حطه فوق الإعدادات -->
+<div class="settings-section" style="margin-top: 20px;">
+    <div class="settings-item" onclick="window.open('smart-cards.html', '_blank')">
+        <i class="fas fa-layer-group" style="color: #ff6b6b;"></i>
+        <span>البطاقات الذكية</span>
+        <span class="notification-badge" id="smartCardsBadge" style="position: relative; top: 0; left: 0; margin-right: auto; background: #ff6b6b; display: none;">0</span>
+    </div>
+</div>
             <!-- الإعدادات -->
             <div class="settings-section">
                 <div class="settings-item" onclick="showSettingsPage()">
@@ -3988,6 +3996,33 @@
                 }
             });
         };
+        // ==================== تحديث عداد البطاقات الذكية ====================
+function updateSmartCardsBadge() {
+    try {
+        // قراءة البطاقات من localStorage
+        let savedCards = localStorage.getItem('smartCards');
+        if (savedCards) {
+            let cards = JSON.parse(savedCards);
+            let now = new Date();
+            let dueCards = cards.filter(c => new Date(c.nextReview) <= now).length;
+            
+            let badge = document.getElementById('smartCardsBadge');
+            if (dueCards > 0) {
+                badge.textContent = dueCards > 9 ? '9+' : dueCards;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+    } catch (e) {
+        console.log('خطأ في تحديث العداد');
+    }
+}
+
+// تحديث العداد كل ساعة
+setInterval(updateSmartCardsBadge, 60 * 60 * 1000);
+// تحديث عند تحميل الصفحة
+setTimeout(updateSmartCardsBadge, 1000);
     </script>
 </body>
 </html> 
