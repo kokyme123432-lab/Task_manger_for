@@ -1789,6 +1789,149 @@
                 top: 20px;
             }
         }
+        /* ========== تنسيق البطاقات الذكية فقط ========== */
+
+/* تأكيد أن صفحة البطاقات تأخذ العرض الكامل */
+#smartCardsPage {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* توزيع الإحصائيات في صف واحد */
+#smartCardsPage > div:first-of-type {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 20px !important;
+    width: 100% !important;
+    margin: 20px 0 !important;
+}
+
+/* جعل أزرار الإجراءات في صف */
+#smartCardsPage > div:nth-of-type(2) {
+    display: flex !important;
+    gap: 15px !important;
+    width: 100% !important;
+    margin: 20px 0 !important;
+}
+
+/* توزيع التصنيفات في شبكة */
+#decksGrid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+    gap: 20px !important;
+    width: 100% !important;
+    margin: 20px 0 !important;
+}
+
+/* توزيع البطاقات في شبكة */
+#cardsGrid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+    gap: 20px !important;
+    width: 100% !important;
+    margin: 20px 0 !important;
+}
+
+/* جعل رأس قسم البطاقات في سطر واحد */
+#smartCardsPage .settings-group > div:first-child {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin-bottom: 20px !important;
+}
+
+/* الـ Modals في المنتصف */
+#addCardModal,
+#reviewModal {
+    direction: rtl;
+}
+
+#addCardModal.show,
+#reviewModal.show {
+    display: flex !important;
+}
+
+#addCardModal .modal-content,
+#reviewModal .modal-content {
+    width: 90%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+#reviewModal .modal-content {
+    max-width: 600px;
+}
+
+/* بطاقة المراجعة في المنتصف */
+#reviewCard {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#reviewCard .sub-mission-card {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* أزرار التقييم في المنتصف */
+#reviewButtons {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#reviewButtons > div:first-child {
+    display: flex !important;
+    justify-content: center !important;
+    gap: 15px !important;
+    width: 100% !important;
+}
+
+/* خيارات الصعوبة في سطر واحد */
+#addCardModal .form-group > div {
+    display: flex !important;
+    gap: 10px !important;
+    width: 100% !important;
+}
+
+#addCardModal .type-option {
+    flex: 1 !important;
+    text-align: center !important;
+}
+
+/* للشاشات الصغيرة */
+@media (max-width: 768px) {
+    #smartCardsPage > div:first-of-type {
+        grid-template-columns: 1fr !important;
+    }
+    
+    #smartCardsPage > div:nth-of-type(2) {
+        flex-direction: column !important;
+    }
+    
+    #decksGrid {
+        grid-template-columns: 1fr !important;
+    }
+    
+    #cardsGrid {
+        grid-template-columns: 1fr !important;
+    }
+    
+    #smartCardsPage .settings-group > div:first-child {
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+    
+    #deckFilter {
+        width: 100% !important;
+    }
+}
     </style>
 </head>
 <body>
